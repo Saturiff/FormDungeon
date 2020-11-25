@@ -57,22 +57,15 @@ namespace DungeonGame
             KeyStateInfo keyS = KeyboardInfo.GetKeyState(Keys.S);
             KeyStateInfo keyD = KeyboardInfo.GetKeyState(Keys.D);
 
-            if (keyW.IsPressed)
-            {
-                Debug.WriteLine("keyW Pressed!");
-            }
-            if (keyA.IsPressed)
-            {
-                Debug.WriteLine("keyA Pressed!");
-            }
-            if (keyS.IsPressed)
-            {
-                Debug.WriteLine("keyS Pressed!");
-            }
-            if (keyD.IsPressed)
-            {
-                Debug.WriteLine("keyD Pressed!");
-            }
+            UI.player.isMovingUp = keyW.IsPressed ? true : false;
+            UI.player.isMovingDown = keyS.IsPressed ? true : false;
+            UI.player.isMovingLeft = keyA.IsPressed ? true : false;
+            UI.player.isMovingRight = keyD.IsPressed ? true : false;
+            Console.WriteLine(keyW.IsPressed + " | "
+                 + keyS.IsPressed + " | "
+                 + keyA.IsPressed + " | "
+                 + keyD.IsPressed);
+            UI.player.CalcMove();
 
             return CallNextHookEx(m_HookHandle, nCode, wParam, lParam);
         }

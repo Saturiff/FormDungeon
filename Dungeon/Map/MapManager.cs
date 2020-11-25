@@ -50,7 +50,6 @@ namespace DungeonGame
 
                     TileType tileType = EnumExtensions<TileType>.GetEnumByOrder(Convert.ToUInt16(mapData[i]));
                     tilesData.Add(new Point(i % col, i / col), tileType);
-                    Console.WriteLine(new Point(i % col, i / col).ToString() + " " + tileType);
                     g.FillRectangle(palette[tileType], rect);
                 }
             }
@@ -58,20 +57,23 @@ namespace DungeonGame
             UI.p_Viewport.BackgroundImage = bg;
         }
 
+        // todo: walkable
         private TileType? GetTileType(Point p)
         {
-            if (p.X < row && p.Y < col)
+            if (p.X > -1 && p.X < row && p.Y > -1 && p.Y < col)
                 return tilesData[p];
 
             return null;
         }
 
-        public bool isWalkable(Point p)
+        public bool IsWalkable(Point p)
         {
-            if(GetTileType(p) == TileType.Floor || GetTileType(p) == TileType.Door)
-                return true;
-
-            return false;
+            return true;
+            
+            // if(GetTileType(p) == TileType.Floor || GetTileType(p) == TileType.Door)
+            //     return true;
+            // 
+            // return false;
         }
 
         private const int row = 11;   // 440/40

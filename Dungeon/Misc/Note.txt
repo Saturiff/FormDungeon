@@ -1,15 +1,10 @@
-﻿todo list
+﻿Todo list:
 
-Move in map
+after player move -> send location data to server (timer?)
 Spawn point
-Block area
+player move(server)
+walkable area / block area
+tile response effect
+mouse function
+...
 
-
-// --
-
-keyboard or mouse?
-player move(local)
-
-mapping
-
-after player move -> server

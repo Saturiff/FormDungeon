@@ -15,14 +15,14 @@ namespace DungeonGame
             // tile outline
             p_Viewport.MouseMove += delegate (object sender, MouseEventArgs e)
             {
-                Console.WriteLine(e.Location);
+                // Console.WriteLine(e.Location);
             };
 
             // select tile
             p_Viewport.Click += delegate (object sender, EventArgs e)
             {
-                Console.WriteLine(p_Viewport.PointToClient(Cursor.Position));
-                //MessageBox.Show("You clicked my tile!\nsender = " + sender + "\neventargs = " + e);
+                // Console.WriteLine(p_Viewport.PointToClient(Cursor.Position));
+                // MessageBox.Show("You clicked my tile!\nsender = " + sender + "\neventargs = " + e);
             };
         }
 
@@ -84,16 +84,16 @@ namespace DungeonGame
         public static void BeginPlay()
         {
             if (IsVaildName(tb_Nickname.Text))
-                TCPClient.Login(tb_Nickname.Text);
+                ClientListener.Login(tb_Nickname.Text);
             else
                 Log("Invalid name.");
 
-            if (TCPClient.isOnline)
+            if (ClientListener.isOnline)
             {
                 tb_Nickname.Enabled = false;
 
-                while (TCPClient.isWaitingPlayerData) ;
-                player = TCPClient.GetPlayerInfo();
+                while (ClientListener.isWaitingPlayerData) ;
+                player = ClientListener.GetPlayerInfo();
 
                 Log("Welcome, " + player.name + "!");
 
@@ -132,7 +132,7 @@ namespace DungeonGame
             b_Sell.Enabled = false;
             b_Drop.Enabled = false;
 
-            TCPClient.Logout();
+            ClientListener.Logout();
 
             tb_CharacterStatus.Text = "";
             tb_ItemInfo.Text = "";

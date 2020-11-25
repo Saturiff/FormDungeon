@@ -43,10 +43,23 @@ namespace DungeonGame
             BackgroundImage = bg;
         }
 
-        public void MoveTo(Point newLocation)
+        public void CalcMove()
         {
-            // if (newLocation is ok)
-            Location = newLocation;
+            int mult = 10;
+            int up = ((isMovingUp ? -1 : 0) + (isMovingDown ? 1 : 0)) * mult;
+            int right = ((isMovingRight ? 1 : 0) + (isMovingLeft ? -1 : 0)) * mult;
+
+            MoveTo(new Point(Location.X + right, Location.Y + up));
+        }
+
+        private void MoveTo(Point newLocation)
+        {
+            if (UI.map.IsWalkable(newLocation))
+                Location = newLocation;
+
+            // todo:send location data to server
+            // timer tick?
+            
         }
 
         // enable when offline
@@ -61,6 +74,11 @@ namespace DungeonGame
 
         private Size tileSize = new Size(40, 40);
         private Size characterSize = new Size(20, 20);
+
+        public bool isMovingUp;
+        public bool isMovingDown;
+        public bool isMovingLeft;
+        public bool isMovingRight;
 
         public string name { get; set; }
         public uint health { get; set; }

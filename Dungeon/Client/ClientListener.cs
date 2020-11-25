@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace DungeonGame
 {
-    public static class TCPClient
+    public static class ClientListener
     {
         public static void SetServerIP(string inIP = "127.0.0.1") => ip = inIP;
 
