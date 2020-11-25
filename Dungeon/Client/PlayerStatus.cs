@@ -1,4 +1,4 @@
-﻿namespace DungeonGame
+﻿namespace DungeonGame.Client
 {
     public enum OnlineStatus
     {

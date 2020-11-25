@@ -88,7 +88,7 @@ namespace DungeonGame
             else
                 Log("Invalid name.");
 
-            if (TCPClient.status == OnlineStatus.online)
+            if (TCPClient.isOnline)
             {
                 tb_Nickname.Enabled = false;
 

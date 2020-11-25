@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DungeonGame.Map;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;

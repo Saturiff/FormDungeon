@@ -30,7 +30,7 @@ namespace DungeonServer
 
         private void B_ToggleServer_Click(object sender, EventArgs e)
         {
-            if (ServerListener.status != ServerStatus.online)
+            if (!ServerListener.isOnline)
             {
                 UI.Start();
             }
@@ -42,7 +42,7 @@ namespace DungeonServer
 
         private void DungeonServer_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (ServerListener.status == ServerStatus.online)
+            if (ServerListener.isOnline)
                 ServerListener.StopServer();
 
             Application.ExitThread();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DungeonGame.Client;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -218,8 +219,16 @@ namespace DungeonGame
             socket.Close();
         }
 
-        public static ServerMessageStatus svMsgStatus = ServerMessageStatus.None;
-        public static OnlineStatus status = OnlineStatus.offline;
+        public static bool isOnline
+        {
+            get 
+            {
+                return status == OnlineStatus.online;
+            }
+        }
+
+        private static ServerMessageStatus svMsgStatus = ServerMessageStatus.None;
+        private static OnlineStatus status = OnlineStatus.offline;
         private static string playerName;
         private static string ip = "";
         private static int port = 8800;

@@ -1,25 +1,15 @@
-﻿
-Location
+﻿todo list
 
-0,0   0,1   0,2
-1,0   1,1   1,2
-2,0   2,1   2,2
+Move in map
+Spawn point
+Block area
 
 
-Server message
+// --
 
-0:	Offline
-1:	Online
-2:	Message
-3:	Action
-4:	Sync
-5:	
+keyboard or mouse?
+player move(local)
 
-1s = 1000ms
-0.016 s = 
+mapping
 
-fix:
-遠端主機已強制關閉一個現存的連線。
-
-debug
-UI
+after player move -> server

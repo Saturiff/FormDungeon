@@ -50,8 +50,8 @@
             this.T_SyncTicker = new System.Windows.Forms.Timer(this.components);
             this.LB_Message = new System.Windows.Forms.ListBox();
             this.LB_Log = new System.Windows.Forms.ListBox();
-            this.INV_Player = new DungeonGame.Inventory();
             this.INV_Their = new DungeonGame.Inventory();
+            this.INV_Player = new DungeonGame.Inventory();
             this.SuspendLayout();
             // 
             // P_Viewport
@@ -254,15 +254,6 @@
             this.LB_Log.Size = new System.Drawing.Size(250, 156);
             this.LB_Log.TabIndex = 27;
             // 
-            // INV_Player
-            // 
-            this.INV_Player.Font = new System.Drawing.Font("Consolas", 7F);
-            this.INV_Player.Location = new System.Drawing.Point(17, 482);
-            this.INV_Player.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.INV_Player.Name = "INV_Player";
-            this.INV_Player.Size = new System.Drawing.Size(250, 165);
-            this.INV_Player.TabIndex = 28;
-            // 
             // INV_Their
             // 
             this.INV_Their.Font = new System.Drawing.Font("Consolas", 7F);
@@ -271,6 +262,15 @@
             this.INV_Their.Name = "INV_Their";
             this.INV_Their.Size = new System.Drawing.Size(250, 165);
             this.INV_Their.TabIndex = 29;
+            // 
+            // INV_Player
+            // 
+            this.INV_Player.Font = new System.Drawing.Font("Consolas", 7F);
+            this.INV_Player.Location = new System.Drawing.Point(17, 482);
+            this.INV_Player.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.INV_Player.Name = "INV_Player";
+            this.INV_Player.Size = new System.Drawing.Size(250, 165);
+            this.INV_Player.TabIndex = 28;
             // 
             // Dungeon
             // 

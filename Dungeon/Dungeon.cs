@@ -16,6 +16,7 @@ namespace DungeonGame
             BindUI();
             TCPClient.SetServerIP();
 
+            kbHook.Hook();
         }
 
         /// <summary>
@@ -45,12 +46,12 @@ namespace DungeonGame
 
         // Convert.ChangeType(TB_Nickname.Text, StatusType[CharacterStatusInfo.IP])
 
-        // private InventorySystem inventory = new InventorySystem();
+        public KeyboardHook kbHook = new KeyboardHook();
 
         #region 表單控件事件
         private void B_ToggleLogin_Click(object sender, EventArgs e)
         {
-            if (TCPClient.status != OnlineStatus.online)
+            if (!TCPClient.isOnline)
             {
                 UI.BeginPlay();
             }
@@ -92,7 +93,9 @@ namespace DungeonGame
 
         private void Dungeon_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (TCPClient.status == OnlineStatus.online)
+            kbHook.Unhook();
+
+            if (TCPClient.isOnline)
                 TCPClient.Logout();
 
             Application.ExitThread();

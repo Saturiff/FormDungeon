@@ -1,4 +1,4 @@
-﻿namespace DungeonGame
+﻿namespace DungeonGame.Client
 {
     /// <summary>
     /// 等待伺服器回傳值之狀態

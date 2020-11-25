@@ -1,4 +1,4 @@
-﻿namespace DungeonServer
+﻿namespace DungeonServer.Server
 {
     /// <summary>
     /// 伺服器狀態：線上、離線

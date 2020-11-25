@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DungeonServer.Server;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
@@ -87,7 +88,7 @@ namespace DungeonServer
                             break;
 
                         case ServerMessageType.Verification:
-                            string res = EnumExtensions<ServerMessageStatus>.GetOrderByEnum(players.ContainsKey(str) ? ServerMessageStatus.Fail 
+                            string res = EnumExtensions<ServerMessageStatus>.GetOrderByEnum(players.ContainsKey(str) ? ServerMessageStatus.Fail
                                                                                                                      : ServerMessageStatus.Success).ToString();
                             SendTo(sk, cmdOrder.ToString() + res);
                             break;
@@ -192,10 +193,17 @@ namespace DungeonServer
         }
         #endregion
 
-        public static ServerStatus status = ServerStatus.offline;
-        public static int maxPlayers = 5;
-        public static string ip, port;
+        public static bool isOnline
+        {
+            get
+            {
+                return status == ServerStatus.online;
+            }
+        }
 
+        private static ServerStatus status = ServerStatus.offline;
+        private const int maxPlayers = 5;
+        private static string ip, port;
         private static TcpListener svListener;
         private static Socket svSocket;
         private static Thread serverThread, clientThread;
