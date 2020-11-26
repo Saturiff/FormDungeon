@@ -1,6 +1,6 @@
 ﻿namespace DungeonGame
 {
-    partial class Dungeon
+    partial class F_Dungeon
     {
         /// <summary>
         /// 設計工具所需的變數。

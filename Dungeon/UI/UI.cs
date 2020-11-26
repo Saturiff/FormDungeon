@@ -12,6 +12,18 @@ namespace DungeonGame
         {
             tb_ItemInfo.Font = new System.Drawing.Font(tb_ItemInfo.Font.Name, 10);
 
+            f_Dungeon.Activated += delegate (object sender, EventArgs e)
+            {
+                if (ClientManager.isOnline)
+                    kbHook.Hook();
+            };
+
+            f_Dungeon.Deactivate += delegate (object sender, EventArgs e)
+            {
+                if (ClientManager.isOnline)
+                    kbHook.Unhook();
+            };
+
             // tile outline
             p_Viewport.MouseMove += delegate (object sender, MouseEventArgs e)
             {
@@ -23,6 +35,11 @@ namespace DungeonGame
             {
                 // Console.WriteLine(p_Viewport.PointToClientManager(Cursor.Position));
             };
+        }
+
+        private static void F_Dungeon_Activated(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -69,11 +86,6 @@ namespace DungeonGame
             return true;
         }
 
-        private static void RefreshInventory()
-        {
-
-        }
-
         /// <summary>
         /// 按下登入按鍵時所呼叫
         /// <para>1. 嘗試登入伺服器</para>
@@ -97,7 +109,6 @@ namespace DungeonGame
                 Log("Welcome, " + player.name + "!");
 
                 map = new MapManager();
-                RefreshInventory();
 
                 p_Viewport.Controls.Add(player);
 
@@ -125,6 +136,9 @@ namespace DungeonGame
         /// </summary>
         public static void Destroy()
         {
+            p_Viewport.Controls.Remove(player);
+            player = default;
+
             t_SyncTicker.Enabled = false;
             b_Send.Enabled = false;
             b_Use.Enabled = false;
@@ -151,6 +165,7 @@ namespace DungeonGame
         public static Character player;
         public static MapManager map;
 
+        public static Form f_Dungeon;
         public static Panel p_Viewport;
         public static Timer t_SyncTicker;
         public static TextBox tb_Nickname;

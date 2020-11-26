@@ -3,9 +3,9 @@ using System.Windows.Forms;
 
 namespace DungeonGame
 {
-    public partial class Dungeon : Form
+    public partial class F_Dungeon : Form
     {
-        public Dungeon()
+        public F_Dungeon()
         {
             InitializeComponent();
 
@@ -22,6 +22,7 @@ namespace DungeonGame
         /// </summary>
         private void BindUI()
         {
+            UI.f_Dungeon = this;
             UI.p_Viewport = P_Viewport;
             UI.t_SyncTicker = T_SyncTicker;
             UI.tb_Nickname = TB_Nickname;

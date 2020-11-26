@@ -13,7 +13,7 @@ namespace DungeonGame
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Dungeon());
+            Application.Run(new F_Dungeon());
         }
     }
 }
