@@ -6,19 +6,9 @@ namespace DungeonGame.Hook
 
     public class KeyboardInfo
     {
-        private KeyboardInfo() { }
-
-        [DllImport("user32")]
-        private static extern short GetKeyState(int vKey);
-
         public static KeyStateInfo GetKeyState(Keys key)
         {
-            int vkey = (int)key;
-
-            if (key == Keys.Alt)
-            {
-                vkey = 0x12;    // VK_ALT
-            }
+            int vkey = (key == Keys.Alt) ? 0x12 : (int)key; // VK_ALT : Keys
 
             short keyState = GetKeyState(vkey);
             int low = Low(keyState);
@@ -39,12 +29,13 @@ namespace DungeonGame.Hook
             {
                 return (keyState >> 0x10) & 0x1;
             }
-
         }
 
-        private static int Low(int keyState)
-        {
-            return keyState & 0xffff;
-        }
+        private static int Low(int keyState) => keyState & 0xffff;
+
+        #region DLL
+        [DllImport("user32")]
+        private static extern short GetKeyState(int vKey);
+        #endregion
     }
 }

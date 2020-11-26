@@ -1,4 +1,5 @@
 ﻿using DungeonGame.Map;
+using DungeonUtility;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -48,7 +49,7 @@ namespace DungeonGame
                     Point pos = new Point(colPos, rowPos);
                     Rectangle rect = new Rectangle(pos, tileSize);
 
-                    TileType tileType = EnumExtensions<TileType>.GetEnumByOrder(Convert.ToUInt16(mapData[i]));
+                    TileType tileType = EnumEx<TileType>.GetEnumByOrder(Convert.ToUInt16(mapData[i]));
                     tilesData.Add(new Point(i % col, i / col), tileType);
                     g.FillRectangle(palette[tileType], rect);
                 }
@@ -69,7 +70,7 @@ namespace DungeonGame
         public bool IsWalkable(Point p)
         {
             return true;
-            
+
             // if(GetTileType(p) == TileType.Floor || GetTileType(p) == TileType.Door)
             //     return true;
             // 

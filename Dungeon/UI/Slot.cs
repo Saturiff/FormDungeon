@@ -8,6 +8,9 @@ namespace DungeonGame
         public Slot()
         {
             InitializeComponent();
+
+            // test
+            AddItem(ItemData.data["001"]);
         }
 
         public void AddItem(Item inItem)
@@ -27,6 +30,6 @@ namespace DungeonGame
             if (item != null) UI.tb_ItemInfo.Text = item.info;
         }
 
-        public Item item;
+        public Item item { get; set; }
     }
 }

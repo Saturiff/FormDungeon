@@ -5,7 +5,7 @@
     /// </summary>
     public enum ServerStatus
     {
-        online,
-        offline
+        Online,
+        Offline
     }
 }

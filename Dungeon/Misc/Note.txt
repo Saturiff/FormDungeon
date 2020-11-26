@@ -1,10 +1,9 @@
 ﻿Todo list:
-
-after player move -> send location data to server (timer?)
-Spawn point
-player move(server)
-walkable area / block area
-tile response effect
-mouse function
+feature		after player move -> send location data to server (timer?)
+feature		Spawn point
+feature		player move(server)
+feature		walkable area / block area
+feature		tile response effect
+feature		mouse function
+feature		inventory
 ...
-

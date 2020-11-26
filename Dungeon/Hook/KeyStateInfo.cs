@@ -4,10 +4,6 @@ namespace DungeonGame.Hook
 {
     public struct KeyStateInfo
     {
-        private Keys m_Key;
-        private bool m_IsPressed;
-        private bool m_IsToggled;
-
         public KeyStateInfo(Keys key, bool ispressed, bool istoggled)
         {
             m_Key = key;
@@ -15,27 +11,13 @@ namespace DungeonGame.Hook
             m_IsToggled = istoggled;
         }
 
-        public static KeyStateInfo Default
-        {
-            get
-            {
-                return new KeyStateInfo(Keys.None, false, false);
-            }
-        }
+        public static KeyStateInfo Default => new KeyStateInfo(Keys.None, false, false);
+        public Keys Key => m_Key;
+        public bool IsPressed => m_IsPressed;
+        public bool IsToggled => m_IsToggled;
 
-        public Keys Key
-        {
-            get { return m_Key; }
-        }
-
-        public bool IsPressed
-        {
-            get { return m_IsPressed; }
-        }
-
-        public bool IsToggled
-        {
-            get { return m_IsToggled; }
-        }
+        private Keys m_Key { get; set; }
+        private bool m_IsPressed { get; set; }
+        private bool m_IsToggled { get; set; }
     }
 }

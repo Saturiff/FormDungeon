@@ -13,15 +13,15 @@ namespace DungeonGame
             using (Process curProcess = Process.GetCurrentProcess())
             using (ProcessModule curModule = curProcess.MainModule)
             {
-                m_KbdHookProc = new HookProc(KeyboardHookProc);
+                kbHookProc = new HookProc(KeyboardHookProc);
 
-                m_HookHandle = SetWindowsHookEx(WH_KEYBOARD_LL, m_KbdHookProc,
+                hookHandle = SetWindowsHookEx(WH_KEYBOARD_LL, kbHookProc,
                     GetModuleHandle(curModule.ModuleName), 0);
             }
 
-            if (m_HookHandle == 0)
+            if (hookHandle == 0)
             {
-                Console.WriteLine("呼叫 SetWindowsHookEx 失敗!");
+                Console.WriteLine("SetWindowsHookEx Fail.");
                 return;
             }
 
@@ -30,13 +30,13 @@ namespace DungeonGame
 
         public void Unhook()
         {
-            bool ret = UnhookWindowsHookEx(m_HookHandle);
+            bool ret = UnhookWindowsHookEx(hookHandle);
             if (ret == false)
             {
-                Console.WriteLine("呼叫 UnhookWindowsHookEx 失敗!");
+                Console.WriteLine("UnhookWindowsHookEx Fail.");
                 return;
             }
-            m_HookHandle = 0;
+            hookHandle = 0;
 
             Console.WriteLine("Unhooked!");
         }
@@ -47,11 +47,8 @@ namespace DungeonGame
             bool isPressed = (lParam.ToInt32() & 0x80000000) == 0;
 
             if (nCode < 0 || !isPressed)
-            {
-                return CallNextHookEx(m_HookHandle, nCode, wParam, lParam);
-            }
+                return CallNextHookEx(hookHandle, nCode, wParam, lParam);
 
-            // 取得欲攔截之按鍵狀態
             KeyStateInfo keyW = KeyboardInfo.GetKeyState(Keys.W);
             KeyStateInfo keyA = KeyboardInfo.GetKeyState(Keys.A);
             KeyStateInfo keyS = KeyboardInfo.GetKeyState(Keys.S);
@@ -61,35 +58,30 @@ namespace DungeonGame
             UI.player.isMovingDown = keyS.IsPressed ? true : false;
             UI.player.isMovingLeft = keyA.IsPressed ? true : false;
             UI.player.isMovingRight = keyD.IsPressed ? true : false;
-            Console.WriteLine(keyW.IsPressed + " | "
-                 + keyS.IsPressed + " | "
-                 + keyA.IsPressed + " | "
-                 + keyD.IsPressed);
+
             UI.player.CalcMove();
 
-            return CallNextHookEx(m_HookHandle, nCode, wParam, lParam);
+            return CallNextHookEx(hookHandle, nCode, wParam, lParam);
         }
 
-        const int WH_KEYBOARD_LL = 13;
+        private const int WH_KEYBOARD_LL = 13;
+        private static int hookHandle = 0;
+        private HookProc kbHookProc;
 
         public delegate int HookProc(int nCode, IntPtr wParam, IntPtr lParam);
 
-        private static int m_HookHandle = 0; // Hook handle
-        private HookProc m_KbdHookProc;      // 鍵盤掛鉤函式指標
-
+        #region DLL
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr GetModuleHandle(string lpModuleName);
 
-        // 設置掛鉤.
         [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
         public static extern int SetWindowsHookEx(int idHook, HookProc lpfn, IntPtr hInstance, int threadId);
 
-        // 將之前設置的掛鉤移除。記得在應用程式結束前呼叫此函式.
         [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
         public static extern bool UnhookWindowsHookEx(int idHook);
 
-        // 呼叫下一個掛鉤處理常式（若不這麼做，會令其他掛鉤處理常式失效）.
         [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
         public static extern int CallNextHookEx(int idHook, int nCode, IntPtr wParam, IntPtr lParam);
+        #endregion
     }
 }

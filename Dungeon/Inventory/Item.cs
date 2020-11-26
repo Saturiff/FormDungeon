@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace DungeonGame
 {
@@ -28,18 +27,17 @@ namespace DungeonGame
 
                 return bg;
             }
-            set { icon = value; }
+            set 
+            { 
+                icon = value; 
+            }
         }
         public string info
         {
             get
             {
-                return "name:\t\t" + name
-                    + Environment.NewLine + "atk:\t\t" + atk
-                    + Environment.NewLine + "def:\t\t" + def
-                    + Environment.NewLine + "sellPrice:\t" + sellPrice
-                    + Environment.NewLine + "buyPrice:\t" + buyPrice
-                    + Environment.NewLine + "desc:\t\t" + desc;
+                return string.Format("name:\t\t{0}\r\natk\t\t{1}\r\ndef\t\t{2}\r\nSell Price:\t{3}\r\nBuy Price:\t{4}\r\nDesc:\t\t{5}"
+                    , name, atk, def, sellPrice, buyPrice, desc);
             }
         }
     }

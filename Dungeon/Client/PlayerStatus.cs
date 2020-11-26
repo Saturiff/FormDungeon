@@ -2,7 +2,7 @@
 {
     public enum OnlineStatus
     {
-        online,
-        offline
+        Online,
+        Offline
     }
 }

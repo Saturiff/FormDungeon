@@ -1,4 +1,5 @@
 ﻿using DungeonServer.Server;
+using DungeonUtility;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -33,7 +34,7 @@ namespace DungeonServer
             serverThread = new Thread(ServerLoop);
             serverThread.IsBackground = true;
             serverThread.Start();
-            status = ServerStatus.online;
+            status = ServerStatus.Online;
         }
 
         private static void ServerLoop()
@@ -53,14 +54,14 @@ namespace DungeonServer
 
         public static void StopServer()
         {
-            string code = EnumExtensions<ServerMessageType>.GetOrderByEnum(ServerMessageType.Offline).ToString();
+            string code = EnumEx<ServerMessageType>.GetOrderByEnum(ServerMessageType.Offline).ToString();
             SendAll(code);
 
             svListener.Stop();
             serverThread.Abort();
             if (clientThread != null) clientThread.Abort();
 
-            status = ServerStatus.offline;
+            status = ServerStatus.Offline;
         }
         #endregion
 
@@ -78,7 +79,7 @@ namespace DungeonServer
                     int inLen = sk.Receive(data);
                     string msg = Encoding.Default.GetString(data, 0, inLen);
                     int cmdOrder = Convert.ToInt32(msg[0].ToString());
-                    ServerMessageType cmd = EnumExtensions<ServerMessageType>.GetEnumByOrder(cmdOrder);
+                    ServerMessageType cmd = EnumEx<ServerMessageType>.GetEnumByOrder(cmdOrder);
                     string str = msg.Substring(1);
 
                     switch (cmd)
@@ -88,7 +89,7 @@ namespace DungeonServer
                             break;
 
                         case ServerMessageType.Verification:
-                            string res = EnumExtensions<ServerMessageStatus>.GetOrderByEnum(players.ContainsKey(str) ? ServerMessageStatus.Fail
+                            string res = EnumEx<ServerMessageStatus>.GetOrderByEnum(players.ContainsKey(str) ? ServerMessageStatus.Fail
                                                                                                                      : ServerMessageStatus.Success).ToString();
                             SendTo(sk, cmdOrder.ToString() + res);
                             break;
@@ -159,7 +160,7 @@ namespace DungeonServer
         // 格式 = 同步代碼,伺服器時間,玩家1名稱|玩家素質(由管線符號'|'分隔),玩家2名稱| ...
         private static void SyncPlayerData(string name)
         {
-            string cmd = EnumExtensions<ServerMessageType>.GetOrderByEnum(ServerMessageType.Sync).ToString();
+            string cmd = EnumEx<ServerMessageType>.GetOrderByEnum(ServerMessageType.Sync).ToString();
             string syncStr = cmd;
             foreach (var key in players.Keys)
             {
@@ -193,20 +194,16 @@ namespace DungeonServer
         }
         #endregion
 
-        public static bool isOnline
-        {
-            get
-            {
-                return status == ServerStatus.online;
-            }
-        }
+        private static ServerStatus status = ServerStatus.Offline;
+        public static bool isOnline => status == ServerStatus.Online;
 
-        private static ServerStatus status = ServerStatus.offline;
         private const int maxPlayers = 5;
-        private static string ip, port;
-        private static TcpListener svListener;
-        private static Socket svSocket;
-        private static Thread serverThread, clientThread;
+        private static string ip { get; set; }
+        private static string port { get; set; }
+        private static TcpListener svListener { get; set; }
+        private static Socket svSocket { get; set; }
+        private static Thread serverThread { get; set; }
+        private static Thread clientThread { get; set; }
 
         // 所有連線清單，[玩家名稱 : 連線物件]
         private static Hashtable socketHT = new Hashtable();

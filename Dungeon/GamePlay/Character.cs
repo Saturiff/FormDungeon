@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DungeonUtility;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -6,10 +7,7 @@ namespace DungeonGame
 {
     public class Character : Panel
     {
-        public Character()
-        {
-            Init();
-        }
+        public Character() => Init();
 
         public Character(uint health, int atk, int def, uint coin)
         {
@@ -37,7 +35,7 @@ namespace DungeonGame
             {
                 g.Clear(Color.Transparent);
 
-                GraphicsExtensions.FillCircle(g, Brushes.Azure, tileSize.Width / 2, tileSize.Height / 2, 5);
+                GraphicsEx.FillCircle(g, Brushes.Azure, tileSize.Width / 2, tileSize.Height / 2, 5);
             }
 
             BackgroundImage = bg;

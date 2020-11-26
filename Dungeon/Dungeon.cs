@@ -14,9 +14,7 @@ namespace DungeonGame
             MaximizeBox = false;
 
             BindUI();
-            ClientListener.SetServerIP();
-
-            kbHook.Hook();
+            ClientManager.SetServerIP();
         }
 
         /// <summary>
@@ -46,12 +44,10 @@ namespace DungeonGame
 
         // Convert.ChangeType(TB_Nickname.Text, StatusType[CharacterStatusInfo.IP])
 
-        public KeyboardHook kbHook = new KeyboardHook();
-
         #region 表單控件事件
         private void B_ToggleLogin_Click(object sender, EventArgs e)
         {
-            if (!ClientListener.isOnline)
+            if (!ClientManager.isOnline)
             {
                 UI.BeginPlay();
             }
@@ -88,20 +84,18 @@ namespace DungeonGame
 
         private void B_Send_Click(object sender, EventArgs e)
         {
-            ClientListener.SendMessage(TB_Message.Text);
+            ClientManager.SendMessage(TB_Message.Text);
         }
 
         private void Dungeon_FormClosing(object sender, FormClosingEventArgs e)
         {
-            kbHook.Unhook();
-
-            if (ClientListener.isOnline)
-                ClientListener.Logout();
+            if (ClientManager.isOnline)
+                ClientManager.Logout();
 
             Application.ExitThread();
         }
 
-        private void T_SyncTicker_Tick(object sender, EventArgs e) => ClientListener.UpdateUI();
+        private void T_SyncTicker_Tick(object sender, EventArgs e) => ClientManager.UpdateUI();
         #endregion
     }
 }

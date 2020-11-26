@@ -1,16 +1,24 @@
 ﻿using System;
 using System.Linq;
 
-namespace DungeonGame
+namespace DungeonUtility
 {
-    public static class EnumExtensions<T>
+    public static class EnumEx<T>
     {
-        // 由位置取得目標枚舉
+        /// <summary>
+        /// 由索引取得目標枚舉項目
+        /// </summary>
+        /// <param name="index">欲取得枚舉項目之索引</param>
+        /// <returns>索引</returns>
         public static T GetEnumByOrder(int index)
                 => Enum.GetValues(typeof(T)).Cast<T>().Select((x, i)
                 => new { item = x, index = i }).Single(x => x.index == index).item;
-        
-        // 由枚舉取得目標位置
+
+        /// <summary>
+        /// 由枚舉項目取得索引
+        /// </summary>
+        /// <param name="item">欲取得索引之枚舉項目</param>
+        /// <returns>枚舉項目</returns>
         public static int GetOrderByEnum(T item)
                 => Enum.GetValues(typeof(T)).Cast<T>().Select((x, i)
                 => new { item = x, index = i }).Single(x => x.item.Equals(item)).index;

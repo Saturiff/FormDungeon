@@ -6,32 +6,19 @@ namespace DungeonServer
 {
     public class Character
     {
-        public Character(string inName)
-        {
-            name = inName;
-        }
+        public Character(string inName) => name = inName;
 
-        public void UpdateLocation(Point newLocation)
-        {
-            loc = newLocation;
-        }
+        public void UpdateLocation(Point newLocation) => loc = newLocation;
 
         // call when logout
-        public void Save()
-        {
-            File.WriteAllText(dataPath, dataPack);
-        }
+        public void Save() => File.WriteAllText(dataPath, dataPack);
 
         // call when login
         public void Read()
         {
             if (!File.Exists(dataPath))
-            {
                 using (StreamWriter sw = File.CreateText(dataPath))
-                {
                     sw.WriteLine("0|0|0|0");
-                }
-            }
 
             string rawData = "";
             using (StreamReader sr = File.OpenText(dataPath))
@@ -50,19 +37,8 @@ namespace DungeonServer
         private int def { get; set; }
         private uint coin { get; set; }
         private Point loc { get; set; }
-        private string dataPath
-        {
-            get
-            {
-                return @"./saves/" + name;
-            }
-        }
-        public string dataPack
-        {
-            get
-            {
-                return health.ToString() + '|' + atk.ToString() + '|' + def.ToString() + '|' + coin.ToString();
-            }
-        }
+        private string dataPath => @"./saves/" + name;
+        
+        public string dataPack => string.Format("{0}|{1}|{2}|{3}", health.ToString(), atk.ToString(), def.ToString(), coin.ToString());
     }
 }

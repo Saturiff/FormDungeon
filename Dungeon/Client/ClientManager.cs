@@ -1,4 +1,5 @@
 ﻿using DungeonGame.Client;
+using DungeonUtility;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -8,7 +9,7 @@ using System.Threading;
 
 namespace DungeonGame
 {
-    public static class ClientListener
+    public static class ClientManager
     {
         public static void SetServerIP(string inIP = "127.0.0.1") => ip = inIP;
 
@@ -55,7 +56,7 @@ namespace DungeonGame
 
                 if (svMsgStatus == ServerMessageStatus.Success)
                 {
-                    status = OnlineStatus.online;
+                    status = OnlineStatus.Online;
                     SendToServer(ServerMessageType.Online, playerName);
                 }
 
@@ -71,7 +72,7 @@ namespace DungeonGame
         /// <param name="inMsg">欲傳送之資料</param>
         private static void SendToServer(ServerMessageType type, string inMsg)
         {
-            string msg = EnumExtensions<ServerMessageType>.GetOrderByEnum(type).ToString() + inMsg;
+            string msg = EnumEx<ServerMessageType>.GetOrderByEnum(type).ToString() + inMsg;
 
             byte[] data = Encoding.Default.GetBytes(msg);
             socket.Send(data, 0, data.Length, SocketFlags.None);
@@ -110,7 +111,7 @@ namespace DungeonGame
 
                 msg = Encoding.Default.GetString(data, 0, inLen);
                 cmdOrder = Convert.ToInt32(msg[0].ToString());
-                cmd = EnumExtensions<ServerMessageType>.GetEnumByOrder(cmdOrder);
+                cmd = EnumEx<ServerMessageType>.GetEnumByOrder(cmdOrder);
 
                 switch (cmd)
                 {
@@ -120,7 +121,7 @@ namespace DungeonGame
 
                     case ServerMessageType.Verification:
                         int res = Convert.ToInt32(msg.Substring(1));
-                        svMsgStatus = EnumExtensions<ServerMessageStatus>.GetEnumByOrder(res);
+                        svMsgStatus = EnumEx<ServerMessageStatus>.GetEnumByOrder(res);
                         break;
 
                     case ServerMessageType.Online:
@@ -177,18 +178,12 @@ namespace DungeonGame
         /// 接收訊息
         /// </summary>
         /// <param name="rawData">伺服器傳來的原始資料</param>
-        private static void ReceiveTextMessage(string rawData)
-        {
-            UI.Message(rawData.Substring(1));
-        }
+        private static void ReceiveTextMessage(string rawData) => UI.Message(rawData.Substring(1));
 
         /// <summary>
         /// 向伺服器請求其他玩家資料
         /// </summary>
-        private static void RequestSyncPlayersData()
-        {
-            SendToServer(ServerMessageType.Sync, playerName);
-        }
+        private static void RequestSyncPlayersData() => SendToServer(ServerMessageType.Sync, playerName);
 
         /// <summary>
         /// 由伺服器回傳的資料進行介面更新，會不斷執行
@@ -215,25 +210,26 @@ namespace DungeonGame
 
             players.Remove(playerName);
 
-            status = OnlineStatus.offline;
+            status = OnlineStatus.Offline;
             socket.Close();
         }
 
         public static bool isOnline
         {
-            get 
+            get
             {
-                return status == OnlineStatus.online;
+                return status == OnlineStatus.Online;
             }
         }
 
+        private static string playerName { get; set; }
+        private static string ip { get; set; }
+        private const int port = 8800;
         private static ServerMessageStatus svMsgStatus = ServerMessageStatus.None;
-        private static OnlineStatus status = OnlineStatus.offline;
-        private static string playerName;
-        private static string ip = "";
-        private static int port = 8800;
-        private static Socket socket;
-        private static Thread tcpThread;
+        private static OnlineStatus status = OnlineStatus.Offline;
+        private static Socket socket { get; set; }
+        private static Thread tcpThread { get; set; }
+
         public static bool isWaitingPlayerData = true;
         // 其他玩家清單，[玩家名稱 : 角色物件]
         private static Dictionary<string, Character> players = new Dictionary<string, Character>();

@@ -21,8 +21,7 @@ namespace DungeonGame
             // select tile
             p_Viewport.Click += delegate (object sender, EventArgs e)
             {
-                // Console.WriteLine(p_Viewport.PointToClient(Cursor.Position));
-                // MessageBox.Show("You clicked my tile!\nsender = " + sender + "\neventargs = " + e);
+                // Console.WriteLine(p_Viewport.PointToClientManager(Cursor.Position));
             };
         }
 
@@ -84,16 +83,16 @@ namespace DungeonGame
         public static void BeginPlay()
         {
             if (IsVaildName(tb_Nickname.Text))
-                ClientListener.Login(tb_Nickname.Text);
+                ClientManager.Login(tb_Nickname.Text);
             else
                 Log("Invalid name.");
 
-            if (ClientListener.isOnline)
+            if (ClientManager.isOnline)
             {
                 tb_Nickname.Enabled = false;
 
-                while (ClientListener.isWaitingPlayerData) ;
-                player = ClientListener.GetPlayerInfo();
+                while (ClientManager.isWaitingPlayerData) ;
+                player = ClientManager.GetPlayerInfo();
 
                 Log("Welcome, " + player.name + "!");
 
@@ -109,6 +108,8 @@ namespace DungeonGame
                 b_Buy.Enabled = true;
                 b_Sell.Enabled = true;
                 b_Drop.Enabled = true;
+
+                kbHook.Hook();
 
                 b_ToggleLogin.Text = "Logout";
             }
@@ -132,7 +133,9 @@ namespace DungeonGame
             b_Sell.Enabled = false;
             b_Drop.Enabled = false;
 
-            ClientListener.Logout();
+            kbHook.Unhook();
+
+            ClientManager.Logout();
 
             tb_CharacterStatus.Text = "";
             tb_ItemInfo.Text = "";
@@ -142,6 +145,8 @@ namespace DungeonGame
 
             b_ToggleLogin.Text = "Login";
         }
+
+        private static KeyboardHook kbHook = new KeyboardHook();
 
         public static Character player;
         public static MapManager map;
