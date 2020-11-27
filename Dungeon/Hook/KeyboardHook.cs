@@ -24,8 +24,6 @@ namespace DungeonGame
                 Console.WriteLine("SetWindowsHookEx Fail.");
                 return;
             }
-
-            Console.WriteLine("Hooked!");
         }
 
         public void Unhook()
@@ -37,8 +35,6 @@ namespace DungeonGame
                 return;
             }
             hookHandle = 0;
-
-            Console.WriteLine("Unhooked!");
         }
 
         public static int KeyboardHookProc(int nCode, IntPtr wParam, IntPtr lParam)

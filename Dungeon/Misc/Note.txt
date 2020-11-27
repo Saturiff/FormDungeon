@@ -1,9 +1,10 @@
 ﻿Todo list:
-feature		after player move -> send location data to server (timer?)
 feature		Spawn point
-feature		player move(server)
 feature		walkable area / block area
 feature		tile response effect
 feature		mouse function
 feature		inventory
+優化			新增角色
+優化			減少Split
+優化			減化巢狀
 ...

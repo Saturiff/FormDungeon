@@ -39,6 +39,7 @@ namespace DungeonServer
         private Point loc { get; set; }
         private string dataPath => @"./saves/" + name;
         
-        public string dataPack => string.Format("{0}|{1}|{2}|{3}", health.ToString(), atk.ToString(), def.ToString(), coin.ToString());
+        public string dataPack => string.Format("{0}|{1}|{2}|{3}|{4}|{5}", 
+            health.ToString(), atk.ToString(), def.ToString(), coin.ToString(), loc.X, loc.Y);
     }
 }

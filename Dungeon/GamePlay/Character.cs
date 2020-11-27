@@ -11,18 +11,37 @@ namespace DungeonGame
 
         public Character(uint health, int atk, int def, uint coin)
         {
-            Init();
             this.health = health;
             this.atk = atk;
             this.def = def;
             this.coin = coin;
+
+            Init();
+        }
+
+        public Character(string dataPack)
+        {
+            UpdateByDataPack(dataPack);
+
+            Init();
         }
 
         private void Init()
         {
             Size = characterSize;
-
+            
             DrawCharacter();
+        }
+
+        public void UpdateByDataPack(string dataPack)
+        {
+            string[] datas = dataPack.Split('|');
+            name = datas[0];
+            health = Convert.ToUInt32(datas[1]);
+            atk = Convert.ToInt32(datas[2]);
+            def = Convert.ToInt32(datas[3]);
+            coin = Convert.ToUInt32(datas[4]);
+            Location = new Point(Convert.ToInt32(datas[5]), Convert.ToInt32(datas[6]));
         }
 
         /// <summary>
@@ -55,9 +74,8 @@ namespace DungeonGame
             if (UI.map.IsWalkable(newLocation))
                 Location = newLocation;
 
-            // todo:send location data to server
             // timer tick?
-            
+            ClientManager.UpdatePlayerLocation();
         }
 
         // enable when offline

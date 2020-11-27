@@ -89,8 +89,9 @@ namespace DungeonServer
                             break;
 
                         case ServerMessageType.Verification:
-                            string res = EnumEx<ServerMessageStatus>.GetOrderByEnum(players.ContainsKey(str) ? ServerMessageStatus.Fail
-                                                                                                                     : ServerMessageStatus.Success).ToString();
+                            string res = EnumEx<ServerMessageStatus>
+                                .GetOrderByEnum(players.ContainsKey(str) ? ServerMessageStatus.Fail
+                                                                         : ServerMessageStatus.Success).ToString();
                             SendTo(sk, cmdOrder.ToString() + res);
                             break;
 
@@ -104,7 +105,10 @@ namespace DungeonServer
                             break;
 
                         case ServerMessageType.Action:
-                            // 更新玩家位置
+                            string[] datas = str.Split('|');
+                            UpdatePlayerLocation(name: datas[0],
+                                                 x: Convert.ToInt32(datas[1]),
+                                                 y: Convert.ToInt32(datas[2]));
                             break;
 
                         case ServerMessageType.Sync:
@@ -156,12 +160,16 @@ namespace DungeonServer
             UI.AddLog(message);
         }
 
+        // 更新玩家位置
+        private static void UpdatePlayerLocation(string name, int x, int y) 
+            => players[name].UpdateLocation(new System.Drawing.Point(x, y));
+
         // 同步所有玩家資料，傳給所有玩家除了自己以外的資料
-        // 格式 = 同步代碼,伺服器時間,玩家1名稱|玩家素質(由管線符號'|'分隔),玩家2名稱| ...
+        // 格式 = 同步代碼,其他玩家數,玩家1名稱|玩家素質(由管線符號'|'分隔),玩家2名稱| ...
         private static void SyncPlayerData(string name)
         {
             string cmd = EnumEx<ServerMessageType>.GetOrderByEnum(ServerMessageType.Sync).ToString();
-            string syncStr = cmd;
+            string syncStr = cmd + "," + (players.Count - 1).ToString();
             foreach (var key in players.Keys)
             {
                 if (key != name)

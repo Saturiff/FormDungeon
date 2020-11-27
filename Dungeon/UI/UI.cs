@@ -37,11 +37,6 @@ namespace DungeonGame
             };
         }
 
-        private static void F_Dungeon_Activated(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// 新增至聊天訊息欄
         /// </summary>
@@ -86,6 +81,10 @@ namespace DungeonGame
             return true;
         }
 
+        public static void SpawnCharacter(Character c) => p_Viewport.BeginInvoke((Action)delegate () { p_Viewport.Controls.Add(c); });
+
+        public static void DestroyCharacter(Character c) => p_Viewport.BeginInvoke((Action)delegate () { p_Viewport.Controls.Remove(c); });
+
         /// <summary>
         /// 按下登入按鍵時所呼叫
         /// <para>1. 嘗試登入伺服器</para>
@@ -110,7 +109,7 @@ namespace DungeonGame
 
                 map = new MapManager();
 
-                p_Viewport.Controls.Add(player);
+                SpawnCharacter(player);
 
                 t_SyncTicker.Enabled = true;
                 b_Send.Enabled = true;
@@ -130,13 +129,14 @@ namespace DungeonGame
 
         /// <summary>
         /// 按下登出按鍵或關閉視窗時所呼叫
-        /// <para>1. 更新UI可控性</para>
-        /// <para>2. 登出伺服器</para>
-        /// <para>3. 清空UI資料</para>
+        /// <para>1. 將玩家由視圖中移除</para>
+        /// <para>2. 更新UI可控性</para>
+        /// <para>3. 登出伺服器</para>
+        /// <para>4. 清空UI資料</para>
         /// </summary>
         public static void Destroy()
         {
-            p_Viewport.Controls.Remove(player);
+            DestroyCharacter(player);
             player = default;
 
             t_SyncTicker.Enabled = false;

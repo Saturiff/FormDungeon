@@ -2,6 +2,7 @@
 using DungeonUtility;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -65,6 +66,11 @@ namespace DungeonGame
             catch { }
         }
 
+        public static void UpdatePlayerLocation()
+        {
+            SendToServer(ServerMessageType.Action, string.Format("{0}|{1}|{2}", playerName, UI.player.Location.X, UI.player.Location.Y));
+        }
+
         /// <summary>
         /// 對伺服器傳送資料
         /// </summary>
@@ -125,7 +131,7 @@ namespace DungeonGame
                         break;
 
                     case ServerMessageType.Online:
-                        LoadCharacterStatus(msg);
+                        LoadPlayerCharacterStatus(msg);
                         break;
 
                     case ServerMessageType.Message:
@@ -133,11 +139,7 @@ namespace DungeonGame
                         break;
 
                     case ServerMessageType.Sync:
-                        // 同步所有玩家資料
-                        // Console.WriteLine(msg);
-
-                        // 若不在字典中，新增key
-                        // 更新玩家物件
+                        SyncAllPlayers(msg);
                         break;
 
                     default:
@@ -159,7 +161,7 @@ namespace DungeonGame
         /// 玩家上線接收自己的角色資料
         /// </summary>
         /// <param name="rawData">伺服器傳來的原始資料</param>
-        private static void LoadCharacterStatus(string rawData)
+        private static void LoadPlayerCharacterStatus(string rawData)
         {
             string[] datas = rawData.Substring(1).Split('|');
             Character c = new Character
@@ -172,6 +174,65 @@ namespace DungeonGame
             };
             players.Add(playerName, c);
             isWaitingPlayerData = false;
+        }
+
+        /// <summary>
+        /// 由伺服器傳來的資料做玩家資料的分割整理
+        /// </summary>
+        /// <param name="rawData">伺服器傳來的原始資料</param>
+        /// <returns></returns>
+        private static IEnumerable<string> ExtractDataPack(string rawData)
+        {
+            string[] datas = rawData.Split(',');
+
+            int otherPlayerNum = Convert.ToInt32(datas[1]);
+
+            if (otherPlayerNum < 1)
+                yield break;
+
+            for (int i = 0; i < otherPlayerNum; i++)
+                yield return datas[i + 2];
+        }
+
+        /// <summary>
+        /// 同步所有其他玩家資料，並在有玩家登出時移除該玩家
+        /// </summary>
+        /// <param name="rawData">伺服器傳來的原始資料</param>
+        private static void SyncAllPlayers(string rawData)
+        {
+            foreach (string name in playerUpdateStatus.Keys.ToList())
+                if (name != playerName)
+                    playerUpdateStatus[name] = false;
+
+            foreach (string dataPack in ExtractDataPack(rawData))
+            {
+                string name = dataPack.Split('|')[0];
+
+                if (players.ContainsKey(name))
+                {
+                    players[name].UpdateByDataPack(dataPack);
+
+                    playerUpdateStatus[name] = true;
+                }
+                else
+                {
+                    Character c = new Character(dataPack);
+
+                    players.Add(c.name, c);
+
+                    UI.SpawnCharacter(players[c.name]);
+
+                    playerUpdateStatus.Add(name, true);
+                }
+            }
+
+            foreach (string name in playerUpdateStatus.Keys.ToList())
+                if (!playerUpdateStatus[name])
+                {
+                    UI.DestroyCharacter(players[name]);
+                    playerUpdateStatus.Remove(name);
+                    players.Remove(name);
+                }
         }
 
         /// <summary>
@@ -193,6 +254,7 @@ namespace DungeonGame
             RequestSyncPlayersData();
 
             players[playerName] = GetPlayerInfo();
+            playerUpdateStatus[playerName] = true;
 
             UI.tb_CharacterStatus.Text = players[playerName].status;
         }
@@ -208,19 +270,19 @@ namespace DungeonGame
             }
             catch { }
 
-            players.Remove(playerName);
+            foreach (Character c in players.Values)
+            {
+                UI.DestroyCharacter(c);
+            }
+
+            players.Clear();
+            playerUpdateStatus.Clear();
 
             status = OnlineStatus.Offline;
             socket.Close();
         }
 
-        public static bool isOnline
-        {
-            get
-            {
-                return status == OnlineStatus.Online;
-            }
-        }
+        public static bool isOnline => status == OnlineStatus.Online;
 
         private static string playerName { get; set; }
         private static string ip { get; set; }
@@ -233,5 +295,6 @@ namespace DungeonGame
         public static bool isWaitingPlayerData = true;
         // 其他玩家清單，[玩家名稱 : 角色物件]
         private static Dictionary<string, Character> players = new Dictionary<string, Character>();
+        private static Dictionary<string, bool> playerUpdateStatus = new Dictionary<string, bool>();
     }
 }
