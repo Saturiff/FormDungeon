@@ -68,7 +68,8 @@ namespace DungeonGame
 
         public static void UpdatePlayerLocation()
         {
-            SendToServer(ServerMessageType.Action, string.Format("{0}|{1}|{2}", playerName, UI.player.Location.X, UI.player.Location.Y));
+            SendToServer(ServerMessageType.Action, string.Format("{0}|{1}|{2}",
+                playerName, UI.player.Location.X, UI.player.Location.Y));
         }
 
         /// <summary>
@@ -163,15 +164,15 @@ namespace DungeonGame
         /// <param name="rawData">伺服器傳來的原始資料</param>
         private static void LoadPlayerCharacterStatus(string rawData)
         {
-            string[] datas = rawData.Substring(1).Split('|');
-            Character c = new Character
-            {
+            string dataPack = rawData.Substring(1);
+            Character c = new Character(dataPack);
+            /*{
                 name = playerName,
                 health = Convert.ToUInt32(datas[0]),
                 atk = Convert.ToInt32(datas[1]),
                 def = Convert.ToInt32(datas[2]),
                 coin = Convert.ToUInt32(datas[3])
-            };
+            };*/
             players.Add(playerName, c);
             isWaitingPlayerData = false;
         }
@@ -200,10 +201,12 @@ namespace DungeonGame
         /// <param name="rawData">伺服器傳來的原始資料</param>
         private static void SyncAllPlayers(string rawData)
         {
+            // 初始化判斷離線的參數
             foreach (string name in playerUpdateStatus.Keys.ToList())
                 if (name != playerName)
                     playerUpdateStatus[name] = false;
 
+            // 更新/新增在線玩家資料
             foreach (string dataPack in ExtractDataPack(rawData))
             {
                 string name = dataPack.Split('|')[0];
@@ -222,15 +225,18 @@ namespace DungeonGame
 
                     UI.SpawnCharacter(players[c.name]);
 
-                    playerUpdateStatus.Add(name, true);
+                    playerUpdateStatus.Add(c.name, true);
                 }
             }
 
+            // 清除離線玩家角色
             foreach (string name in playerUpdateStatus.Keys.ToList())
                 if (!playerUpdateStatus[name])
                 {
                     UI.DestroyCharacter(players[name]);
+
                     playerUpdateStatus.Remove(name);
+
                     players.Remove(name);
                 }
         }

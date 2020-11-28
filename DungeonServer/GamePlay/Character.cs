@@ -36,7 +36,7 @@ namespace DungeonServer
         private int atk { get; set; }
         private int def { get; set; }
         private uint coin { get; set; }
-        private Point loc { get; set; }
+        private Point loc = new Point(400, 220); // todo: spwan point
         private string dataPath => @"./saves/" + name;
         
         public string dataPack => string.Format("{0}|{1}|{2}|{3}|{4}|{5}", 

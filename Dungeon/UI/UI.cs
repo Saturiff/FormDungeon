@@ -24,16 +24,25 @@ namespace DungeonGame
                     kbHook.Unhook();
             };
 
+            p_Viewport.ControlAdded += delegate (object sender, ControlEventArgs e)
+            {
+                // foreach(Control c in p_Viewport.)
+                // Console.WriteLine(((Character)e.Control).name);
+                e.Control.Click += InteractCharacter;
+            };
+
             // tile outline
             p_Viewport.MouseMove += delegate (object sender, MouseEventArgs e)
             {
-                // Console.WriteLine(e.Location);
+                if (map != null)
+                    map.Interact(e.Location);
             };
 
             // select tile
             p_Viewport.Click += delegate (object sender, EventArgs e)
             {
-                // Console.WriteLine(p_Viewport.PointToClientManager(Cursor.Position));
+                if (map != null)
+                    map.Interact(p_Viewport.PointToClient(Cursor.Position));
             };
         }
 
@@ -74,16 +83,31 @@ namespace DungeonGame
         /// <returns>是否為合法姓名</returns>
         private static bool IsVaildName(string name)
         {
-            foreach (var s in new string[] { "\\", "\"", "/", ":", "*", "?", "<", ">", "|", ",", " ", "aux", "com1", "com2", "prn", "con", "nul" })
+            foreach (var s in new string[] {
+                "\\", "\"", "/", ":", "*", "?", "<", ">", "|", ",",
+                " ", "aux", "com1", "com2", "prn", "con", "nul" })
                 if (name.Contains(s))
                     return false;
 
             return true;
         }
 
-        public static void SpawnCharacter(Character c) => p_Viewport.BeginInvoke((Action)delegate () { p_Viewport.Controls.Add(c); });
+        public static void SpawnCharacter(Character c) => p_Viewport.BeginInvoke((Action)delegate ()
+            {
+                p_Viewport.Controls.Add(c);
+                
+            });
 
-        public static void DestroyCharacter(Character c) => p_Viewport.BeginInvoke((Action)delegate () { p_Viewport.Controls.Remove(c); });
+        public static void DestroyCharacter(Character c) => p_Viewport.BeginInvoke((Action)delegate ()
+            {
+                p_Viewport.Controls.Remove(c);
+            });
+
+        private static void InteractCharacter(object sender, EventArgs e)
+        {
+            // todo: add function to interact!
+            // Console.WriteLine("Interact character: " + ((Character)sender).name);
+        }
 
         /// <summary>
         /// 按下登入按鍵時所呼叫

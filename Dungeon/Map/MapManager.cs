@@ -61,20 +61,56 @@ namespace DungeonGame
         // todo: walkable
         private TileType? GetTileType(Point p)
         {
-            if (p.X > -1 && p.X < row && p.Y > -1 && p.Y < col)
-                return tilesData[p];
+            Point _p = new Point(p.X / tileSize.Width, p.Y / tileSize.Height);
+            
+            if (_p.X > -1 && _p.X < col && _p.Y > -1 && _p.Y < row)
+                return tilesData[_p];
 
             return null;
         }
 
         public bool IsWalkable(Point p)
         {
-            return true;
+            if (GetTileType(p) == TileType.Floor || GetTileType(p) == TileType.Door)
+                return true;
 
-            // if(GetTileType(p) == TileType.Floor || GetTileType(p) == TileType.Door)
-            //     return true;
-            // 
-            // return false;
+            return false;
+        }
+
+        private bool IsInteractable(Point p)
+        {
+            if (GetTileType(p) == TileType.Floor)
+                return true;
+
+            return false;
+        }
+        
+        private void BorderlineEffect(Point p)
+        {
+            /*Bitmap borderline = new Bitmap(tileSize.Width, tileSize.Height);
+            using (Graphics g = Graphics.FromImage(borderline))
+            {
+                g.Clear(Color.Transparent);
+
+                Point _p = new Point(p.X / tileSize.Width, p.Y / tileSize.Height);
+
+                int colPos = _p.X * tileSize.Width;
+                int rowPos = _p.Y * tileSize.Height;
+                Point pos = new Point(colPos, rowPos);
+                Rectangle rect = new Rectangle(pos, tileSize);
+
+                g.DrawRectangle(Pens.Azure, rect);
+            }
+
+            UI.p_Viewport.*/
+        }
+
+        public void Interact(Point p)
+        {
+            if(IsInteractable(p))
+            {
+                BorderlineEffect(p);
+            }
         }
 
         private const int row = 11;   // 440/40

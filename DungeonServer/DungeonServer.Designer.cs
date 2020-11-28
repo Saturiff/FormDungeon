@@ -85,6 +85,7 @@
             // 
             // TB_ServerPort
             // 
+            this.TB_ServerPort.Enabled = false;
             this.TB_ServerPort.Location = new System.Drawing.Point(452, 180);
             this.TB_ServerPort.Name = "TB_ServerPort";
             this.TB_ServerPort.Size = new System.Drawing.Size(128, 26);

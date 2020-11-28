@@ -85,6 +85,9 @@
     <EmbeddedResource Include="Dungeon.resx">
       <DependentUpon>Dungeon.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GamePlay\Character.resx">
+      <DependentUpon>Character.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Inventory.resx">
       <DependentUpon>Inventory.cs</DependentUpon>
     </EmbeddedResource>

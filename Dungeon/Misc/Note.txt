@@ -1,10 +1,14 @@
 ﻿Todo list:
-feature		Spawn point
-feature		walkable area / block area
-feature		tile response effect
-feature		mouse function
+bug			mult player spawn location sync
+bug			offline by close window didn't work
+bug			client crash then server didn't work
 feature		inventory
 優化			新增角色
 優化			減少Split
 優化			減化巢狀
+優化			walkable area / block area
+優化			bind event
+character draw start pos?
+pending		spawnpoint give server control?
+客戶端出錯時服務器端需將其移除(離線)
 ...

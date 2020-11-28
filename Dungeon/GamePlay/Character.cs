@@ -9,16 +9,6 @@ namespace DungeonGame
     {
         public Character() => Init();
 
-        public Character(uint health, int atk, int def, uint coin)
-        {
-            this.health = health;
-            this.atk = atk;
-            this.def = def;
-            this.coin = coin;
-
-            Init();
-        }
-
         public Character(string dataPack)
         {
             UpdateByDataPack(dataPack);
@@ -74,7 +64,6 @@ namespace DungeonGame
             if (UI.map.IsWalkable(newLocation))
                 Location = newLocation;
 
-            // timer tick?
             ClientManager.UpdatePlayerLocation();
         }
 
@@ -112,6 +101,5 @@ namespace DungeonGame
                 + Environment.NewLine + "Coin:\t" + coin;
             }
         }
-
     }
 }

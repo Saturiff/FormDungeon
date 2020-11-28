@@ -54,14 +54,23 @@ namespace DungeonServer
 
         public static void StopServer()
         {
-            string code = EnumEx<ServerMessageType>.GetOrderByEnum(ServerMessageType.Offline).ToString();
-            SendAll(code);
+            try
+            {
+                string code = EnumEx<ServerMessageType>.GetOrderByEnum(ServerMessageType.Offline).ToString();
+                SendAll(code);
 
-            svListener.Stop();
-            serverThread.Abort();
-            if (clientThread != null) clientThread.Abort();
-
-            status = ServerStatus.Offline;
+                svListener.Stop();
+                serverThread.Abort();
+                if (clientThread != null) clientThread.Abort();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                status = ServerStatus.Offline;
+            }
         }
         #endregion
 
@@ -97,7 +106,7 @@ namespace DungeonServer
 
                         case ServerMessageType.Online:
                             PlayerOnline(str, sk);
-                            SendTo(str, cmdOrder.ToString() + players[str].dataPack);
+                            SendTo(str, cmdOrder.ToString() + str + "|" + players[str].dataPack);
                             break;
 
                         case ServerMessageType.Message:
@@ -161,7 +170,7 @@ namespace DungeonServer
         }
 
         // 更新玩家位置
-        private static void UpdatePlayerLocation(string name, int x, int y) 
+        private static void UpdatePlayerLocation(string name, int x, int y)
             => players[name].UpdateLocation(new System.Drawing.Point(x, y));
 
         // 同步所有玩家資料，傳給所有玩家除了自己以外的資料

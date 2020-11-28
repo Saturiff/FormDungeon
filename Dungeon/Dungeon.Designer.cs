@@ -56,6 +56,7 @@
             // 
             // P_Viewport
             // 
+            this.P_Viewport.Cursor = System.Windows.Forms.Cursors.Cross;
             this.P_Viewport.Location = new System.Drawing.Point(13, 14);
             this.P_Viewport.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.P_Viewport.Name = "P_Viewport";
@@ -272,7 +273,7 @@
             this.INV_Player.Size = new System.Drawing.Size(250, 165);
             this.INV_Player.TabIndex = 28;
             // 
-            // Dungeon
+            // F_Dungeon
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -301,7 +302,7 @@
             this.Controls.Add(this.P_Viewport);
             this.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Name = "Dungeon";
+            this.Name = "F_Dungeon";
             this.Text = "Dungeon";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Dungeon_FormClosing);
             this.ResumeLayout(false);

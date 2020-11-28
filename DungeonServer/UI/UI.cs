@@ -19,12 +19,16 @@ namespace DungeonServer
         {
             ServerListener.StartServer();
 
+            lb_Log.Items.Add("-----");
+
             b_ToggleServer.Text = "Stop server";
         }
 
         public static void Stop()
         {
             ServerListener.StopServer();
+
+            lb_PlayerList.Items.Clear();
 
             b_ToggleServer.Text = "Start server";
         }
