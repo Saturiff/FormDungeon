@@ -12,21 +12,11 @@ namespace DungeonGame
 {
     public static class ClientManager
     {
+        #region 初始化
         public static void SetServerIP(string inIP = "127.0.0.1") => ip = inIP;
+        #endregion
 
-        /// <summary>
-        /// 查詢玩家
-        /// </summary>
-        /// <returns>Character物件</returns>
-        public static Character GetPlayerInfo() => players[playerName];
-
-        /// <summary>
-        /// 查詢指定名稱玩家
-        /// </summary>
-        /// <param name="name">玩家名稱</param>
-        /// <returns>Character物件</returns>
-        public static Character GetPlayerInfo(string name) => players[name];
-
+        #region 傳送資料
         /// <summary>
         /// 登入伺服器
         /// <para>1. 初始化TCP監聽</para>
@@ -73,6 +63,71 @@ namespace DungeonGame
         }
 
         /// <summary>
+        /// 玩家對所有在線玩家發送訊息
+        /// </summary>
+        /// <param name="msg">玩家發送的訊息</param>
+        public static void SendMessage(string msg)
+            => SendToServer(ServerMessageType.Message, playerName + " : " + msg);
+
+        /// <summary>
+        /// 由伺服器回傳的資料進行介面更新，會不斷執行
+        /// </summary>
+        public static void UpdateUI()
+        {
+            RequestSyncPlayersData();
+
+            players[playerName] = GetPlayerInfo();
+            playerUpdateStatus[playerName] = true;
+
+            UI.tb_CharacterStatus.Text = players[playerName].status;
+        }
+
+        /// <summary>
+        /// 向伺服器請求其他玩家資料
+        /// </summary>
+        private static void RequestSyncPlayersData()
+            => SendToServer(ServerMessageType.SyncPlayerData, playerName);
+
+        public static void RequestSyncPlayerItem(string targetName)
+            => SendToServer(ServerMessageType.SyncPlayerItem, playerName + "|" + targetName);
+
+        /// <summary>
+        /// 查詢玩家
+        /// </summary>
+        /// <returns>Character物件</returns>
+        public static Character GetPlayerInfo() => players[playerName];
+
+        /// <summary>
+        /// 查詢指定名稱玩家
+        /// </summary>
+        /// <param name="name">玩家名稱</param>
+        /// <returns>Character物件</returns>
+        public static Character GetPlayerInfo(string name) => players[name];
+
+        /// <summary>
+        /// 傳送登出請求與玩家名稱
+        /// </summary>
+        public static void Logout()
+        {
+            try
+            {
+                SendToServer(ServerMessageType.Offline, playerName);
+            }
+            catch { }
+
+            foreach (Character c in players.Values)
+            {
+                UI.DestroyCharacter(c);
+            }
+
+            players.Clear();
+            playerUpdateStatus.Clear();
+
+            status = OnlineStatus.Offline;
+            socket.Close();
+        }
+
+        /// <summary>
         /// 對伺服器傳送資料
         /// </summary>
         /// <param name="type">伺服器請求的種類指令碼</param>
@@ -84,14 +139,9 @@ namespace DungeonGame
             byte[] data = Encoding.Default.GetBytes(msg);
             socket.Send(data, 0, data.Length, SocketFlags.None);
         }
+        #endregion
 
-        /// <summary>
-        /// 玩家對所有在線玩家發送訊息
-        /// </summary>
-        /// <param name="msg">玩家發送的訊息</param>
-        public static void SendMessage(string msg)
-            => SendToServer(ServerMessageType.Message, playerName + " : " + msg);
-
+        #region 處理接收的資料
         /// <summary>
         /// 監聽伺服器資料，會不斷執行
         /// </summary>
@@ -139,11 +189,16 @@ namespace DungeonGame
                         ReceiveTextMessage(msg);
                         break;
 
-                    case ServerMessageType.Sync:
-                        SyncAllPlayers(msg);
+                    case ServerMessageType.SyncPlayerData:
+                        SyncAllPlayersData(msg);
+                        break;
+
+                    case ServerMessageType.SyncPlayerItem:
+                        SyncPlayerItem(msg);
                         break;
 
                     default:
+                        Console.WriteLine("bad data: " + cmdOrder);
                         break;
                 }
             }
@@ -166,13 +221,6 @@ namespace DungeonGame
         {
             string dataPack = rawData.Substring(1);
             Character c = new Character(dataPack);
-            /*{
-                name = playerName,
-                health = Convert.ToUInt32(datas[0]),
-                atk = Convert.ToInt32(datas[1]),
-                def = Convert.ToInt32(datas[2]),
-                coin = Convert.ToUInt32(datas[3])
-            };*/
             players.Add(playerName, c);
             isWaitingPlayerData = false;
         }
@@ -196,10 +244,16 @@ namespace DungeonGame
         }
 
         /// <summary>
+        /// 接收訊息
+        /// </summary>
+        /// <param name="rawData">伺服器傳來的原始資料</param>
+        private static void ReceiveTextMessage(string rawData) => UI.Message(rawData.Substring(1));
+
+        /// <summary>
         /// 同步所有其他玩家資料，並在有玩家登出時移除該玩家
         /// </summary>
         /// <param name="rawData">伺服器傳來的原始資料</param>
-        private static void SyncAllPlayers(string rawData)
+        private static void SyncAllPlayersData(string rawData)
         {
             // 初始化判斷離線的參數
             foreach (string name in playerUpdateStatus.Keys.ToList())
@@ -241,52 +295,11 @@ namespace DungeonGame
                 }
         }
 
-        /// <summary>
-        /// 接收訊息
-        /// </summary>
-        /// <param name="rawData">伺服器傳來的原始資料</param>
-        private static void ReceiveTextMessage(string rawData) => UI.Message(rawData.Substring(1));
-
-        /// <summary>
-        /// 向伺服器請求其他玩家資料
-        /// </summary>
-        private static void RequestSyncPlayersData() => SendToServer(ServerMessageType.Sync, playerName);
-
-        /// <summary>
-        /// 由伺服器回傳的資料進行介面更新，會不斷執行
-        /// </summary>
-        public static void UpdateUI()
+        private static void SyncPlayerItem(string rawData)
         {
-            RequestSyncPlayersData();
-
-            players[playerName] = GetPlayerInfo();
-            playerUpdateStatus[playerName] = true;
-
-            UI.tb_CharacterStatus.Text = players[playerName].status;
+            // Update UI.inv_Their or UI.inv_Player
         }
-
-        /// <summary>
-        /// 傳送登出請求與玩家名稱
-        /// </summary>
-        public static void Logout()
-        {
-            try
-            {
-                SendToServer(ServerMessageType.Offline, playerName);
-            }
-            catch { }
-
-            foreach (Character c in players.Values)
-            {
-                UI.DestroyCharacter(c);
-            }
-
-            players.Clear();
-            playerUpdateStatus.Clear();
-
-            status = OnlineStatus.Offline;
-            socket.Close();
-        }
+        #endregion
 
         public static bool isOnline => status == OnlineStatus.Online;
 

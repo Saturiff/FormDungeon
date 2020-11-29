@@ -1,14 +1,26 @@
-﻿Todo list:
-bug			mult player spawn location sync
-bug			offline by close window didn't work
-bug			client crash then server didn't work
-feature		inventory
+﻿Fix:
+Character image
+
+Doing:
+玩家->玩家
+玩家->商人
+feature		inventory data
+feature		inventory grid
+feature		inventory system
+
+Todo list:
+String join
+character draw start pos?
+pending		spawnpoint give server control?
+客戶端出錯時服務器端需將其移除(離線)
+優化			character
+feature		enemy
+feature		fight
+feature		shop npc
+
+Optim:
 優化			新增角色
 優化			減少Split
 優化			減化巢狀
 優化			walkable area / block area
 優化			bind event
-character draw start pos?
-pending		spawnpoint give server control?
-客戶端出錯時服務器端需將其移除(離線)
-...

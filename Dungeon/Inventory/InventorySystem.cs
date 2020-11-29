@@ -1,52 +1,79 @@
-﻿using System.Collections.Generic;
-using System.Windows.Forms;
-
-namespace DungeonGame
+﻿namespace DungeonGame.Inventory
 {
+    /// <summary>
+    /// 管理所有在Form中的InventoryGrid
+    /// </summary>
     public class InventorySystem
     {
-        public InventorySystem(FlowLayoutPanel player, FlowLayoutPanel their)
+        public InventorySystem()
         {
-            FLP_Player = player;
-            FLP_Their = their;
 
-            for(uint i = 0; i < slotNumber; i++)
-            {
-                FLP_Player.Controls.Add(new Slot());
-                FLP_Their.Controls.Add(new Slot());
-                playerItems.Add(new Slot());
-                theirItems.Add(new Slot());
-            }
-
-            playerItems.ForEach(x => FLP_Player.Controls.Add(x));
-            theirItems.ForEach(x => FLP_Their.Controls.Add(x));
         }
 
+        // Resync all slot
+        public void Update()
+        {
+
+        }
+
+        public void Use()
+        {
+            if (UseItem())
+                UI.inv_Player.RemoveItem(UI.inv_Player.selectedIdx);
+        }
+
+        // todo: 是否成功使用物品
+        private bool UseItem()
+        {
+            return true;
+        }
+
+        // player - player
+        // Player selected (in player's inventory) item
+        // To their inventory
+        // ---
+        // shop - player
+        // Buy()
+        // To player's inventory
         public void Transfer()
         {
+            // ClientManager.
+            // SendToServer();
+            // while(not get message);
+            // if(success) remove
+            // else ui.log.add(full)
 
+            // Buy();
+            // UI.inv_Their.UpdateItem
         }
 
+        // Player selected (in shop's inventory) item
+        // Calc(price-coin) 
+        // Update coin
+        // Transfer to player's inventory
         public void Buy()
         {
 
         }
 
+        // Player selected (in player's inventory) item
+        // Calc(sell price+coin)
+        // Update coin
+        // Transfer to player's inventory
         public void Sell()
         {
 
         }
 
+        // Remove item from player's inventory
         public void Drop()
         {
-
+            UI.inv_Player.RemoveItem(UI.inv_Player.selectedIdx);
         }
 
-        public readonly uint slotNumber = 15;
-        public FlowLayoutPanel FLP_Player;
-        public FlowLayoutPanel FLP_Their;
-        public List<Slot> playerItems = new List<Slot>();
-        public List<Slot> theirItems = new List<Slot>();
-
+        private void Clear(InventoryGrid target)
+        {
+            target.ClearInventory();
+        }
     }
 }

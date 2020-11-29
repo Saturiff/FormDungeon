@@ -54,11 +54,11 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Client\ServerMessageType.cs" />
-    <Compile Include="UI\Inventory.cs">
+    <Compile Include="Inventory\InventoryGrid.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UI\Inventory.Designer.cs">
-      <DependentUpon>Inventory.cs</DependentUpon>
+    <Compile Include="Inventory\InventoryGrid.Designer.cs">
+      <DependentUpon>InventoryGrid.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\UI.cs" />
     <Compile Include="Dungeon.cs">
@@ -75,10 +75,10 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Client\ClientManager.cs" />
-    <Compile Include="UI\Slot.cs">
+    <Compile Include="Inventory\Slot.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UI\Slot.Designer.cs">
+    <Compile Include="Inventory\Slot.Designer.cs">
       <DependentUpon>Slot.cs</DependentUpon>
     </Compile>
     <Compile Include="Map\TileType.cs" />
@@ -88,10 +88,10 @@
     <EmbeddedResource Include="GamePlay\Character.resx">
       <DependentUpon>Character.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Inventory.resx">
-      <DependentUpon>Inventory.cs</DependentUpon>
+    <EmbeddedResource Include="Inventory\InventoryGrid.resx">
+      <DependentUpon>InventoryGrid.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Slot.resx">
+    <EmbeddedResource Include="Inventory\Slot.resx">
       <DependentUpon>Slot.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>

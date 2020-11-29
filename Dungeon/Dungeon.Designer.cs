@@ -39,7 +39,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.TB_CharacterStatus = new System.Windows.Forms.TextBox();
             this.TB_Message = new System.Windows.Forms.TextBox();
-            this.B_Send = new System.Windows.Forms.Button();
+            this.B_SendMessage = new System.Windows.Forms.Button();
             this.B_Transfer = new System.Windows.Forms.Button();
             this.B_Buy = new System.Windows.Forms.Button();
             this.B_Sell = new System.Windows.Forms.Button();
@@ -50,8 +50,8 @@
             this.T_SyncTicker = new System.Windows.Forms.Timer(this.components);
             this.LB_Message = new System.Windows.Forms.ListBox();
             this.LB_Log = new System.Windows.Forms.ListBox();
-            this.INV_Their = new DungeonGame.Inventory();
-            this.INV_Player = new DungeonGame.Inventory();
+            this.INV_Their = new DungeonGame.InventoryGrid();
+            this.INV_Player = new DungeonGame.InventoryGrid();
             this.SuspendLayout();
             // 
             // P_Viewport
@@ -147,16 +147,16 @@
             this.TB_Message.Size = new System.Drawing.Size(168, 26);
             this.TB_Message.TabIndex = 16;
             // 
-            // B_Send
+            // B_SendMessage
             // 
-            this.B_Send.Enabled = false;
-            this.B_Send.Location = new System.Drawing.Point(1015, 427);
-            this.B_Send.Name = "B_Send";
-            this.B_Send.Size = new System.Drawing.Size(76, 27);
-            this.B_Send.TabIndex = 17;
-            this.B_Send.Text = "Send";
-            this.B_Send.UseVisualStyleBackColor = true;
-            this.B_Send.Click += new System.EventHandler(this.B_Send_Click);
+            this.B_SendMessage.Enabled = false;
+            this.B_SendMessage.Location = new System.Drawing.Point(1015, 427);
+            this.B_SendMessage.Name = "B_SendMessage";
+            this.B_SendMessage.Size = new System.Drawing.Size(76, 27);
+            this.B_SendMessage.TabIndex = 17;
+            this.B_SendMessage.Text = "Send";
+            this.B_SendMessage.UseVisualStyleBackColor = true;
+            this.B_SendMessage.Click += new System.EventHandler(this.B_SendMessage_Click);
             // 
             // B_Transfer
             // 
@@ -167,7 +167,6 @@
             this.B_Transfer.TabIndex = 18;
             this.B_Transfer.Text = "Transfer";
             this.B_Transfer.UseVisualStyleBackColor = true;
-            this.B_Transfer.Click += new System.EventHandler(this.B_Transfer_Click);
             // 
             // B_Buy
             // 
@@ -178,7 +177,6 @@
             this.B_Buy.TabIndex = 19;
             this.B_Buy.Text = "Buy";
             this.B_Buy.UseVisualStyleBackColor = true;
-            this.B_Buy.Click += new System.EventHandler(this.B_Buy_Click);
             // 
             // B_Sell
             // 
@@ -189,7 +187,6 @@
             this.B_Sell.TabIndex = 20;
             this.B_Sell.Text = "Sell";
             this.B_Sell.UseVisualStyleBackColor = true;
-            this.B_Sell.Click += new System.EventHandler(this.B_Sell_Click);
             // 
             // B_Drop
             // 
@@ -200,7 +197,6 @@
             this.B_Drop.TabIndex = 21;
             this.B_Drop.Text = "Drop";
             this.B_Drop.UseVisualStyleBackColor = true;
-            this.B_Drop.Click += new System.EventHandler(this.B_Drop_Click);
             // 
             // TB_ItemInfo
             // 
@@ -230,7 +226,6 @@
             this.B_Use.TabIndex = 25;
             this.B_Use.Text = "Use";
             this.B_Use.UseVisualStyleBackColor = true;
-            this.B_Use.Click += new System.EventHandler(this.B_Use_Click);
             // 
             // T_SyncTicker
             // 
@@ -289,7 +284,7 @@
             this.Controls.Add(this.B_Sell);
             this.Controls.Add(this.B_Buy);
             this.Controls.Add(this.B_Transfer);
-            this.Controls.Add(this.B_Send);
+            this.Controls.Add(this.B_SendMessage);
             this.Controls.Add(this.TB_Message);
             this.Controls.Add(this.TB_CharacterStatus);
             this.Controls.Add(this.label5);
@@ -322,7 +317,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox TB_CharacterStatus;
         private System.Windows.Forms.TextBox TB_Message;
-        private System.Windows.Forms.Button B_Send;
+        private System.Windows.Forms.Button B_SendMessage;
         private System.Windows.Forms.Button B_Transfer;
         private System.Windows.Forms.Button B_Buy;
         private System.Windows.Forms.Button B_Sell;
@@ -333,8 +328,8 @@
         private System.Windows.Forms.Timer T_SyncTicker;
         private System.Windows.Forms.ListBox LB_Message;
         private System.Windows.Forms.ListBox LB_Log;
-        private Inventory INV_Player;
-        private Inventory INV_Their;
+        private InventoryGrid INV_Player;
+        private InventoryGrid INV_Their;
     }
 }
 

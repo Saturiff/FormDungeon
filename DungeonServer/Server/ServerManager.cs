@@ -120,8 +120,13 @@ namespace DungeonServer
                                                  y: Convert.ToInt32(datas[2]));
                             break;
 
-                        case ServerMessageType.Sync:
-                            SyncPlayerData(str);
+                        case ServerMessageType.SyncPlayerData:
+                            SyncAllPlayersData(name: str);
+                            break;
+
+                        case ServerMessageType.SyncPlayerItem:
+                            string[] names = str.Split('|');
+                            SyncPlayerItem(requestFrom: names[0], targetPlayer: names[1]);
                             break;
 
                         default:
@@ -175,9 +180,9 @@ namespace DungeonServer
 
         // 同步所有玩家資料，傳給所有玩家除了自己以外的資料
         // 格式 = 同步代碼,其他玩家數,玩家1名稱|玩家素質(由管線符號'|'分隔),玩家2名稱| ...
-        private static void SyncPlayerData(string name)
+        private static void SyncAllPlayersData(string name)
         {
-            string cmd = EnumEx<ServerMessageType>.GetOrderByEnum(ServerMessageType.Sync).ToString();
+            string cmd = EnumEx<ServerMessageType>.GetOrderByEnum(ServerMessageType.SyncPlayerData).ToString();
             string syncStr = cmd + "," + (players.Count - 1).ToString();
             foreach (var key in players.Keys)
             {
@@ -186,6 +191,11 @@ namespace DungeonServer
             }
 
             SendTo(name, syncStr);
+        }
+
+        private static void SyncPlayerItem(string requestFrom, string targetPlayer)
+        {
+            SendTo(requestFrom, players[targetPlayer].itemPack);
         }
         #endregion
 

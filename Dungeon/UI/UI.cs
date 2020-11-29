@@ -1,17 +1,32 @@
-﻿using System;
+﻿using DungeonGame.Inventory;
+using System;
 using System.Windows.Forms;
 
 namespace DungeonGame
 {
+    /// <summary>
+    /// 所有類別可對表單控件進行訪問的唯一渠道
+    /// <para>* 僅在跨類別時使用</para>
+    /// </summary>
     public static class UI
     {
+        #region 初始化
         /// <summary>
         /// 對特定控件的額外初始化
         /// </summary>
         public static void InitControls()
         {
+            inventory = new InventorySystem();
+
             tb_ItemInfo.Font = new System.Drawing.Font(tb_ItemInfo.Font.Name, 10);
 
+            BindFormEvents();
+            BindViewportEvents();
+            BindInventoryEvents();
+        }
+
+        private static void BindFormEvents()
+        {
             f_Dungeon.Activated += delegate (object sender, EventArgs e)
             {
                 if (ClientManager.isOnline)
@@ -23,11 +38,12 @@ namespace DungeonGame
                 if (ClientManager.isOnline)
                     kbHook.Unhook();
             };
+        }
 
+        private static void BindViewportEvents()
+        {
             p_Viewport.ControlAdded += delegate (object sender, ControlEventArgs e)
             {
-                // foreach(Control c in p_Viewport.)
-                // Console.WriteLine(((Character)e.Control).name);
                 e.Control.Click += InteractCharacter;
             };
 
@@ -44,8 +60,39 @@ namespace DungeonGame
                 if (map != null)
                     map.Interact(p_Viewport.PointToClient(Cursor.Position));
             };
+
         }
 
+        private static void BindInventoryEvents()
+        {
+            b_Use.Click += delegate (object sender, EventArgs e)
+            {
+                inventory.Use();
+            };
+
+            b_Transfer.Click += delegate (object sender, EventArgs e)
+            {
+                inventory.Transfer();
+            };
+
+            b_Buy.Click += delegate (object sender, EventArgs e)
+            {
+                inventory.Buy();
+            };
+
+            b_Sell.Click += delegate (object sender, EventArgs e)
+            {
+                inventory.Sell();
+            };
+
+            b_Drop.Click += delegate (object sender, EventArgs e)
+            {
+                inventory.Drop();
+            };
+        }
+        #endregion
+
+        #region ListBox
         /// <summary>
         /// 新增至聊天訊息欄
         /// </summary>
@@ -75,23 +122,9 @@ namespace DungeonGame
             lb.SelectedIndex = lb.Items.Count - 1;
             lb.ClearSelected();
         }
+        #endregion
 
-        /// <summary>
-        /// 判斷姓名合法性，避免創建存檔文件或傳遞資料封包時時出現錯誤
-        /// </summary>
-        /// <param name="name">欲判斷之玩家名稱</param>
-        /// <returns>是否為合法姓名</returns>
-        private static bool IsVaildName(string name)
-        {
-            foreach (var s in new string[] {
-                "\\", "\"", "/", ":", "*", "?", "<", ">", "|", ",",
-                " ", "aux", "com1", "com2", "prn", "con", "nul" })
-                if (name.Contains(s))
-                    return false;
-
-            return true;
-        }
-
+        #region Character
         public static void SpawnCharacter(Character c) => p_Viewport.BeginInvoke((Action)delegate ()
             {
                 p_Viewport.Controls.Add(c);
@@ -108,7 +141,9 @@ namespace DungeonGame
             // todo: add function to interact!
             // Console.WriteLine("Interact character: " + ((Character)sender).name);
         }
+        #endregion
 
+        #region Login/Logout
         /// <summary>
         /// 按下登入按鍵時所呼叫
         /// <para>1. 嘗試登入伺服器</para>
@@ -152,6 +187,22 @@ namespace DungeonGame
         }
 
         /// <summary>
+        /// 判斷姓名合法性，避免創建存檔文件或傳遞資料封包時時出現錯誤
+        /// </summary>
+        /// <param name="name">欲判斷之玩家名稱</param>
+        /// <returns>是否為合法姓名</returns>
+        private static bool IsVaildName(string name)
+        {
+            foreach (var s in new string[] {
+                "\\", "\"", "/", ":", "*", "?", "<", ">", "|", ",",
+                " ", "aux", "com1", "com2", "prn", "con", "nul" })
+                if (name.Contains(s))
+                    return false;
+
+            return true;
+        }
+
+        /// <summary>
         /// 按下登出按鍵或關閉視窗時所呼叫
         /// <para>1. 將玩家由視圖中移除</para>
         /// <para>2. 更新UI可控性</para>
@@ -183,8 +234,10 @@ namespace DungeonGame
 
             b_ToggleLogin.Text = "Login";
         }
+        #endregion
 
         private static KeyboardHook kbHook = new KeyboardHook();
+        private static InventorySystem inventory;
 
         public static Character player;
         public static MapManager map;
@@ -205,7 +258,7 @@ namespace DungeonGame
         public static Button b_Buy;
         public static Button b_Sell;
         public static Button b_Drop;
-        public static Inventory inv_Player;
-        public static Inventory inv_Their;
+        public static InventoryGrid inv_Player;
+        public static InventoryGrid inv_Their;
     }
 }

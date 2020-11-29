@@ -1,7 +1,7 @@
 ﻿
 namespace DungeonGame
 {
-    partial class Inventory
+    partial class InventoryGrid
     {
         /// <summary> 
         /// Required designer variable.

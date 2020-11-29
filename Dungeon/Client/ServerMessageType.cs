@@ -10,6 +10,7 @@
         Offline,
         Message,
         Action,
-        Sync
+        SyncPlayerData,
+        SyncPlayerItem
     }
 }

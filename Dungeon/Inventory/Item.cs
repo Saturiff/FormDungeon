@@ -36,8 +36,8 @@ namespace DungeonGame
         {
             get
             {
-                return string.Format("name:\t\t{0}\r\natk\t\t{1}\r\ndef\t\t{2}\r\nSell Price:\t{3}\r\nBuy Price:\t{4}\r\nDesc:\t\t{5}"
-                    , name, atk, def, sellPrice, buyPrice, desc);
+                return string.Format("name:\t\t{0}\r\natk\t\t{1}\r\ndef\t\t{2}\r\nSell Price:\t{3}\r\nBuy Price:\t{4}\r\nDesc:\t\t{5}",
+                    name, atk, def, sellPrice, buyPrice, desc);
             }
         }
     }

@@ -6,6 +6,7 @@ namespace DungeonGame
     {
         public static readonly Dictionary<string, Item> data = new Dictionary<string, Item>
         {
+            { "000", new Item { name = "None", atk = 0,  def = 0,  buyPrice = 0, sellPrice = 0, desc = "" } },
             { "001", new Item { name = "Pendant", atk = 500,  def = 500,  buyPrice = 15000, sellPrice = 3000, desc = "墜飾" } },
             { "002", new Item { name = "Buff",    atk = 150,  def = 150,  buyPrice = 5000, sellPrice = 1000, desc = "增益" } },
             { "003", new Item { name = "Ring A",  atk = 5,  def = 5,   buyPrice = 75, sellPrice = 10, desc = "戒指 A" } },
