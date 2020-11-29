@@ -171,7 +171,7 @@ namespace DungeonGame
                 SpawnCharacter(player);
 
                 t_SyncTicker.Enabled = true;
-                b_Send.Enabled = true;
+                b_SendMessage.Enabled = true;
                 b_Use.Enabled = true;
                 b_Transfer.Enabled = true;
                 b_Buy.Enabled = true;
@@ -215,7 +215,7 @@ namespace DungeonGame
             player = default;
 
             t_SyncTicker.Enabled = false;
-            b_Send.Enabled = false;
+            b_SendMessage.Enabled = false;
             b_Use.Enabled = false;
             b_Transfer.Enabled = false;
             b_Buy.Enabled = false;
@@ -252,7 +252,7 @@ namespace DungeonGame
         public static ListBox lb_Message;
         public static ListBox lb_Log;
         public static Button b_ToggleLogin;
-        public static Button b_Send;
+        public static Button b_SendMessage;
         public static Button b_Use;
         public static Button b_Transfer;
         public static Button b_Buy;

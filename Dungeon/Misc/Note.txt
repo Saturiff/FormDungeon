@@ -1,7 +1,4 @@
-﻿Fix:
-Character image
-
-Doing:
+﻿Doing:
 玩家->玩家
 玩家->商人
 feature		inventory data

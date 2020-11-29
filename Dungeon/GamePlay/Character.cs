@@ -19,8 +19,7 @@ namespace DungeonGame
         private void Init()
         {
             Size = characterSize;
-            
-            DrawCharacter();
+            BorderStyle = BorderStyle.FixedSingle;
         }
 
         public void UpdateByDataPack(string dataPack)
@@ -32,22 +31,7 @@ namespace DungeonGame
             def = Convert.ToInt32(datas[3]);
             coin = Convert.ToUInt32(datas[4]);
             Location = new Point(Convert.ToInt32(datas[5]), Convert.ToInt32(datas[6]));
-        }
-
-        /// <summary>
-        /// 繪製角色
-        /// </summary>
-        private void DrawCharacter()
-        {
-            Bitmap bg = new Bitmap(tileSize.Width, tileSize.Height);
-            using (Graphics g = Graphics.FromImage(bg))
-            {
-                g.Clear(Color.Transparent);
-
-                GraphicsEx.FillCircle(g, Brushes.Azure, tileSize.Width / 2, tileSize.Height / 2, 5);
-            }
-
-            BackgroundImage = bg;
+            BackColor = Color.FromArgb(Convert.ToUInt16(datas[7]), Convert.ToUInt16(datas[8]), Convert.ToUInt16(datas[9]));
         }
 
         public void CalcMove()
@@ -77,7 +61,6 @@ namespace DungeonGame
             coin = default;
         }
 
-        private Size tileSize = new Size(40, 40);
         private Size characterSize = new Size(20, 20);
 
         public bool isMovingUp;
