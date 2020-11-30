@@ -124,25 +124,28 @@ namespace DungeonGame
         #endregion
 
         #region Character
-        public static void SpawnCharacter(Character c) => p_Viewport.BeginInvoke((Action)delegate ()
+        public static void SpawnCharacter(CharacterBase c) => p_Viewport.BeginInvoke((Action)delegate ()
             {
                 p_Viewport.Controls.Add(c);
-                
+
             });
 
-        public static void DestroyCharacter(Character c) => p_Viewport.BeginInvoke((Action)delegate ()
+        public static void DestroyCharacter(CharacterBase c) => p_Viewport.BeginInvoke((Action)delegate ()
             {
                 p_Viewport.Controls.Remove(c);
             });
 
+        /// <summary>
+        /// 鼠標與Viewport的角色互動
+        /// </summary>
+        /// <param name="sender">Character物件</param>
+        /// <param name="e">EventArgs參數</param>
         private static void InteractCharacter(object sender, EventArgs e)
         {
-            Character ch = (Character)sender;
-            
-            ClientManager.RequestCharacterItem(ch.name);
-
-            // todo: add function to interact!
-            // Console.WriteLine("Interact character: " + ((Character)sender).name);
+            if (sender is Enemy enemy && enemy.isAlive)
+                player.Attack(enemy);
+            else
+                ClientManager.RequestCharacterItem(((CharacterBase)sender).name);
         }
         #endregion
 
@@ -166,6 +169,7 @@ namespace DungeonGame
 
                 while (ClientManager.isWaitingPlayerData) ;
                 player = ClientManager.GetPlayerInfo();
+                ClientManager.RequestCharacterItem(player.name);
 
                 Log("Welcome, " + player.name + "!");
 
@@ -241,7 +245,7 @@ namespace DungeonGame
 
         private static KeyboardHook kbHook = new KeyboardHook();
 
-        public static Character player;
+        public static Player player;
         public static MapManager map;
         public static InventorySystem inventory;
 

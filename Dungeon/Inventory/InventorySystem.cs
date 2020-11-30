@@ -5,11 +5,6 @@
     /// </summary>
     public class InventorySystem
     {
-        public InventorySystem()
-        {
-
-        }
-
         // Resync all slot, call by ClientManager
         public void Update(string name, string itemPack)
         {

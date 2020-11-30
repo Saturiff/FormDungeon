@@ -10,6 +10,9 @@ using System.Threading;
 
 namespace DungeonGame
 {
+    /// <summary>
+    /// 對遊戲伺服器進行傳送資料與接收資料
+    /// </summary>
     public static class ClientManager
     {
         #region 初始化
@@ -56,10 +59,23 @@ namespace DungeonGame
             catch { }
         }
 
+        /// <summary>
+        /// 玩家移動後對伺服器傳送玩家的新位置
+        /// </summary>
         public static void UpdatePlayerLocation()
         {
             SendToServer(ServerMessageType.Action, string.Format("{0}|{1}|{2}",
                 playerName, UI.player.Location.X, UI.player.Location.Y));
+        }
+
+        /// <summary>
+        /// 玩家對目標造成傷害
+        /// </summary>
+        /// <param name="name">目標名稱</param>
+        /// <param name="damage">傷害值</param>
+        public static void Hit(string name, int damage)
+        {
+            SendToServer(ServerMessageType.Hit, name + "|" + damage.ToString());
         }
 
         /// <summary>
@@ -83,11 +99,15 @@ namespace DungeonGame
         }
 
         /// <summary>
-        /// 向伺服器請求其他玩家資料
+        /// 向伺服器請求其他玩家狀態資料
         /// </summary>
         private static void RequestSyncPlayersData()
             => SendToServer(ServerMessageType.SyncPlayerData, playerName);
 
+        /// <summary>
+        /// 向伺服器請求特定玩家物品欄資料
+        /// </summary>
+        /// <param name="targetName"></param>
         public static void RequestCharacterItem(string targetName)
             => SendToServer(ServerMessageType.RequestCharacterItem, playerName + "|" + targetName);
 
@@ -95,14 +115,14 @@ namespace DungeonGame
         /// 查詢玩家
         /// </summary>
         /// <returns>Character物件</returns>
-        public static Character GetPlayerInfo() => players[playerName];
+        public static Player GetPlayerInfo() => players[playerName];
 
         /// <summary>
         /// 查詢指定名稱玩家
         /// </summary>
         /// <param name="name">玩家名稱</param>
         /// <returns>Character物件</returns>
-        public static Character GetPlayerInfo(string name) => players[name];
+        public static Player GetPlayerInfo(string name) => players[name];
 
         /// <summary>
         /// 傳送登出請求與玩家名稱
@@ -115,7 +135,7 @@ namespace DungeonGame
             }
             catch { }
 
-            foreach (Character c in players.Values)
+            foreach (Player c in players.Values)
             {
                 UI.DestroyCharacter(c);
             }
@@ -220,7 +240,7 @@ namespace DungeonGame
         private static void LoadPlayerCharacterStatus(string rawData)
         {
             string dataPack = rawData.Substring(1);
-            Character c = new Character(dataPack);
+            Player c = new Player(dataPack);
             players.Add(playerName, c);
             isWaitingPlayerData = false;
         }
@@ -244,13 +264,13 @@ namespace DungeonGame
         }
 
         /// <summary>
-        /// 接收訊息
+        /// 接收文字訊息
         /// </summary>
         /// <param name="rawData">伺服器傳來的原始資料</param>
         private static void ReceiveTextMessage(string rawData) => UI.Message(rawData.Substring(1));
 
         /// <summary>
-        /// 同步所有其他玩家資料，並在有玩家登出時移除該玩家
+        /// 同步所有其他玩家狀態資料，並在有玩家登出時移除該玩家
         /// </summary>
         /// <param name="rawData">伺服器傳來的原始資料</param>
         private static void SyncAllPlayersData(string rawData)
@@ -273,7 +293,7 @@ namespace DungeonGame
                 }
                 else
                 {
-                    Character c = new Character(dataPack);
+                    Player c = new Player(dataPack);
 
                     players.Add(c.name, c);
 
@@ -295,6 +315,10 @@ namespace DungeonGame
                 }
         }
 
+        /// <summary>
+        /// 更新特定玩家物品欄資料
+        /// </summary>
+        /// <param name="rawData">伺服器傳來的原始資料</param>
         private static void SyncPlayerItem(string rawData)
         {
             string[] itemData = rawData.Substring(1).Split(',');
@@ -302,7 +326,6 @@ namespace DungeonGame
             string itemPack = itemData[1];
 
             UI.inventory.Update(fromPlayerName, itemPack);
-            // Update UI.inv_Their or UI.inv_Player
         }
         #endregion
 
@@ -316,9 +339,11 @@ namespace DungeonGame
         private static Socket socket { get; set; }
         private static Thread tcpThread { get; set; }
 
+        // 是否在等待伺服器回傳玩家狀態資料
         public static bool isWaitingPlayerData = true;
-        // 其他玩家清單，[玩家名稱 : 角色物件]
-        private static Dictionary<string, Character> players = new Dictionary<string, Character>();
+        // 線上玩家清單，[玩家名稱 : 角色物件]
+        private static Dictionary<string, Player> players = new Dictionary<string, Player>();
+        // 玩家更新狀態，若同步資料後該玩家沒更新過，則會移除該玩家，[玩家名稱 : 是否更新過]
         private static Dictionary<string, bool> playerUpdateStatus = new Dictionary<string, bool>();
     }
 }

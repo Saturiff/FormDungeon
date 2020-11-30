@@ -39,7 +39,6 @@ namespace DungeonGame
 
         public static int KeyboardHookProc(int nCode, IntPtr wParam, IntPtr lParam)
         {
-            // 當按鍵按下及鬆開時都會觸發此函式，這裡只處理鍵盤按下的情形。
             bool isPressed = (lParam.ToInt32() & 0x80000000) == 0;
 
             if (nCode < 0 || !isPressed)

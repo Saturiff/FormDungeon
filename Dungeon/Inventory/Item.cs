@@ -17,12 +17,12 @@ namespace DungeonGame
                 Bitmap bg = new Bitmap(50, 50);
                 using (Graphics g = Graphics.FromImage(bg))
                 {
-                    g.Clear(Color.Black);
+                    g.Clear(Color.Transparent);
                     Point pos = new Point(10, 10);
                     Size slotSize = new Size(30, 30);
                     Rectangle rect = new Rectangle(pos, slotSize);
 
-                    g.FillRectangle(new SolidBrush(Color.Black), rect);
+                    g.FillRectangle(new SolidBrush(Color.Transparent), rect);
                 }
 
                 return bg;

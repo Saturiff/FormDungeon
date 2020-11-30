@@ -54,6 +54,12 @@ namespace DungeonGame
             return -1;
         }
 
+        private IEnumerable<Slot> GetEachSlot()
+        {
+            foreach (Slot slot in slots)
+                yield return slot;
+        }
+
         private ControlCollection slots => ((FlowLayoutPanel)Controls[0]).Controls;
 
         public Slot selected { get; set; }
@@ -83,9 +89,32 @@ namespace DungeonGame
             set
             {
                 string[] items = value.Split('|');
-                for(int i = 0; i < slots.Count; i++)
+                for (int i = 0; i < slots.Count; i++)
                     UpdateItem(items[i], i);
             }
         }
+        public int atk
+        {
+            get
+            {
+                int _atk = 0;
+                foreach (Slot slot in GetEachSlot())
+                    _atk += slot.item?.atk ?? 0;
+
+                return _atk;
+            }
+        }
+        public int def
+        {
+            get
+            {
+                int _def = 0;
+                foreach (Slot slot in GetEachSlot())
+                    _def += slot.item?.def ?? 0;
+
+                return _def;
+            }
+        }
+
     }
 }

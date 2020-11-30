@@ -40,7 +40,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EnumEx.cs" />
-    <Compile Include="GraphicsEx.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Drawing" />

@@ -46,11 +46,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GamePlay\CharacterBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GamePlay\Enemy.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GamePlay\Shop.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Hook\KeyboardInfo.cs" />
     <Compile Include="Hook\KeyStateInfo.cs" />
     <Compile Include="Hook\KeyboardHook.cs" />
     <Compile Include="Client\ServerMessageStatus.cs" />
-    <Compile Include="GamePlay\Character.cs">
+    <Compile Include="GamePlay\Player.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Client\ServerMessageType.cs" />
@@ -85,8 +94,8 @@
     <EmbeddedResource Include="Dungeon.resx">
       <DependentUpon>Dungeon.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GamePlay\Character.resx">
-      <DependentUpon>Character.cs</DependentUpon>
+    <EmbeddedResource Include="GamePlay\Player.resx">
+      <DependentUpon>Player.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Inventory\InventoryGrid.resx">
       <DependentUpon>InventoryGrid.cs</DependentUpon>
