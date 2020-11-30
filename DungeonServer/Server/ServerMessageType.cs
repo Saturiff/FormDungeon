@@ -8,10 +8,12 @@
         Online,
         Verification,
         Offline,
-        Message,
+        TextMessage,
         Action,
         SyncPlayerData,
         RequestCharacterItem,
+        RequestTransferItem,
+        RequestDropItem,
         Hit
     }
 }

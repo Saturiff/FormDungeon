@@ -49,9 +49,6 @@
     <Compile Include="GamePlay\CharacterBase.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GamePlay\Enemy.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="GamePlay\Shop.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -128,7 +125,18 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Misc\Note.txt" />
+    <None Include="Misc\Note.md" />
+    <None Include="Resources\item009.png" />
+    <None Include="Resources\item011.png" />
+    <None Include="Resources\item010.png" />
+    <None Include="Resources\item008.png" />
+    <None Include="Resources\item007.png" />
+    <None Include="Resources\item006.png" />
+    <None Include="Resources\item005.png" />
+    <None Include="Resources\item004.png" />
+    <None Include="Resources\item003.png" />
+    <None Include="Resources\item002.png" />
+    <None Include="Resources\item001.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DungeonUtility\DungeonUtility.csproj">

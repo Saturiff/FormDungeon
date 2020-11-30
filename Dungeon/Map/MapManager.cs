@@ -17,7 +17,7 @@ namespace DungeonGame
 
         private string[] ReadMapFromFile(string mapName = default)
         {
-            string path = @"D:\Desktop\不會得獎的專案\Dungeon\Maps.csv";
+            string path = @".\Maps\Map.csv";
             string rawData = "";
             using (FileStream fs = File.Open(path, FileMode.Open))
             {

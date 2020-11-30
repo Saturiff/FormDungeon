@@ -33,10 +33,7 @@ namespace DungeonGame
             UI.lb_Log = LB_Log;
             UI.b_ToggleLogin = B_ToggleLogin;
             UI.b_SendMessage = B_SendMessage;
-            UI.b_Use = B_Use;
             UI.b_Transfer = B_Transfer;
-            UI.b_Buy = B_Buy;
-            UI.b_Sell = B_Sell;
             UI.b_Drop = B_Drop;
             UI.inv_Player = INV_Player;
             UI.inv_Their = INV_Their;
@@ -56,8 +53,7 @@ namespace DungeonGame
             }
         }
 
-        private void B_SendMessage_Click(object sender, EventArgs e) 
-            => ClientManager.SendMessage(TB_Message.Text);
+        private void B_SendMessage_Click(object sender, EventArgs e) => ClientManager.SendMessage(TB_Message.Text);
 
         private void Dungeon_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -69,5 +65,5 @@ namespace DungeonGame
 
         private void T_SyncTicker_Tick(object sender, EventArgs e) => ClientManager.UpdateUI();
         #endregion
-        }
+    }
 }

@@ -37,7 +37,7 @@ namespace DungeonGame
             hookHandle = 0;
         }
 
-        public static int KeyboardHookProc(int nCode, IntPtr wParam, IntPtr lParam)
+        private static int KeyboardHookProc(int nCode, IntPtr wParam, IntPtr lParam)
         {
             bool isPressed = (lParam.ToInt32() & 0x80000000) == 0;
 
@@ -59,11 +59,11 @@ namespace DungeonGame
             return CallNextHookEx(hookHandle, nCode, wParam, lParam);
         }
 
+        public delegate int HookProc(int nCode, IntPtr wParam, IntPtr lParam);
+
+        private HookProc kbHookProc;
         private const int WH_KEYBOARD_LL = 13;
         private static int hookHandle = 0;
-        private HookProc kbHookProc;
-
-        public delegate int HookProc(int nCode, IntPtr wParam, IntPtr lParam);
 
         #region DLL
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]

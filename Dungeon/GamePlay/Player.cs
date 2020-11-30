@@ -49,6 +49,6 @@ namespace DungeonGame
             }
         }
         public new int atk => UI.inv_Player.atk;
-        public new int def => UI.inv_Player.atk;
+        public new int def => UI.inv_Player.def;
     }
 }

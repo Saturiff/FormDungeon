@@ -35,6 +35,7 @@ namespace DungeonGame
         public void RemoveItem(int slotIdx)
             => ((Slot)slots[slotIdx]).RemoveItem();
 
+        // 取得字典中對應識別碼
         private string GetItemIndexByItem(Item item)
         {
             foreach (var itemNum in ItemData.data.Keys)

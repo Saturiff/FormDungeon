@@ -64,24 +64,9 @@ namespace DungeonGame
 
         private static void BindInventoryEvents()
         {
-            b_Use.Click += delegate (object sender, EventArgs e)
-            {
-                inventory.Use();
-            };
-
             b_Transfer.Click += delegate (object sender, EventArgs e)
             {
                 inventory.Transfer();
-            };
-
-            b_Buy.Click += delegate (object sender, EventArgs e)
-            {
-                inventory.Buy();
-            };
-
-            b_Sell.Click += delegate (object sender, EventArgs e)
-            {
-                inventory.Sell();
             };
 
             b_Drop.Click += delegate (object sender, EventArgs e)
@@ -142,7 +127,7 @@ namespace DungeonGame
         /// <param name="e">EventArgs參數</param>
         private static void InteractCharacter(object sender, EventArgs e)
         {
-            if (sender is Enemy enemy && enemy.isAlive)
+            if (sender is Player enemy && enemy.isAlive)
                 player.Attack(enemy);
             else
                 ClientManager.RequestCharacterItem(((CharacterBase)sender).name);
@@ -179,10 +164,7 @@ namespace DungeonGame
 
                 t_SyncTicker.Enabled = true;
                 b_SendMessage.Enabled = true;
-                b_Use.Enabled = true;
                 b_Transfer.Enabled = true;
-                b_Buy.Enabled = true;
-                b_Sell.Enabled = true;
                 b_Drop.Enabled = true;
 
                 kbHook.Hook();
@@ -200,6 +182,9 @@ namespace DungeonGame
         /// <returns>是否為合法姓名</returns>
         private static bool IsVaildName(string name)
         {
+            if (name == string.Empty) 
+                return false;
+
             foreach (var s in new string[] {
                 "\\", "\"", "/", ":", "*", "?", "<", ">", "|", ",",
                 " ", "aux", "com1", "com2", "prn", "con", "nul" })
@@ -223,15 +208,15 @@ namespace DungeonGame
 
             t_SyncTicker.Enabled = false;
             b_SendMessage.Enabled = false;
-            b_Use.Enabled = false;
             b_Transfer.Enabled = false;
-            b_Buy.Enabled = false;
-            b_Sell.Enabled = false;
             b_Drop.Enabled = false;
 
             kbHook.Unhook();
 
             ClientManager.Logout();
+
+            inventory.Clear(inv_Their);
+            inventory.Clear(inv_Player);
 
             tb_CharacterStatus.Text = "";
             tb_ItemInfo.Text = "";
@@ -260,10 +245,7 @@ namespace DungeonGame
         public static ListBox lb_Log;
         public static Button b_ToggleLogin;
         public static Button b_SendMessage;
-        public static Button b_Use;
         public static Button b_Transfer;
-        public static Button b_Buy;
-        public static Button b_Sell;
         public static Button b_Drop;
         public static InventoryGrid inv_Player;
         public static InventoryGrid inv_Their;

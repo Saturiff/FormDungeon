@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.IO;
 
 namespace DungeonServer
@@ -9,11 +8,11 @@ namespace DungeonServer
         public Character(string inName)
         {
             name = inName;
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < slotNum; i++)
                 items[i] = "000";
         }
 
-        public void UpdateLocation(Point newLocation) => loc = newLocation;
+        public void UpdateLocation(int newX, int newY) => loc = (newX, newY);
 
         // call when logout
         public void Save() => File.WriteAllText(dataPath, dataPack + "|" + itemPack);
@@ -38,29 +37,29 @@ namespace DungeonServer
                 rawData = sr.ReadLine();
 
             string[] datas = rawData.Split('|');
-
             health = Convert.ToUInt32(datas[0]);
             coin = Convert.ToUInt32(datas[1]);
-            loc.X = Convert.ToInt32(datas[2]);
-            loc.Y = Convert.ToInt32(datas[3]);
-            color = Color.FromArgb(Convert.ToUInt16(datas[4]), Convert.ToUInt16(datas[5]), Convert.ToUInt16(datas[6]));
-            for (int i = 0; i < 15; i++)
+            loc.x = Convert.ToInt32(datas[2]);
+            loc.y = Convert.ToInt32(datas[3]);
+            color = (Convert.ToUInt16(datas[4]), Convert.ToUInt16(datas[5]), Convert.ToUInt16(datas[6]));
+            for (int i = 0; i < slotNum; i++)
                 items[i] = datas[7 + i];
         }
 
         private static int GetNextRandomByte() => r.Next(255);
 
         private string name { get; set; }
-        private uint health { get; set; }
+        private uint health { get => 200; set { } }
         private uint coin { get; set; }
-        private Point loc = new Point(400, 220);
-        private Color color = Color.FromArgb(GetNextRandomByte(), GetNextRandomByte(), GetNextRandomByte());
+        private (int x, int y) loc = (400, 220);
+        private (int r, int g, int b) color = (GetNextRandomByte(), GetNextRandomByte(), GetNextRandomByte());
         private string dataPath => @"./saves/" + name;
-        private string[] items = new string[15];
+        private const int slotNum = 15;
+        private string[] items = new string[slotNum];
         private static Random r = new Random();
 
         public string dataPack => string.Format("{0}|{1}|{2}|{3}|{4}|{5}|{6}",
-            health.ToString(), coin.ToString(), loc.X, loc.Y, color.R, color.G, color.B);
+            health.ToString(), coin.ToString(), loc.x, loc.y, color.r, color.g, color.b);
         public string itemPack => string.Format("{0}|{1}|{2}|{3}|{4}|{5}|{6}|{7}|{8}|{9}|{10}|{11}|{12}|{13}|{14}",
             items);
     }

@@ -83,7 +83,7 @@ namespace DungeonGame
         /// </summary>
         /// <param name="msg">玩家發送的訊息</param>
         public static void SendMessage(string msg)
-            => SendToServer(ServerMessageType.Message, playerName + " : " + msg);
+            => SendToServer(ServerMessageType.TextMessage, playerName + " : " + msg);
 
         /// <summary>
         /// 由伺服器回傳的資料進行介面更新，會不斷執行
@@ -110,6 +110,12 @@ namespace DungeonGame
         /// <param name="targetName"></param>
         public static void RequestCharacterItem(string targetName)
             => SendToServer(ServerMessageType.RequestCharacterItem, playerName + "|" + targetName);
+
+        public static void RequestTransferItem(string targetName)
+            => SendToServer(ServerMessageType.RequestTransferItem, playerName + "|" + targetName);
+
+        public static void RequestDropItem(string targetName)
+            => SendToServer(ServerMessageType.RequestDropItem, playerName + "|" + targetName);
 
         /// <summary>
         /// 查詢玩家
@@ -168,9 +174,9 @@ namespace DungeonGame
         private static void Listen()
         {
             EndPoint svEndpoint = socket.RemoteEndPoint;
-            byte[] data = new byte[1023];
+            byte[] byteDatas = new byte[dataSize];
             int inLen = 0;
-            string msg;
+            string rawData;
             int cmdOrder;
             ServerMessageType cmd;
 
@@ -178,7 +184,7 @@ namespace DungeonGame
             {
                 try
                 {
-                    inLen = socket.ReceiveFrom(data, ref svEndpoint);
+                    inLen = socket.ReceiveFrom(byteDatas, ref svEndpoint);
                 }
                 catch
                 {
@@ -186,8 +192,8 @@ namespace DungeonGame
                     tcpThread.Abort();
                 }
 
-                msg = Encoding.Default.GetString(data, 0, inLen);
-                cmdOrder = Convert.ToInt32(msg[0].ToString());
+                rawData = Encoding.Default.GetString(byteDatas, 0, inLen);
+                cmdOrder = Convert.ToInt32(rawData[0].ToString());
                 cmd = EnumEx<ServerMessageType>.GetEnumByOrder(cmdOrder);
 
                 switch (cmd)
@@ -197,24 +203,23 @@ namespace DungeonGame
                         break;
 
                     case ServerMessageType.Verification:
-                        int res = Convert.ToInt32(msg.Substring(1));
-                        svMsgStatus = EnumEx<ServerMessageStatus>.GetEnumByOrder(res);
+                        ContinueVerification(rawData);
                         break;
 
                     case ServerMessageType.Online:
-                        LoadPlayerCharacterStatus(msg);
+                        LoadPlayerCharacterStatus(rawData);
                         break;
 
-                    case ServerMessageType.Message:
-                        ReceiveTextMessage(msg);
+                    case ServerMessageType.TextMessage:
+                        ReceiveTextMessage(rawData);
                         break;
 
                     case ServerMessageType.SyncPlayerData:
-                        SyncAllPlayersData(msg);
+                        SyncAllPlayersData(rawData);
                         break;
 
                     case ServerMessageType.RequestCharacterItem:
-                        SyncPlayerItem(msg);
+                        SyncPlayerItem(rawData);
                         break;
 
                     default:
@@ -231,6 +236,15 @@ namespace DungeonGame
         {
             UI.Destroy();
             UI.Log("Server offline.");
+        }
+
+        /// <summary>
+        /// 伺服器端驗證角色名稱
+        /// </summary>
+        private static void ContinueVerification(string rawData)
+        {
+            int resultIdx = Convert.ToInt32(rawData.Substring(1));
+            svMsgStatus = EnumEx<ServerMessageStatus>.GetEnumByOrder(resultIdx);
         }
 
         /// <summary>
@@ -334,6 +348,7 @@ namespace DungeonGame
         private static string playerName { get; set; }
         private static string ip { get; set; }
         private const int port = 8800;
+        private const int dataSize = 0x3ff;
         private static ServerMessageStatus svMsgStatus = ServerMessageStatus.None;
         private static OnlineStatus status = OnlineStatus.Offline;
         private static Socket socket { get; set; }

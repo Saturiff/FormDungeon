@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(F_Dungeon));
             this.P_Viewport = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.B_ToggleLogin = new System.Windows.Forms.Button();
@@ -41,12 +42,9 @@
             this.TB_Message = new System.Windows.Forms.TextBox();
             this.B_SendMessage = new System.Windows.Forms.Button();
             this.B_Transfer = new System.Windows.Forms.Button();
-            this.B_Buy = new System.Windows.Forms.Button();
-            this.B_Sell = new System.Windows.Forms.Button();
             this.B_Drop = new System.Windows.Forms.Button();
             this.TB_ItemInfo = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.B_Use = new System.Windows.Forms.Button();
             this.T_SyncTicker = new System.Windows.Forms.Timer(this.components);
             this.LB_Message = new System.Windows.Forms.ListBox();
             this.LB_Log = new System.Windows.Forms.ListBox();
@@ -161,39 +159,19 @@
             // B_Transfer
             // 
             this.B_Transfer.Enabled = false;
-            this.B_Transfer.Location = new System.Drawing.Point(276, 498);
+            this.B_Transfer.Location = new System.Drawing.Point(274, 482);
             this.B_Transfer.Name = "B_Transfer";
-            this.B_Transfer.Size = new System.Drawing.Size(90, 30);
+            this.B_Transfer.Size = new System.Drawing.Size(90, 50);
             this.B_Transfer.TabIndex = 18;
             this.B_Transfer.Text = "Transfer";
             this.B_Transfer.UseVisualStyleBackColor = true;
             // 
-            // B_Buy
-            // 
-            this.B_Buy.Enabled = false;
-            this.B_Buy.Location = new System.Drawing.Point(276, 534);
-            this.B_Buy.Name = "B_Buy";
-            this.B_Buy.Size = new System.Drawing.Size(90, 30);
-            this.B_Buy.TabIndex = 19;
-            this.B_Buy.Text = "Buy";
-            this.B_Buy.UseVisualStyleBackColor = true;
-            // 
-            // B_Sell
-            // 
-            this.B_Sell.Enabled = false;
-            this.B_Sell.Location = new System.Drawing.Point(276, 570);
-            this.B_Sell.Name = "B_Sell";
-            this.B_Sell.Size = new System.Drawing.Size(90, 30);
-            this.B_Sell.TabIndex = 20;
-            this.B_Sell.Text = "Sell";
-            this.B_Sell.UseVisualStyleBackColor = true;
-            // 
             // B_Drop
             // 
             this.B_Drop.Enabled = false;
-            this.B_Drop.Location = new System.Drawing.Point(276, 606);
+            this.B_Drop.Location = new System.Drawing.Point(274, 587);
             this.B_Drop.Name = "B_Drop";
-            this.B_Drop.Size = new System.Drawing.Size(90, 30);
+            this.B_Drop.Size = new System.Drawing.Size(90, 50);
             this.B_Drop.TabIndex = 21;
             this.B_Drop.Text = "Drop";
             this.B_Drop.UseVisualStyleBackColor = true;
@@ -216,16 +194,6 @@
             this.label6.Size = new System.Drawing.Size(90, 19);
             this.label6.TabIndex = 24;
             this.label6.Text = "Item Info";
-            // 
-            // B_Use
-            // 
-            this.B_Use.Enabled = false;
-            this.B_Use.Location = new System.Drawing.Point(276, 462);
-            this.B_Use.Name = "B_Use";
-            this.B_Use.Size = new System.Drawing.Size(90, 30);
-            this.B_Use.TabIndex = 25;
-            this.B_Use.Text = "Use";
-            this.B_Use.UseVisualStyleBackColor = true;
             // 
             // T_SyncTicker
             // 
@@ -253,18 +221,22 @@
             // INV_Their
             // 
             this.INV_Their.Font = new System.Drawing.Font("Consolas", 7F);
+            this.INV_Their.itemPack = "000|000|000|000|000|000|000|000|000|000|000|000|000|000|000";
             this.INV_Their.Location = new System.Drawing.Point(377, 482);
             this.INV_Their.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.INV_Their.Name = "INV_Their";
+            this.INV_Their.selected = null;
             this.INV_Their.Size = new System.Drawing.Size(250, 165);
             this.INV_Their.TabIndex = 29;
             // 
             // INV_Player
             // 
             this.INV_Player.Font = new System.Drawing.Font("Consolas", 7F);
+            this.INV_Player.itemPack = "000|000|000|000|000|000|000|000|000|000|000|000|000|000|000";
             this.INV_Player.Location = new System.Drawing.Point(17, 482);
             this.INV_Player.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.INV_Player.Name = "INV_Player";
+            this.INV_Player.selected = null;
             this.INV_Player.Size = new System.Drawing.Size(250, 165);
             this.INV_Player.TabIndex = 28;
             // 
@@ -277,12 +249,9 @@
             this.Controls.Add(this.INV_Player);
             this.Controls.Add(this.LB_Log);
             this.Controls.Add(this.LB_Message);
-            this.Controls.Add(this.B_Use);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.TB_ItemInfo);
             this.Controls.Add(this.B_Drop);
-            this.Controls.Add(this.B_Sell);
-            this.Controls.Add(this.B_Buy);
             this.Controls.Add(this.B_Transfer);
             this.Controls.Add(this.B_SendMessage);
             this.Controls.Add(this.TB_Message);
@@ -296,9 +265,10 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.P_Viewport);
             this.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "F_Dungeon";
-            this.Text = "Dungeon";
+            this.Text = " Dungeon Game";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Dungeon_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -319,12 +289,9 @@
         private System.Windows.Forms.TextBox TB_Message;
         private System.Windows.Forms.Button B_SendMessage;
         private System.Windows.Forms.Button B_Transfer;
-        private System.Windows.Forms.Button B_Buy;
-        private System.Windows.Forms.Button B_Sell;
         private System.Windows.Forms.Button B_Drop;
         private System.Windows.Forms.TextBox TB_ItemInfo;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Button B_Use;
         private System.Windows.Forms.Timer T_SyncTicker;
         private System.Windows.Forms.ListBox LB_Message;
         private System.Windows.Forms.ListBox LB_Log;

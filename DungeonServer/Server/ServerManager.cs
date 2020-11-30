@@ -84,49 +84,54 @@ namespace DungeonServer
             {
                 try
                 {
-                    byte[] data = new byte[1023];
-                    int inLen = sk.Receive(data);
-                    string msg = Encoding.Default.GetString(data, 0, inLen);
-                    int cmdOrder = Convert.ToInt32(msg[0].ToString());
+                    byte[] byteDatas = new byte[dataSize];
+                    int inLen = sk.Receive(byteDatas);
+                    string rawData = Encoding.Default.GetString(byteDatas, index: 0, inLen);
+                    int cmdOrder = Convert.ToInt32(rawData[0].ToString());
                     ServerMessageType cmd = EnumEx<ServerMessageType>.GetEnumByOrder(cmdOrder);
-                    string str = msg.Substring(1);
+                    string data = rawData.Substring(1);
 
                     switch (cmd)
                     {
                         case ServerMessageType.Offline:
-                            PlayerOffline(str, th);
+                            PlayerOffline(data, th);
                             break;
 
                         case ServerMessageType.Verification:
-                            string res = EnumEx<ServerMessageStatus>
-                                .GetOrderByEnum(players.ContainsKey(str) ? ServerMessageStatus.Fail
-                                                                         : ServerMessageStatus.Success).ToString();
+                            string res = EnumEx<ServerMessageStatus>.GetOrderByEnum(players.ContainsKey(data) ? ServerMessageStatus.Fail
+                                                                                                              : ServerMessageStatus.Success).ToString();
                             SendTo(sk, cmdOrder.ToString() + res);
                             break;
 
                         case ServerMessageType.Online:
-                            PlayerOnline(str, sk);
-                            SendTo(str, cmdOrder.ToString() + str + "|" + players[str].dataPack);
+                            PlayerOnline(playerName: data, sk);
+                            SendTo(playerName: data, cmdOrder.ToString() + data + "|" + players[data].dataPack);
                             break;
 
-                        case ServerMessageType.Message:
-                            SendTextToAll(cmdOrder, str);
+                        case ServerMessageType.TextMessage:
+                            SendTextToAll(cmdOrder, message: data);
                             break;
 
                         case ServerMessageType.Action:
-                            string[] datas = str.Split('|');
+                            string[] datas = data.Split('|');
                             UpdatePlayerLocation(name: datas[0],
                                                  x: Convert.ToInt32(datas[1]),
                                                  y: Convert.ToInt32(datas[2]));
                             break;
 
                         case ServerMessageType.SyncPlayerData:
-                            SyncAllPlayersData(name: str);
+                            SyncAllPlayersData(name: data);
                             break;
 
                         case ServerMessageType.RequestCharacterItem:
-                            string[] names = str.Split('|');
+                            string[] names = data.Split('|');
                             SyncPlayerItem(requestFrom: names[0], targetPlayer: names[1]);
+                            break;
+
+                        case ServerMessageType.RequestTransferItem:
+                            break;
+
+                        case ServerMessageType.RequestDropItem:
                             break;
 
                         default:
@@ -155,15 +160,15 @@ namespace DungeonServer
         }
 
         // 新增至玩家池，(新增)讀取紀錄
-        private static void PlayerOnline(string name, Socket sk)
+        private static void PlayerOnline(string playerName, Socket sk)
         {
-            players.Add(name, new Character(name));
-            players[name].Read();
+            players.Add(playerName, new Character(playerName));
+            players[playerName].Read();
 
-            socketHT.Add(name, sk);
+            socketHT.Add(playerName, sk);
 
-            UI.AddToPlayerList(name);
-            UI.AddLog(name + " online.");
+            UI.AddToPlayerList(playerName);
+            UI.AddLog(playerName + " online.");
         }
 
         // 對所有玩家發送訊息
@@ -176,7 +181,7 @@ namespace DungeonServer
 
         // 更新玩家位置
         private static void UpdatePlayerLocation(string name, int x, int y)
-            => players[name].UpdateLocation(new System.Drawing.Point(x, y));
+            => players[name].UpdateLocation(x, y);
 
         // 同步所有玩家資料，傳給所有玩家除了自己以外的資料
         // 格式 = 同步代碼,其他玩家數,玩家1名稱|玩家素質(由管線符號'|'分隔),玩家2名稱| ...
@@ -201,30 +206,31 @@ namespace DungeonServer
         #endregion
 
         #region 傳遞位元組資料
-        private static void SendTo(string name, string str)
+        private static void SendTo(string playerName, string strData)
         {
-            byte[] data = Encoding.Default.GetBytes(str);
-            Socket sk = (Socket)socketHT[name];
-            sk.Send(data, 0, data.Length, SocketFlags.None);
+            byte[] byteDatas = Encoding.Default.GetBytes(strData);
+            Socket sk = (Socket)socketHT[playerName];
+            sk.Send(byteDatas, 0, byteDatas.Length, SocketFlags.None);
         }
 
         private static void SendTo(Socket sk, string str)
         {
-            byte[] data = Encoding.Default.GetBytes(str);
-            sk.Send(data, 0, data.Length, SocketFlags.None);
+            byte[] byteDatas = Encoding.Default.GetBytes(str);
+            sk.Send(byteDatas, 0, byteDatas.Length, SocketFlags.None);
         }
 
         private static void SendAll(string str)
         {
-            byte[] data = Encoding.Default.GetBytes(str);
+            byte[] byteDatas = Encoding.Default.GetBytes(str);
             foreach (Socket s in socketHT.Values)
-                s.Send(data, 0, data.Length, SocketFlags.None);
+                s.Send(byteDatas, 0, byteDatas.Length, SocketFlags.None);
         }
         #endregion
 
         private static ServerStatus status = ServerStatus.Offline;
         public static bool isOnline => status == ServerStatus.Online;
 
+        private const int dataSize = 0x3ff;
         private const int maxPlayers = 5;
         private static string ip { get; set; }
         private static string port { get; set; }

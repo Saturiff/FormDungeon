@@ -10,28 +10,7 @@ namespace DungeonGame
         public int sellPrice { get; set; }
         public int buyPrice { get; set; }
         public string desc { get; set; }
-        public Bitmap icon
-        {
-            get
-            {
-                Bitmap bg = new Bitmap(50, 50);
-                using (Graphics g = Graphics.FromImage(bg))
-                {
-                    g.Clear(Color.Transparent);
-                    Point pos = new Point(10, 10);
-                    Size slotSize = new Size(30, 30);
-                    Rectangle rect = new Rectangle(pos, slotSize);
-
-                    g.FillRectangle(new SolidBrush(Color.Transparent), rect);
-                }
-
-                return bg;
-            }
-            set 
-            { 
-                icon = value; 
-            }
-        }
+        public Bitmap icon { get; set; }
         public string info
         {
             get
