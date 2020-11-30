@@ -80,6 +80,12 @@ namespace DungeonGame
 
                 return string.Join("|", itemNums);
             }
+            set
+            {
+                string[] items = value.Split('|');
+                for(int i = 0; i < slots.Count; i++)
+                    UpdateItem(items[i], i);
+            }
         }
     }
 }

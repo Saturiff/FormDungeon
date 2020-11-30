@@ -124,7 +124,7 @@ namespace DungeonServer
                             SyncAllPlayersData(name: str);
                             break;
 
-                        case ServerMessageType.SyncPlayerItem:
+                        case ServerMessageType.RequestCharacterItem:
                             string[] names = str.Split('|');
                             SyncPlayerItem(requestFrom: names[0], targetPlayer: names[1]);
                             break;
@@ -195,7 +195,8 @@ namespace DungeonServer
 
         private static void SyncPlayerItem(string requestFrom, string targetPlayer)
         {
-            SendTo(requestFrom, players[targetPlayer].itemPack);
+            string cmd = EnumEx<ServerMessageType>.GetOrderByEnum(ServerMessageType.RequestCharacterItem).ToString();
+            SendTo(requestFrom, cmd + targetPlayer + "," + players[targetPlayer].itemPack);
         }
         #endregion
 

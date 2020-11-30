@@ -88,8 +88,8 @@ namespace DungeonGame
         private static void RequestSyncPlayersData()
             => SendToServer(ServerMessageType.SyncPlayerData, playerName);
 
-        public static void RequestSyncPlayerItem(string targetName)
-            => SendToServer(ServerMessageType.SyncPlayerItem, playerName + "|" + targetName);
+        public static void RequestCharacterItem(string targetName)
+            => SendToServer(ServerMessageType.RequestCharacterItem, playerName + "|" + targetName);
 
         /// <summary>
         /// 查詢玩家
@@ -193,7 +193,7 @@ namespace DungeonGame
                         SyncAllPlayersData(msg);
                         break;
 
-                    case ServerMessageType.SyncPlayerItem:
+                    case ServerMessageType.RequestCharacterItem:
                         SyncPlayerItem(msg);
                         break;
 
@@ -297,6 +297,11 @@ namespace DungeonGame
 
         private static void SyncPlayerItem(string rawData)
         {
+            string[] itemData = rawData.Substring(1).Split(',');
+            string fromPlayerName = itemData[0];
+            string itemPack = itemData[1];
+
+            UI.inventory.Update(fromPlayerName, itemPack);
             // Update UI.inv_Their or UI.inv_Player
         }
         #endregion

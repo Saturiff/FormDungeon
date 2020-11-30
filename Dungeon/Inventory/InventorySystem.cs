@@ -10,10 +10,13 @@
 
         }
 
-        // Resync all slot
-        public void Update()
+        // Resync all slot, call by ClientManager
+        public void Update(string name, string itemPack)
         {
-
+            if (name == UI.player.name)
+                UI.inv_Player.itemPack = itemPack;
+            else
+                UI.inv_Their.itemPack = itemPack;
         }
 
         public void Use()

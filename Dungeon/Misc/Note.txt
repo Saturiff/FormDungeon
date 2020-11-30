@@ -1,12 +1,8 @@
 ﻿Doing:
-玩家->玩家
-玩家->商人
-feature		inventory data
-feature		inventory grid
-feature		inventory system
 
 Todo list:
-String join
+玩家->商人
+Update player status by item
 character draw start pos?
 pending		spawnpoint give server control?
 客戶端出錯時服務器端需將其移除(離線)

@@ -60,7 +60,6 @@ namespace DungeonGame
                 if (map != null)
                     map.Interact(p_Viewport.PointToClient(Cursor.Position));
             };
-
         }
 
         private static void BindInventoryEvents()
@@ -138,6 +137,10 @@ namespace DungeonGame
 
         private static void InteractCharacter(object sender, EventArgs e)
         {
+            Character ch = (Character)sender;
+            
+            ClientManager.RequestCharacterItem(ch.name);
+
             // todo: add function to interact!
             // Console.WriteLine("Interact character: " + ((Character)sender).name);
         }
@@ -237,10 +240,10 @@ namespace DungeonGame
         #endregion
 
         private static KeyboardHook kbHook = new KeyboardHook();
-        private static InventorySystem inventory;
 
         public static Character player;
         public static MapManager map;
+        public static InventorySystem inventory;
 
         public static Form f_Dungeon;
         public static Panel p_Viewport;

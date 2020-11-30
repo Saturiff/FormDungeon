@@ -11,6 +11,6 @@
         Message,
         Action,
         SyncPlayerData,
-        SyncPlayerItem
+        RequestCharacterItem
     }
 }
