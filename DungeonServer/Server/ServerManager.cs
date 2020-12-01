@@ -124,12 +124,13 @@ namespace DungeonServer
                             break;
 
                         case ServerMessageType.RequestCharacterItem:
-                            SyncPlayerItem(requestFrom: data);
+                            string[] rciDatas = data.Split('|');
+                            SyncPlayerItem(requestFrom: rciDatas[0], targetPlayer: rciDatas[1]);
                             break;
 
                         case ServerMessageType.RequestPickItem: // change to pickup
                             string[] rtiDatas = data.Split('|');
-                            SyncItemTransfer(requestFrom: rtiDatas[0], targetPlayer: rtiDatas[1], slotIdx: rtiDatas[2]);
+                            SyncItemPick(requestFrom: rtiDatas[0], targetPlayer: rtiDatas[1], slotIdx: rtiDatas[2]);
                             break;
 
                         case ServerMessageType.RequestDropItem:
@@ -201,21 +202,21 @@ namespace DungeonServer
             SendTo(name, syncStr);
         }
 
-        private static void SyncPlayerItem(string requestFrom)
+        private static void SyncPlayerItem(string requestFrom, string targetPlayer)
         {
             string cmd = EnumEx<ServerMessageType>.GetOrderByEnum(ServerMessageType.RequestCharacterItem).ToString();
-            SendTo(requestFrom, cmd + players[requestFrom].itemPack);
+            SendTo(requestFrom, cmd + targetPlayer + "," + players[targetPlayer].itemPack);
         }
 
-        private static void SyncItemTransfer(string requestFrom, string targetPlayer, string slotIdx)
+        private static void SyncItemPick(string requestFrom, string targetPlayer, string slotIdx)
         {
             int idx = Convert.ToInt32(slotIdx);
             // tansfer
             
             // save
 
-            SyncPlayerItem(requestFrom);
-            SyncPlayerItem(targetPlayer);
+            // SyncPlayerItem(requestFrom);
+            // SyncPlayerItem(targetPlayer);
         }
 
         private static void SyncItemDrop(string requestFrom, string slotIdx)
@@ -225,7 +226,7 @@ namespace DungeonServer
 
             // save
 
-            SyncPlayerItem(requestFrom);
+            // SyncPlayerItem(requestFrom);
         }
         #endregion
 

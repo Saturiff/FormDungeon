@@ -16,6 +16,7 @@ namespace DungeonGame
         /// </summary>
         public static void InitControls()
         {
+            inv_Their = new InventoryGrid();
             inventory = new InventorySystem();
 
             tb_ItemInfo.Font = new System.Drawing.Font(tb_ItemInfo.Font.Name, 10);
@@ -124,8 +125,11 @@ namespace DungeonGame
         /// <param name="e">EventArgs參數</param>
         private static void InteractCharacter(object sender, EventArgs e)
         {
-            // if (sender is Player p && p != player && p.isAlive)
-            // player.Attack(p);
+            if (sender is Player p && p != player)
+            {
+                focusEnemyName = p.name;
+                // player.Attack(p);
+            }
             // else if sender is pickable p
             // Pickup p
         }
@@ -150,7 +154,7 @@ namespace DungeonGame
                 tb_Nickname.Enabled = false;
 
                 while (ClientManager.isWaitingPlayerData) ;
-                player = ClientManager.GetPlayerInfo();
+                player = ClientManager.GetPlayerCharacter();
                 ClientManager.RequestCharacterItem();
 
                 Log("Welcome, " + player.name + "!");
@@ -213,6 +217,7 @@ namespace DungeonGame
             inventory.Clear(inv_Player);
 
             tb_CharacterStatus.Text = "";
+            tb_EnemyStatus.Text = "";
             tb_ItemInfo.Text = "";
             tb_Nickname.Enabled = true;
 
@@ -226,13 +231,16 @@ namespace DungeonGame
 
         public static Player player;
         public static MapManager map;
+        public static InventoryGrid inv_Their;
         public static InventorySystem inventory;
+        public static string focusEnemyName;
 
         public static Form f_Dungeon;
         public static Panel p_Viewport;
         public static Timer t_SyncTicker;
         public static TextBox tb_Nickname;
         public static TextBox tb_CharacterStatus;
+        public static TextBox tb_EnemyStatus;
         public static TextBox tb_Message;
         public static TextBox tb_ItemInfo;
         public static ListBox lb_Message;

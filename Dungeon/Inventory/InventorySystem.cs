@@ -6,15 +6,21 @@
     public class InventorySystem
     {
         // Resync all slot, call by ClientManager
-        public void Update(string itemPack)
+        public void Update(string name, string itemPack)
         {
-            UI.inv_Player.itemPack = itemPack;
+            if (name == UI.player.name)
+                UI.inv_Player.itemPack = itemPack;
+            else
+            {
+                UI.inv_Their.itemPack = itemPack;
+                UI.tb_EnemyStatus.Text = ClientManager.GetPlayerCharacter(UI.focusEnemyName).status;
+            }
         }
 
         // other player item -> current player item
         // Player selected (in player's inventory) item
         // To their inventory
-        public void Transfer()
+        public void Pick()
         {
             // ClientManager.
             // SendToServer();

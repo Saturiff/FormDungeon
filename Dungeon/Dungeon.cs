@@ -27,6 +27,7 @@ namespace DungeonGame
             UI.t_SyncTicker = T_SyncTicker;
             UI.tb_Nickname = TB_Nickname;
             UI.tb_CharacterStatus = TB_CharacterStatus;
+            UI.tb_EnemyStatus = TB_EnemyStatus;
             UI.tb_Message = TB_Message;
             UI.tb_ItemInfo = TB_ItemInfo;
             UI.lb_Message = LB_Message;

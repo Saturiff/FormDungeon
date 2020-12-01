@@ -90,30 +90,48 @@ namespace DungeonGame
         /// </summary>
         public static void UpdateUI()
         {
-            RequestSyncPlayersData();
+            RequestPlayersData();
 
-            players[playerName] = GetPlayerInfo();
+            players[playerName] = GetPlayerCharacter();
             playerUpdateStatus[playerName] = true;
 
             UI.tb_CharacterStatus.Text = players[playerName].status;
+
+            if (UI.focusEnemyName != "")
+                RequestCharacterItem(UI.focusEnemyName);
         }
 
         /// <summary>
-        /// 向伺服器請求其他玩家狀態資料
+        /// 向伺服器請求玩家狀態
         /// </summary>
-        private static void RequestSyncPlayersData()
+        private static void RequestPlayersData()
             => SendToServer(ServerMessageType.SyncPlayerData, playerName);
 
         /// <summary>
-        /// 向伺服器請求特定玩家物品欄資料
+        /// 向伺服器請求玩家物品欄，僅在登入時執行一次
+        /// </summary>
+        public static void RequestCharacterItem()
+            => SendToServer(ServerMessageType.RequestCharacterItem, playerName + "|" + playerName);
+
+        /// <summary>
+        /// 向伺服器請求特定玩家物品欄
+        /// </summary>
+        /// <param name="name">玩家名稱</param>
+        public static void RequestCharacterItem(string name)
+            => SendToServer(ServerMessageType.RequestCharacterItem, playerName + "|" + name);
+
+        /// <summary>
+        /// 撿取物品
         /// </summary>
         /// <param name="targetName"></param>
-        public static void RequestCharacterItem()
-            => SendToServer(ServerMessageType.RequestCharacterItem, playerName);
-
+        /// <param name="slotIdx"></param>
         public static void RequestPickItem(string targetName, int slotIdx)
             => SendToServer(ServerMessageType.RequestPickItem, playerName + "|" + targetName + "|" + slotIdx.ToString());
 
+        /// <summary>
+        /// 丟棄物品
+        /// </summary>
+        /// <param name="slotIdx"></param>
         public static void RequestDropItem(int slotIdx)
             => SendToServer(ServerMessageType.RequestDropItem, playerName + "|" + slotIdx);
 
@@ -121,14 +139,14 @@ namespace DungeonGame
         /// 查詢玩家
         /// </summary>
         /// <returns>Character物件</returns>
-        public static Player GetPlayerInfo() => players[playerName];
+        public static Player GetPlayerCharacter() => players[playerName];
 
         /// <summary>
         /// 查詢指定名稱玩家
         /// </summary>
         /// <param name="name">玩家名稱</param>
         /// <returns>Character物件</returns>
-        public static Player GetPlayerInfo(string name) => players[name];
+        public static Player GetPlayerCharacter(string name) => players[name];
 
         /// <summary>
         /// 傳送登出請求與玩家名稱
@@ -326,6 +344,12 @@ namespace DungeonGame
                     playerUpdateStatus.Remove(name);
 
                     players.Remove(name);
+
+                    if (UI.focusEnemyName == name)
+                    {
+                        UI.focusEnemyName = "";
+                        UI.tb_EnemyStatus.Text = "";
+                    }
                 }
         }
 
@@ -335,9 +359,9 @@ namespace DungeonGame
         /// <param name="rawData">伺服器傳來的原始資料</param>
         private static void SyncPlayerItem(string rawData)
         {
-            string itemPack = rawData.Substring(1);
+            string[] datas = rawData.Substring(1).Split(',');
             
-            UI.inventory.Update(itemPack);
+            UI.inventory.Update(name: datas[0], itemPack: datas[1]);
         }
         #endregion
 

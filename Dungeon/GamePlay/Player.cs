@@ -47,7 +47,7 @@ namespace DungeonGame
                 + Environment.NewLine + "Coin:\t" + coin;
             }
         }
-        public new int atk => UI.inv_Player.atk;
-        public new int def => UI.inv_Player.def;
+        public new int atk => (name == UI.player.name ? UI.inv_Player : UI.inv_Their).atk;
+        public new int def => (name == UI.player.name ? UI.inv_Player : UI.inv_Their).def;
     }
 }
