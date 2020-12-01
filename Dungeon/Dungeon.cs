@@ -33,10 +33,8 @@ namespace DungeonGame
             UI.lb_Log = LB_Log;
             UI.b_ToggleLogin = B_ToggleLogin;
             UI.b_SendMessage = B_SendMessage;
-            UI.b_Transfer = B_Transfer;
             UI.b_Drop = B_Drop;
             UI.inv_Player = INV_Player;
-            UI.inv_Their = INV_Their;
             UI.InitControls();
         }
 

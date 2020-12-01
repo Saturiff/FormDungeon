@@ -64,11 +64,6 @@ namespace DungeonGame
 
         private static void BindInventoryEvents()
         {
-            b_Transfer.Click += delegate (object sender, EventArgs e)
-            {
-                inventory.Transfer();
-            };
-
             b_Drop.Click += delegate (object sender, EventArgs e)
             {
                 inventory.Drop();
@@ -127,10 +122,10 @@ namespace DungeonGame
         /// <param name="e">EventArgs參數</param>
         private static void InteractCharacter(object sender, EventArgs e)
         {
-            if (sender is Player enemy && enemy.isAlive)
-                player.Attack(enemy);
-            else
-                ClientManager.RequestCharacterItem(((CharacterBase)sender).name);
+            // if (sender is Player p && p != player && p.isAlive)
+            // player.Attack(p);
+            // else if sender is pickable p
+            // Pickup p
         }
         #endregion
 
@@ -154,7 +149,7 @@ namespace DungeonGame
 
                 while (ClientManager.isWaitingPlayerData) ;
                 player = ClientManager.GetPlayerInfo();
-                ClientManager.RequestCharacterItem(player.name);
+                ClientManager.RequestCharacterItem();
 
                 Log("Welcome, " + player.name + "!");
 
@@ -164,7 +159,6 @@ namespace DungeonGame
 
                 t_SyncTicker.Enabled = true;
                 b_SendMessage.Enabled = true;
-                b_Transfer.Enabled = true;
                 b_Drop.Enabled = true;
 
                 kbHook.Hook();
@@ -208,14 +202,12 @@ namespace DungeonGame
 
             t_SyncTicker.Enabled = false;
             b_SendMessage.Enabled = false;
-            b_Transfer.Enabled = false;
             b_Drop.Enabled = false;
 
             kbHook.Unhook();
 
             ClientManager.Logout();
 
-            inventory.Clear(inv_Their);
             inventory.Clear(inv_Player);
 
             tb_CharacterStatus.Text = "";
@@ -245,9 +237,7 @@ namespace DungeonGame
         public static ListBox lb_Log;
         public static Button b_ToggleLogin;
         public static Button b_SendMessage;
-        public static Button b_Transfer;
         public static Button b_Drop;
         public static InventoryGrid inv_Player;
-        public static InventoryGrid inv_Their;
     }
 }

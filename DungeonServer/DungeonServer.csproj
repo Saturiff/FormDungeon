@@ -53,6 +53,7 @@
     <Compile Include="DungeonServer.Designer.cs">
       <DependentUpon>DungeonServer.cs</DependentUpon>
     </Compile>
+    <Compile Include="GamePlay\Pickable.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server\ServerMessageStatus.cs" />

@@ -55,7 +55,6 @@ namespace DungeonGame
             name = default;
             currentHealth = default;
             coin = default;
-            isIndestructible = default;
         }
 
         private Size characterSize = new Size(20, 20);
@@ -66,7 +65,6 @@ namespace DungeonGame
         public int atk { get; set; }
         public int def { get; set; }
         public uint coin { get; set; }
-        public bool isIndestructible { get; set; }
         public bool isAlive => currentHealth <= 0;
         public const int attackRange = 100;
     }

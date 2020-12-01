@@ -124,14 +124,17 @@ namespace DungeonServer
                             break;
 
                         case ServerMessageType.RequestCharacterItem:
-                            string[] names = data.Split('|');
-                            SyncPlayerItem(requestFrom: names[0], targetPlayer: names[1]);
+                            SyncPlayerItem(requestFrom: data);
                             break;
 
-                        case ServerMessageType.RequestTransferItem:
+                        case ServerMessageType.RequestTransferItem: // change to pickup
+                            string[] rtiDatas = data.Split('|');
+                            SyncItemTransfer(requestFrom: rtiDatas[0], targetPlayer: rtiDatas[1], slotIdx: rtiDatas[2]);
                             break;
 
                         case ServerMessageType.RequestDropItem:
+                            string[] rdiDatas = data.Split('|');
+                            SyncItemDrop(requestFrom: rdiDatas[0], slotIdx: rdiDatas[1]);
                             break;
 
                         default:
@@ -198,10 +201,31 @@ namespace DungeonServer
             SendTo(name, syncStr);
         }
 
-        private static void SyncPlayerItem(string requestFrom, string targetPlayer)
+        private static void SyncPlayerItem(string requestFrom)
         {
             string cmd = EnumEx<ServerMessageType>.GetOrderByEnum(ServerMessageType.RequestCharacterItem).ToString();
-            SendTo(requestFrom, cmd + targetPlayer + "," + players[targetPlayer].itemPack);
+            SendTo(requestFrom, cmd + players[requestFrom].itemPack);
+        }
+
+        private static void SyncItemTransfer(string requestFrom, string targetPlayer, string slotIdx)
+        {
+            int idx = Convert.ToInt32(slotIdx);
+            // tansfer
+            
+            // save
+
+            SyncPlayerItem(requestFrom);
+            SyncPlayerItem(targetPlayer);
+        }
+
+        private static void SyncItemDrop(string requestFrom, string slotIdx)
+        {
+            int idx = Convert.ToInt32(slotIdx);
+            // remove
+
+            // save
+
+            SyncPlayerItem(requestFrom);
         }
         #endregion
 

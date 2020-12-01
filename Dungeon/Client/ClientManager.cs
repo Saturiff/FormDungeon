@@ -108,14 +108,14 @@ namespace DungeonGame
         /// 向伺服器請求特定玩家物品欄資料
         /// </summary>
         /// <param name="targetName"></param>
-        public static void RequestCharacterItem(string targetName)
-            => SendToServer(ServerMessageType.RequestCharacterItem, playerName + "|" + targetName);
+        public static void RequestCharacterItem()
+            => SendToServer(ServerMessageType.RequestCharacterItem, playerName);
 
-        public static void RequestTransferItem(string targetName)
-            => SendToServer(ServerMessageType.RequestTransferItem, playerName + "|" + targetName);
+        public static void RequestTransferItem(string targetName, int slotIdx)
+            => SendToServer(ServerMessageType.RequestTransferItem, playerName + "|" + targetName + "|" + slotIdx.ToString());
 
-        public static void RequestDropItem(string targetName)
-            => SendToServer(ServerMessageType.RequestDropItem, playerName + "|" + targetName);
+        public static void RequestDropItem(int slotIdx)
+            => SendToServer(ServerMessageType.RequestDropItem, playerName + "|" + slotIdx);
 
         /// <summary>
         /// 查詢玩家
@@ -335,11 +335,9 @@ namespace DungeonGame
         /// <param name="rawData">伺服器傳來的原始資料</param>
         private static void SyncPlayerItem(string rawData)
         {
-            string[] itemData = rawData.Substring(1).Split(',');
-            string fromPlayerName = itemData[0];
-            string itemPack = itemData[1];
-
-            UI.inventory.Update(fromPlayerName, itemPack);
+            string itemPack = rawData.Substring(1);
+            
+            UI.inventory.Update(itemPack);
         }
         #endregion
 

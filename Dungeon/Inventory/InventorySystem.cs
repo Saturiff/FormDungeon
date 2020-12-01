@@ -6,12 +6,9 @@
     public class InventorySystem
     {
         // Resync all slot, call by ClientManager
-        public void Update(string name, string itemPack)
+        public void Update(string itemPack)
         {
-            if (name == UI.player.name)
-                UI.inv_Player.itemPack = itemPack;
-            else
-                UI.inv_Their.itemPack = itemPack;
+            UI.inv_Player.itemPack = itemPack;
         }
 
         // other player item -> current player item
@@ -33,7 +30,9 @@
         // Remove item from player's inventory
         public void Drop()
         {
-            UI.inv_Player.RemoveItem(UI.inv_Player.selectedIdx);
+            int idx = UI.inv_Player.selectedIdx;
+            ClientManager.RequestDropItem(idx);
+            UI.inv_Player.RemoveItem(idx);
         }
 
         public void Clear(InventoryGrid target)
