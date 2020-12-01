@@ -55,6 +55,7 @@
     <Compile Include="GamePlay\Shop.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Graphic\Rect.cs" />
     <Compile Include="Hook\KeyboardInfo.cs" />
     <Compile Include="Hook\KeyStateInfo.cs" />
     <Compile Include="Hook\KeyboardHook.cs" />

@@ -20,8 +20,8 @@ namespace DungeonGame
 
         private void Init()
         {
-            Size = characterSize;
             BorderStyle = BorderStyle.FixedSingle;
+            Size = characterSize;
         }
 
         public void UpdateByDataPack(string dataPack)
@@ -34,10 +34,10 @@ namespace DungeonGame
             BackColor = Color.FromArgb(Convert.ToUInt16(datas[5]), Convert.ToUInt16(datas[6]), Convert.ToUInt16(datas[7]));
         }
 
-        protected void MoveTo(Point newLocation)
+        protected void MoveTo(Point newLoc)
         {
-            if (UI.map.IsWalkable(newLocation))
-                Location = newLocation;
+            if (UI.map.IsWalkable(rect.Offset((newLoc.X, newLoc.Y))))
+                Location = newLoc;
 
             ClientManager.UpdatePlayerLocation();
         }
@@ -58,6 +58,13 @@ namespace DungeonGame
         }
 
         private Size characterSize = new Size(20, 20);
+        private Rect rect => new Rect()
+        {
+            x0y0 = (Location.X, Location.Y),
+            x0y1 = (Location.X, Location.Y + Size.Width),
+            x1y0 = (Location.X + Size.Height, Location.Y),
+            x1y1 = (Location.X + Size.Height, Location.Y + Size.Width)
+        };
 
         public string name { get; set; }
         public uint currentHealth { get; set; }
@@ -67,5 +74,6 @@ namespace DungeonGame
         public uint coin { get; set; }
         public bool isAlive => currentHealth <= 0;
         public const int attackRange = 100;
+        public const int pickRange = 100;
     }
 }

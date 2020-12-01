@@ -12,7 +12,7 @@
         Action,
         SyncPlayerData,
         RequestCharacterItem,
-        RequestTransferItem,
+        RequestPickItem,
         RequestDropItem,
         Hit
     }

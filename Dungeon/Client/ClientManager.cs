@@ -111,8 +111,8 @@ namespace DungeonGame
         public static void RequestCharacterItem()
             => SendToServer(ServerMessageType.RequestCharacterItem, playerName);
 
-        public static void RequestTransferItem(string targetName, int slotIdx)
-            => SendToServer(ServerMessageType.RequestTransferItem, playerName + "|" + targetName + "|" + slotIdx.ToString());
+        public static void RequestPickItem(string targetName, int slotIdx)
+            => SendToServer(ServerMessageType.RequestPickItem, playerName + "|" + targetName + "|" + slotIdx.ToString());
 
         public static void RequestDropItem(int slotIdx)
             => SendToServer(ServerMessageType.RequestDropItem, playerName + "|" + slotIdx);

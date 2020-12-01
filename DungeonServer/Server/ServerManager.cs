@@ -127,7 +127,7 @@ namespace DungeonServer
                             SyncPlayerItem(requestFrom: data);
                             break;
 
-                        case ServerMessageType.RequestTransferItem: // change to pickup
+                        case ServerMessageType.RequestPickItem: // change to pickup
                             string[] rtiDatas = data.Split('|');
                             SyncItemTransfer(requestFrom: rtiDatas[0], targetPlayer: rtiDatas[1], slotIdx: rtiDatas[2]);
                             break;

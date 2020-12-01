@@ -2,10 +2,9 @@
 {
     public enum TileType
     {
-        None,
-        Wall,
-        WallTop,
-        Floor,
-        Door
+        None = 0,
+        Wall = 1,
+        WallTop = 2,
+        Floor = 4
     }
 }

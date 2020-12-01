@@ -12,7 +12,7 @@ namespace DungeonGame
             CheckForIllegalCrossThreadCalls = false;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
-
+            
             BindUI();
             ClientManager.SetServerIP();
         }

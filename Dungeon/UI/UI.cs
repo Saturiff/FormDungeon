@@ -19,7 +19,7 @@ namespace DungeonGame
             inventory = new InventorySystem();
 
             tb_ItemInfo.Font = new System.Drawing.Font(tb_ItemInfo.Font.Name, 10);
-
+            
             BindFormEvents();
             BindViewportEvents();
             BindInventoryEvents();
@@ -47,18 +47,20 @@ namespace DungeonGame
                 e.Control.Click += InteractCharacter;
             };
 
-            // tile outline
-            p_Viewport.MouseMove += delegate (object sender, MouseEventArgs e)
-            {
-                if (map != null)
-                    map.Interact(e.Location);
-            };
-
             // select tile
             p_Viewport.Click += delegate (object sender, EventArgs e)
             {
-                if (map != null)
-                    map.Interact(p_Viewport.PointToClient(Cursor.Position));
+                p_Viewport.Focus();
+            };
+
+            p_Viewport.GotFocus += delegate (object sender, EventArgs e)
+            {
+                p_Viewport.BorderStyle = BorderStyle.FixedSingle;
+            };
+
+            p_Viewport.LostFocus += delegate (object sender, EventArgs e)
+            {
+                p_Viewport.BorderStyle = BorderStyle.None;
             };
         }
 

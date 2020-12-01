@@ -15,7 +15,7 @@ namespace DungeonGame
             GenerateRoom();
         }
 
-        private string[] ReadMapFromFile(string mapName = default)
+        private string[] ReadMapFromFile()
         {
             string path = @".\Maps\Map.csv";
             string rawData = "";
@@ -59,19 +59,22 @@ namespace DungeonGame
         }
 
         // todo: walkable
-        private TileType? GetTileType(Point p)
+        private TileType? GetTileType((int x, int y) p)
         {
-            Point _p = new Point(p.X / tileSize.Width, p.Y / tileSize.Height);
-            
-            if (_p.X > -1 && _p.X < col && _p.Y > -1 && _p.Y < row)
-                return tilesData[_p];
+            p = (p.x / tileSize.Width, p.y / tileSize.Height);
+
+            if (p.x > -1 && p.x < col && p.y > -1 && p.y < row)
+                return tilesData[new Point(p.x, p.y)];
 
             return null;
         }
 
-        public bool IsWalkable(Point p)
+        public bool IsWalkable(Rect objRect)
         {
-            if (GetTileType(p) == TileType.Floor || GetTileType(p) == TileType.Door)
+            if ((GetTileType(objRect.x0y0) == TileType.Floor)
+                && (GetTileType(objRect.x1y0) == TileType.Floor)
+                && (GetTileType(objRect.x0y1) == TileType.Floor)
+                && (GetTileType(objRect.x1y1) == TileType.Floor))
                 return true;
 
             return false;
@@ -79,38 +82,10 @@ namespace DungeonGame
 
         private bool IsInteractable(Point p)
         {
-            if (GetTileType(p) == TileType.Floor)
+            if (GetTileType((p.X, p.Y)) == TileType.Floor)
                 return true;
 
             return false;
-        }
-        
-        private void BorderlineEffect(Point p)
-        {
-            /*Bitmap borderline = new Bitmap(tileSize.Width, tileSize.Height);
-            using (Graphics g = Graphics.FromImage(borderline))
-            {
-                g.Clear(Color.Transparent);
-
-                Point _p = new Point(p.X / tileSize.Width, p.Y / tileSize.Height);
-
-                int colPos = _p.X * tileSize.Width;
-                int rowPos = _p.Y * tileSize.Height;
-                Point pos = new Point(colPos, rowPos);
-                Rectangle rect = new Rectangle(pos, tileSize);
-
-                g.DrawRectangle(Pens.Azure, rect);
-            }
-
-            UI.p_Viewport.*/
-        }
-
-        public void Interact(Point p)
-        {
-            if(IsInteractable(p))
-            {
-                BorderlineEffect(p);
-            }
         }
 
         private const int row = 11;   // 440/40
@@ -122,8 +97,7 @@ namespace DungeonGame
             { TileType.None,    new SolidBrush(Color.FromArgb(70,75,82)) },
             { TileType.Wall,    new SolidBrush(Color.FromArgb(177,188,208)) },
             { TileType.WallTop, new SolidBrush(Color.FromArgb(207,218,238)) },
-            { TileType.Floor,   new SolidBrush(Color.FromArgb(195,200,208)) },
-            { TileType.Door,    new SolidBrush(Color.FromArgb(14,31,62)) }
+            { TileType.Floor,   new SolidBrush(Color.FromArgb(195,200,208)) }
         };
     }
 }

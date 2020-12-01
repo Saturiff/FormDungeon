@@ -25,7 +25,7 @@ namespace DungeonGame
 
         public void CalcMove()
         {
-            int mult = 10;
+            int mult = 15;
             int up = ((isMovingUp ? -1 : 0) + (isMovingDown ? 1 : 0)) * mult;
             int right = ((isMovingRight ? 1 : 0) + (isMovingLeft ? -1 : 0)) * mult;
 
@@ -36,7 +36,6 @@ namespace DungeonGame
         public bool isMovingDown;
         public bool isMovingLeft;
         public bool isMovingRight;
-        
         public string status
         {
             get
