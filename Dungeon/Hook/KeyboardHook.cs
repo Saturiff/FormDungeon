@@ -39,22 +39,25 @@ namespace DungeonGame
 
         private static int KeyboardHookProc(int nCode, IntPtr wParam, IntPtr lParam)
         {
-            bool isPressed = (lParam.ToInt32() & 0x80000000) == 0;
+            if (UI.isInViewport)
+            {
+                bool isPressed = (lParam.ToInt32() & 0x80000000) == 0;
 
-            if (nCode < 0 || !isPressed)
-                return CallNextHookEx(hookHandle, nCode, wParam, lParam);
+                if (nCode < 0 || !isPressed)
+                    return CallNextHookEx(hookHandle, nCode, wParam, lParam);
 
-            KeyStateInfo keyW = KeyboardInfo.GetKeyState(Keys.W);
-            KeyStateInfo keyA = KeyboardInfo.GetKeyState(Keys.A);
-            KeyStateInfo keyS = KeyboardInfo.GetKeyState(Keys.S);
-            KeyStateInfo keyD = KeyboardInfo.GetKeyState(Keys.D);
+                KeyStateInfo keyW = KeyboardInfo.GetKeyState(Keys.W);
+                KeyStateInfo keyA = KeyboardInfo.GetKeyState(Keys.A);
+                KeyStateInfo keyS = KeyboardInfo.GetKeyState(Keys.S);
+                KeyStateInfo keyD = KeyboardInfo.GetKeyState(Keys.D);
 
-            UI.player.isMovingUp = keyW.IsPressed ? true : false;
-            UI.player.isMovingDown = keyS.IsPressed ? true : false;
-            UI.player.isMovingLeft = keyA.IsPressed ? true : false;
-            UI.player.isMovingRight = keyD.IsPressed ? true : false;
+                UI.player.isMovingUp = keyW.IsPressed ? true : false;
+                UI.player.isMovingDown = keyS.IsPressed ? true : false;
+                UI.player.isMovingLeft = keyA.IsPressed ? true : false;
+                UI.player.isMovingRight = keyD.IsPressed ? true : false;
 
-            UI.player.CalcMove();
+                UI.player.CalcMove();
+            }
 
             return CallNextHookEx(hookHandle, nCode, wParam, lParam);
         }

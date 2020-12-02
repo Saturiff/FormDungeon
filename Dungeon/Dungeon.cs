@@ -52,7 +52,11 @@ namespace DungeonGame
             }
         }
 
-        private void B_SendMessage_Click(object sender, EventArgs e) => ClientManager.SendMessage(TB_Message.Text);
+        private void B_SendMessage_Click(object sender, EventArgs e)
+        {
+            ClientManager.SendMessage(TB_Message.Text);
+            TB_Message.Clear();
+        }
 
         private void Dungeon_FormClosing(object sender, FormClosingEventArgs e)
         {

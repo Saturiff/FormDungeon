@@ -48,7 +48,6 @@ namespace DungeonGame
                 e.Control.Click += InteractCharacter;
             };
 
-            // select tile
             p_Viewport.Click += delegate (object sender, EventArgs e)
             {
                 p_Viewport.Focus();
@@ -63,6 +62,7 @@ namespace DungeonGame
             {
                 p_Viewport.BorderStyle = BorderStyle.None;
             };
+
         }
 
         private static void BindInventoryEvents()
@@ -234,6 +234,7 @@ namespace DungeonGame
         public static InventoryGrid inv_Their;
         public static InventorySystem inventory;
         public static string focusEnemyName;
+        public static bool isInViewport => p_Viewport.Focused;
 
         public static Form f_Dungeon;
         public static Panel p_Viewport;

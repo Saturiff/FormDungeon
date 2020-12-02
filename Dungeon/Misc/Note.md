@@ -12,3 +12,7 @@ enemy status
 撿取地面物品
 重生時滿血
 地圖隨機產生物品
+
+### Feature:
+send -> clear message
+focus
