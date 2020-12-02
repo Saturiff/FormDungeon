@@ -1,4 +1,6 @@
-﻿namespace DungeonGame
+﻿using System;
+
+namespace DungeonUtility
 {
     // 0,0====1,0
     //  | Form |
@@ -10,6 +12,9 @@
         public (int x, int y) x0y1;
         public (int x, int y) x1y0;
         public (int x, int y) x1y1;
+        public int width => x1y0.x - x0y0.x;
+        public int height => x0y1.y - x0y0.y;
+
         public Rect Offset((int x, int y) p)
         {
             (int dx, int dy) offset = (p.x - x0y0.x, p.y - x0y0.y);

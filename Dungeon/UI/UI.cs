@@ -45,7 +45,7 @@ namespace DungeonGame
         {
             p_Viewport.ControlAdded += delegate (object sender, ControlEventArgs e)
             {
-                e.Control.Click += InteractCharacter;
+                e.Control.Click += Interact;
             };
 
             p_Viewport.Click += delegate (object sender, EventArgs e)
@@ -123,15 +123,15 @@ namespace DungeonGame
         /// </summary>
         /// <param name="sender">Character物件</param>
         /// <param name="e">EventArgs參數</param>
-        private static void InteractCharacter(object sender, EventArgs e)
+        private static void Interact(object sender, EventArgs e)
         {
-            if (sender is Player p && p != player)
+            if (sender is IInteractable obj)
             {
-                focusEnemyName = p.name;
-                // player.Attack(p);
+                if(obj is Player p && p != player)
+                    focusEnemyName = p.name;
+                else if (obj is Pickable item)
+                    item.Interact();
             }
-            // else if sender is pickable p
-            // Pickup p
         }
         #endregion
 

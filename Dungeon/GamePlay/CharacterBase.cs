@@ -1,10 +1,11 @@
-﻿using System;
+﻿using DungeonUtility;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace DungeonGame
 {
-    public class CharacterBase : Panel
+    public class CharacterBase : Panel, IInteractable
     {
         protected CharacterBase()
         {
@@ -42,7 +43,7 @@ namespace DungeonGame
             ClientManager.UpdatePlayerLocation();
         }
 
-        public void Attack(CharacterBase target) { }
+        public void Interact() { }
 
         protected double DistanceOf(CharacterBase target)
         {

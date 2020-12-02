@@ -12,7 +12,7 @@ namespace DungeonGame
 
         public Player(string dataPack) : base(dataPack) { }
 
-        public new void Attack(CharacterBase target)
+        public void Attack(CharacterBase target)
         {
             double dist = DistanceOf(target);
             if (dist > attackRange)
@@ -20,6 +20,7 @@ namespace DungeonGame
 
             int damage = 10 + (int)(atk * (attackRange - dist)) / 100;
             Console.WriteLine("damage = " + damage);
+            // todo
             // ClientManager.Hit(target.name, damage);
         }
 

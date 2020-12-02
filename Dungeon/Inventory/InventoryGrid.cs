@@ -19,21 +19,29 @@ namespace DungeonGame
         // 新增至空格
         public bool AddItem(string itemNum)
         {
-            int slotIdx = FindEmptySlot();
-            if (slotIdx == -1)
+            var result = FindEmptySlot();
+            if (!result.isSuccess)
                 return false;
 
-            UpdateItem(itemNum, slotIdx);
+            UpdateItem(itemNum, FindEmptySlot().idx);
             return true;
         }
 
         // 替換
         public void UpdateItem(string itemNum, int slotIdx)
-            => ((Slot)slots[slotIdx]).AddItem(itemNum);
+        {
+            ((Slot)slots[slotIdx]).AddItem(itemNum);
+            // todo
+            // ClientManager
+        }
 
         // 移除
         public void RemoveItem(int slotIdx)
-            => ((Slot)slots[slotIdx]).RemoveItem();
+        {
+            ((Slot)slots[slotIdx]).RemoveItem();
+            // todo
+            // ClientManager
+        }
 
         // 取得字典中對應識別碼
         private string GetItemIndexByItem(Item item)
@@ -45,14 +53,13 @@ namespace DungeonGame
             return "000";
         }
 
-        // -1: full
-        private int FindEmptySlot()
+        public (bool isSuccess, int idx) FindEmptySlot()
         {
             for (int i = 0; i < slots.Count; i++)
                 if (GetItemIndexByItem(((Slot)slots[i]).item) == "000")
-                    return i;
+                    return (true, i);
 
-            return -1;
+            return (false, -1);
         }
 
         private IEnumerable<Slot> GetEachSlot()
