@@ -14,6 +14,8 @@
         RequestCharacterItem,
         RequestPickItem,
         RequestDropItem,
-        Hit
+        Hit,
+        SpawnItem,
+        SpawnCharacter
     }
 }

@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using Timer = System.Windows.Forms.Timer;
 
 namespace DungeonServer
 {
@@ -35,6 +36,17 @@ namespace DungeonServer
             serverThread.IsBackground = true;
             serverThread.Start();
             status = ServerStatus.Online;
+
+            spawnTimer = new Timer();
+            spawnTimer.Interval = 5000;
+            spawnTimer.Tick += SpawnTimer_Tick;
+            spawnTimer.Start();
+        }
+
+        private static void SpawnTimer_Tick(object sender, EventArgs e)
+        {
+            (int x, int y) spawnLoc = Rand.GetRandPointInRect(playGround);
+            // SendAll(code+","+spawnLoc.x + "|" + spawnLoc.y);
         }
 
         private static void ServerLoop()
@@ -57,7 +69,9 @@ namespace DungeonServer
             try
             {
                 string code = EnumEx<ServerMessageType>.GetOrderByEnum(ServerMessageType.Offline).ToString();
-                SendAll(code);
+                SendAll(code + ">");
+
+                spawnTimer.Stop();
 
                 svListener.Stop();
                 serverThread.Abort();
@@ -87,54 +101,54 @@ namespace DungeonServer
                     byte[] byteDatas = new byte[dataSize];
                     int inLen = sk.Receive(byteDatas);
                     string rawData = Encoding.Default.GetString(byteDatas, index: 0, inLen);
-                    int cmdOrder = Convert.ToInt32(rawData[0].ToString());
+                    string[] datas = rawData.Split('>');
+                    int cmdOrder = Convert.ToInt32(datas[0]);
                     ServerMessageType cmd = EnumEx<ServerMessageType>.GetEnumByOrder(cmdOrder);
-                    string data = rawData.Substring(1);
-
+                    
                     switch (cmd)
                     {
                         case ServerMessageType.Offline:
-                            PlayerOffline(data, th);
+                            PlayerOffline(datas[1], th);
                             break;
 
                         case ServerMessageType.Verification:
-                            string res = EnumEx<ServerMessageStatus>.GetOrderByEnum(players.ContainsKey(data) ? ServerMessageStatus.Fail
-                                                                                                              : ServerMessageStatus.Success).ToString();
-                            SendTo(sk, cmdOrder.ToString() + res);
+                            string res = EnumEx<ServerMessageStatus>.GetOrderByEnum(players.ContainsKey(datas[1]) ? ServerMessageStatus.Fail
+                                                                                                                  : ServerMessageStatus.Success).ToString();
+                            SendTo(sk, cmdOrder.ToString() + ">" + res);
                             break;
 
                         case ServerMessageType.Online:
-                            PlayerOnline(playerName: data, sk);
-                            SendTo(playerName: data, cmdOrder.ToString() + data + "|" + players[data].dataPack);
+                            PlayerOnline(playerName: datas[1], sk);
+                            SendTo(playerName: datas[1], cmdOrder.ToString() + ">" + datas[1] + "|" + players[datas[1]].dataPack);
                             break;
 
                         case ServerMessageType.TextMessage:
-                            SendTextToAll(cmdOrder, message: data);
+                            SendTextToAll(cmdOrder, message: datas[1]);
                             break;
 
                         case ServerMessageType.Action:
-                            string[] datas = data.Split('|');
-                            UpdatePlayerLocation(name: datas[0],
-                                                 x: Convert.ToInt32(datas[1]),
-                                                 y: Convert.ToInt32(datas[2]));
+                            string[] actionDatas = datas[1].Split('|');
+                            UpdatePlayerLocation(name: actionDatas[0],
+                                                 x: Convert.ToInt32(actionDatas[1]),
+                                                 y: Convert.ToInt32(actionDatas[2]));
                             break;
 
                         case ServerMessageType.SyncPlayerData:
-                            SyncAllPlayersData(name: data);
+                            SyncAllPlayersData(name: datas[1]);
                             break;
 
                         case ServerMessageType.RequestCharacterItem:
-                            string[] rciDatas = data.Split('|');
+                            string[] rciDatas = datas[1].Split('|');
                             SyncPlayerItem(requestFrom: rciDatas[0], targetPlayer: rciDatas[1]);
                             break;
 
-                        case ServerMessageType.RequestPickItem: // change to pickup
-                            string[] rtiDatas = data.Split('|');
+                        case ServerMessageType.RequestPickItem:
+                            string[] rtiDatas = datas[1].Split('|');
                             SyncItemPick(requestFrom: rtiDatas[0], targetPlayer: rtiDatas[1], slotIdx: rtiDatas[2]);
                             break;
 
                         case ServerMessageType.RequestDropItem:
-                            string[] rdiDatas = data.Split('|');
+                            string[] rdiDatas = datas[1].Split('|');
                             SyncItemDrop(requestFrom: rdiDatas[0], slotIdx: rdiDatas[1]);
                             break;
 
@@ -178,7 +192,7 @@ namespace DungeonServer
         // 對所有玩家發送訊息
         private static void SendTextToAll(int cmdOrder, string message)
         {
-            SendAll(cmdOrder.ToString() + message);
+            SendAll(cmdOrder.ToString() + ">" + message);
 
             UI.AddLog(message);
         }
@@ -192,7 +206,7 @@ namespace DungeonServer
         private static void SyncAllPlayersData(string name)
         {
             string cmd = EnumEx<ServerMessageType>.GetOrderByEnum(ServerMessageType.SyncPlayerData).ToString();
-            string syncStr = cmd + "," + (players.Count - 1).ToString();
+            string syncStr = cmd + ">" + (players.Count - 1).ToString();
             foreach (var key in players.Keys)
             {
                 if (key != name)
@@ -205,7 +219,7 @@ namespace DungeonServer
         private static void SyncPlayerItem(string requestFrom, string targetPlayer)
         {
             string cmd = EnumEx<ServerMessageType>.GetOrderByEnum(ServerMessageType.RequestCharacterItem).ToString();
-            SendTo(requestFrom, cmd + targetPlayer + "," + players[targetPlayer].itemPack);
+            SendTo(requestFrom, cmd + ">" + targetPlayer + "," + players[targetPlayer].itemPack);
         }
 
         private static void SyncItemPick(string requestFrom, string targetPlayer, string slotIdx)
@@ -263,6 +277,14 @@ namespace DungeonServer
         private static Socket svSocket { get; set; }
         private static Thread serverThread { get; set; }
         private static Thread clientThread { get; set; }
+        private static Timer spawnTimer { get; set; }
+        private static Rect playGround = new Rect()
+        {
+            x0y0 = (0, 0),
+            x0y1 = (0, 440),
+            x1y0 = (800, 0),
+            x1y1 = (800, 440)
+        };
 
         // 所有連線清單，[玩家名稱 : 連線物件]
         private static Hashtable socketHT = new Hashtable();

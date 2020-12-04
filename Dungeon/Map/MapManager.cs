@@ -58,7 +58,6 @@ namespace DungeonGame
             UI.p_Viewport.BackgroundImage = bg;
         }
 
-        // todo: walkable
         private TileType? GetTileType((int x, int y) p)
         {
             p = (p.x / tileSize.Width, p.y / tileSize.Height);

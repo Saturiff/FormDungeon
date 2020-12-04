@@ -79,7 +79,7 @@ namespace DungeonGame
         /// 新增至聊天訊息欄
         /// </summary>
         /// <param name="s">欲新增之訊息字串</param>
-        public static void Message(string s)
+        public static void AddTextMessage(string s)
         {
             lb_Message.Items.Add(s);
             AutoScrollListBox(lb_Message);
@@ -89,7 +89,7 @@ namespace DungeonGame
         /// 新增至日誌欄
         /// </summary>
         /// <param name="s">欲新增之日誌字串</param>
-        public static void Log(string s)
+        public static void AddLog(string s)
         {
             lb_Log.Items.Add(s);
             AutoScrollListBox(lb_Log);
@@ -107,21 +107,21 @@ namespace DungeonGame
         #endregion
 
         #region Character
-        public static void SpawnCharacter(CharacterBase c) => p_Viewport.BeginInvoke((Action)delegate ()
+        public static void SpawnInViewport(CharacterBase c) => p_Viewport.BeginInvoke((Action)delegate ()
             {
                 p_Viewport.Controls.Add(c);
 
             });
 
-        public static void DestroyCharacter(CharacterBase c) => p_Viewport.BeginInvoke((Action)delegate ()
+        public static void DestroyFromViewport(CharacterBase c) => p_Viewport.BeginInvoke((Action)delegate ()
             {
                 p_Viewport.Controls.Remove(c);
             });
 
         /// <summary>
-        /// 鼠標與Viewport的角色互動
+        /// 鼠標與Viewport中的物件互動
         /// </summary>
-        /// <param name="sender">Character物件</param>
+        /// <param name="sender">被點擊物件</param>
         /// <param name="e">EventArgs參數</param>
         private static void Interact(object sender, EventArgs e)
         {
@@ -147,7 +147,7 @@ namespace DungeonGame
             if (IsVaildName(tb_Nickname.Text))
                 ClientManager.Login(tb_Nickname.Text);
             else
-                Log("Invalid name.");
+                AddLog("Invalid name.");
 
             if (ClientManager.isOnline)
             {
@@ -157,11 +157,11 @@ namespace DungeonGame
                 player = ClientManager.GetPlayerCharacter();
                 ClientManager.RequestCharacterItem();
 
-                Log("Welcome, " + player.name + "!");
+                AddLog("Welcome, " + player.name + "!");
 
                 map = new MapManager();
 
-                SpawnCharacter(player);
+                SpawnInViewport(player);
 
                 t_SyncTicker.Enabled = true;
                 b_SendMessage.Enabled = true;
@@ -172,7 +172,7 @@ namespace DungeonGame
                 b_ToggleLogin.Text = "Logout";
             }
             else
-                Log("Login failed.");
+                AddLog("Login failed.");
         }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace DungeonGame
         /// </summary>
         public static void Destroy()
         {
-            DestroyCharacter(player);
+            DestroyFromViewport(player);
             player = default;
 
             t_SyncTicker.Enabled = false;
@@ -221,7 +221,7 @@ namespace DungeonGame
             tb_ItemInfo.Text = "";
             tb_Nickname.Enabled = true;
 
-            Log("Logout.");
+            AddLog("Logout.");
 
             b_ToggleLogin.Text = "Login";
         }

@@ -161,7 +161,7 @@ namespace DungeonGame
 
             foreach (Player c in players.Values)
             {
-                UI.DestroyCharacter(c);
+                UI.DestroyFromViewport(c);
             }
 
             players.Clear();
@@ -178,7 +178,7 @@ namespace DungeonGame
         /// <param name="inMsg">欲傳送之資料</param>
         private static void SendToServer(ServerMessageType type, string inMsg)
         {
-            string msg = EnumEx<ServerMessageType>.GetOrderByEnum(type).ToString() + inMsg;
+            string msg = EnumEx<ServerMessageType>.GetOrderByEnum(type).ToString() + ">" + inMsg;
 
             byte[] data = Encoding.Default.GetBytes(msg);
             socket.Send(data, 0, data.Length, SocketFlags.None);
@@ -195,6 +195,7 @@ namespace DungeonGame
             byte[] byteDatas = new byte[dataSize];
             int inLen = 0;
             string rawData;
+            string[] datas;
             int cmdOrder;
             ServerMessageType cmd;
 
@@ -211,9 +212,10 @@ namespace DungeonGame
                 }
 
                 rawData = Encoding.Default.GetString(byteDatas, 0, inLen);
-                cmdOrder = Convert.ToInt32(rawData[0].ToString());
+                datas = rawData.Split('>');
+                cmdOrder = Convert.ToInt32(datas[0]);
                 cmd = EnumEx<ServerMessageType>.GetEnumByOrder(cmdOrder);
-
+                
                 switch (cmd)
                 {
                     case ServerMessageType.Offline:
@@ -221,23 +223,23 @@ namespace DungeonGame
                         break;
 
                     case ServerMessageType.Verification:
-                        ContinueVerification(rawData);
+                        ContinueVerification(datas[1]);
                         break;
 
                     case ServerMessageType.Online:
-                        LoadPlayerCharacterStatus(rawData);
+                        LoadPlayerCharacterStatus(datas[1]);
                         break;
 
                     case ServerMessageType.TextMessage:
-                        ReceiveTextMessage(rawData);
+                        ReceiveTextMessage(datas[1]);
                         break;
 
                     case ServerMessageType.SyncPlayerData:
-                        SyncAllPlayersData(rawData);
+                        SyncAllPlayersData(datas[1]);
                         break;
 
                     case ServerMessageType.RequestCharacterItem:
-                        SyncPlayerItem(rawData);
+                        SyncPlayerItem(datas[1]);
                         break;
 
                     default:
@@ -253,15 +255,15 @@ namespace DungeonGame
         private static void ForceOffline()
         {
             UI.Destroy();
-            UI.Log("Server offline.");
+            UI.AddLog("Server offline.");
         }
 
         /// <summary>
         /// 伺服器端驗證角色名稱
         /// </summary>
-        private static void ContinueVerification(string rawData)
+        private static void ContinueVerification(string result)
         {
-            int resultIdx = Convert.ToInt32(rawData.Substring(1));
+            int resultIdx = Convert.ToInt32(result);
             svMsgStatus = EnumEx<ServerMessageStatus>.GetEnumByOrder(resultIdx);
         }
 
@@ -269,9 +271,8 @@ namespace DungeonGame
         /// 玩家上線接收自己的角色資料
         /// </summary>
         /// <param name="rawData">伺服器傳來的原始資料</param>
-        private static void LoadPlayerCharacterStatus(string rawData)
+        private static void LoadPlayerCharacterStatus(string dataPack)
         {
-            string dataPack = rawData.Substring(1);
             Player c = new Player(dataPack);
             players.Add(playerName, c);
             isWaitingPlayerData = false;
@@ -279,33 +280,34 @@ namespace DungeonGame
 
         /// <summary>
         /// 由伺服器傳來的資料做玩家資料的分割整理
+        /// 格式: other_player_count,name|{datapack},name|{datapack}, ...
         /// </summary>
-        /// <param name="rawData">伺服器傳來的原始資料</param>
+        /// <param name="dataPacks">伺服器傳來的原始資料</param>
         /// <returns></returns>
-        private static IEnumerable<string> ExtractDataPack(string rawData)
+        private static IEnumerable<string> ExtractDataPack(string dataPacks)
         {
-            string[] datas = rawData.Split(',');
+            string[] datas = dataPacks.Split(',');
 
-            int otherPlayerNum = Convert.ToInt32(datas[1]);
+            int otherPlayerNum = Convert.ToInt32(datas[0]);
 
             if (otherPlayerNum < 1)
                 yield break;
 
             for (int i = 0; i < otherPlayerNum; i++)
-                yield return datas[i + 2];
+                yield return datas[i + 1];
         }
 
         /// <summary>
         /// 接收文字訊息
         /// </summary>
         /// <param name="rawData">伺服器傳來的原始資料</param>
-        private static void ReceiveTextMessage(string rawData) => UI.Message(rawData.Substring(1));
+        private static void ReceiveTextMessage(string textMessage) => UI.AddTextMessage(textMessage);
 
         /// <summary>
         /// 同步所有其他玩家狀態資料，並在有玩家登出時移除該玩家
         /// </summary>
-        /// <param name="rawData">伺服器傳來的原始資料</param>
-        private static void SyncAllPlayersData(string rawData)
+        /// <param name="playerDatas">伺服器傳來的原始資料</param>
+        private static void SyncAllPlayersData(string playerDatas)
         {
             // 初始化判斷離線的參數
             foreach (string name in playerUpdateStatus.Keys.ToList())
@@ -313,7 +315,7 @@ namespace DungeonGame
                     playerUpdateStatus[name] = false;
 
             // 更新/新增在線玩家資料
-            foreach (string dataPack in ExtractDataPack(rawData))
+            foreach (string dataPack in ExtractDataPack(playerDatas))
             {
                 string name = dataPack.Split('|')[0];
 
@@ -329,7 +331,7 @@ namespace DungeonGame
 
                     players.Add(c.name, c);
 
-                    UI.SpawnCharacter(players[c.name]);
+                    UI.SpawnInViewport(players[c.name]);
 
                     playerUpdateStatus.Add(c.name, true);
                 }
@@ -339,7 +341,7 @@ namespace DungeonGame
             foreach (string name in playerUpdateStatus.Keys.ToList())
                 if (!playerUpdateStatus[name])
                 {
-                    UI.DestroyCharacter(players[name]);
+                    UI.DestroyFromViewport(players[name]);
 
                     playerUpdateStatus.Remove(name);
 
@@ -356,10 +358,10 @@ namespace DungeonGame
         /// <summary>
         /// 更新特定玩家物品欄資料
         /// </summary>
-        /// <param name="rawData">伺服器傳來的原始資料</param>
-        private static void SyncPlayerItem(string rawData)
+        /// <param name="sciData">伺服器傳來的原始資料</param>
+        private static void SyncPlayerItem(string sciData)
         {
-            string[] datas = rawData.Substring(1).Split(',');
+            string[] datas = sciData.Split(',');
             
             UI.inventory.Update(name: datas[0], itemPack: datas[1]);
         }
