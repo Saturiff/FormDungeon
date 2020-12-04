@@ -242,6 +242,21 @@ namespace DungeonGame
                         SyncPlayerItem(datas[1]);
                         break;
 
+                    case ServerMessageType.RequestPickItem:
+                        break;
+
+                    case ServerMessageType.RequestDropItem:
+                        break;
+
+                    case ServerMessageType.Hit:
+                        break;
+
+                    case ServerMessageType.SpawnItem:
+                        break;
+
+                    case ServerMessageType.SpawnCharacter:
+                        break;
+
                     default:
                         Console.WriteLine("bad data: " + cmdOrder);
                         break;
