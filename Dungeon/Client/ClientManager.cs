@@ -252,6 +252,7 @@ namespace DungeonGame
                         break;
 
                     case ServerMessageType.SpawnItem:
+                        ServerSpawnItem(datas[1]);
                         break;
 
                     case ServerMessageType.SpawnCharacter:
@@ -379,6 +380,17 @@ namespace DungeonGame
             string[] datas = sciData.Split(',');
             
             UI.inventory.Update(name: datas[0], itemPack: datas[1]);
+        }
+
+        private static void ServerSpawnItem(string spawnItemData)
+        {
+            string[] datas = spawnItemData.Split(',');
+            (int x, int y) loc = (Convert.ToInt32(datas[1]), Convert.ToInt32(datas[2]));
+            if (UI.map.IsWalkable(new Rect(loc.x, loc.y, Pickable.size.width, Pickable.size.height)))
+            {
+                Pickable pickable = new Pickable(loc, datas[0]);
+                UI.SpawnInViewport(pickable);
+            }
         }
         #endregion
 

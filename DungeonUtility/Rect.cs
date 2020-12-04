@@ -6,8 +6,26 @@ namespace DungeonUtility
     //  | Form |
     //  | Axis |
     // 0,1====1,1
-    public struct Rect
+    public class Rect
     {
+        public Rect() { }
+
+        public Rect(int width, int height)
+        {
+            x0y0 = (0, 0);
+            x0y1 = (0, width);
+            x1y0 = (height, 0);
+            x1y1 = (height, width);
+        }
+
+        public Rect(int x, int y, int width, int height)
+        {
+            x0y0 = (x, y);
+            x0y1 = (x, y + width);
+            x1y0 = (x + height, y);
+            x1y1 = (x + height, y + width);
+        }
+
         public (int x, int y) x0y0;
         public (int x, int y) x0y1;
         public (int x, int y) x1y0;

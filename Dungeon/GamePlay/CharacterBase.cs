@@ -5,12 +5,9 @@ using System.Windows.Forms;
 
 namespace DungeonGame
 {
-    public class CharacterBase : Panel, IInteractable
+    public class CharacterBase : Actor
     {
-        protected CharacterBase()
-        {
-            Init();
-        }
+        protected CharacterBase() => Init();
 
         protected CharacterBase(string dataPack)
         {
@@ -43,8 +40,6 @@ namespace DungeonGame
             ClientManager.UpdatePlayerLocation();
         }
 
-        public void Interact() { }
-
         protected double DistanceOf(CharacterBase target)
         {
             return Math.Sqrt((Location.X - target.Location.X) * (Location.X - target.Location.X) +
@@ -59,14 +54,8 @@ namespace DungeonGame
         }
 
         private Size characterSize = new Size(20, 20);
-        private Rect rect => new Rect()
-        {
-            x0y0 = (Location.X, Location.Y),
-            x0y1 = (Location.X, Location.Y + Size.Width),
-            x1y0 = (Location.X + Size.Height, Location.Y),
-            x1y1 = (Location.X + Size.Height, Location.Y + Size.Width)
-        };
-
+        private Rect rect => new Rect(Location.X, Location.Y, Size.Width, Size.Height);
+        
         public string name { get; set; }
         public uint currentHealth { get; set; }
         public const uint maxHealth = 200;
