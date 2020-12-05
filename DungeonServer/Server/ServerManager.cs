@@ -46,8 +46,7 @@ namespace DungeonServer
         private static void SpawnTimer_Tick(object sender, EventArgs e)
         {
             (int x, int y) spawnLoc = Rand.GetRandPointInRect(playGround);
-
-            SendToAll(ServerMessageType.SpawnItem, Rand.GetRandItemNum() + "," + spawnLoc.x + "," + spawnLoc.y);
+            //SendAll(code + ">" + spawnLoc.x + "|" + spawnLoc.y);
         }
 
         private static void ServerLoop()
@@ -224,7 +223,7 @@ namespace DungeonServer
             SendToPlayer(ServerMessageType.SyncPlayerData, name, syncStr);
         }
 
-        private static void SyncPlayerItem(string requestFrom, string targetPlayer)
+        private static void SyncPlayerItem(string requestFrom, string targetPlayer) 
             => SendToPlayer(ServerMessageType.RequestCharacterItem, requestFrom, targetPlayer + "," + players[targetPlayer].itemPack);
 
         private static void SyncItemPick(string requestFrom, string targetPlayer, string slotIdx)
@@ -287,8 +286,14 @@ namespace DungeonServer
         private static Thread serverThread { get; set; }
         private static Thread clientThread { get; set; }
         private static Timer spawnTimer { get; set; }
-        private static Rect playGround = new Rect(800, 440);
-        
+        private static Rect playGround = new Rect()
+        {
+            x0y0 = (0, 0),
+            x0y1 = (0, 440),
+            x1y0 = (800, 0),
+            x1y1 = (800, 440)
+        };
+
         // 所有連線清單，[玩家名稱 : 連線物件]
         private static Hashtable socketHT = new Hashtable();
         // 所有玩家清單，[玩家名稱 : 角色物件]

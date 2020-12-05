@@ -107,13 +107,13 @@ namespace DungeonGame
         #endregion
 
         #region Character
-        public static void SpawnInViewport(Actor c) => p_Viewport.BeginInvoke((Action)delegate ()
+        public static void SpawnInViewport(CharacterBase c) => p_Viewport.BeginInvoke((Action)delegate ()
             {
                 p_Viewport.Controls.Add(c);
 
             });
 
-        public static void DestroyFromViewport(Actor c) => p_Viewport.BeginInvoke((Action)delegate ()
+        public static void DestroyFromViewport(CharacterBase c) => p_Viewport.BeginInvoke((Action)delegate ()
             {
                 p_Viewport.Controls.Remove(c);
             });

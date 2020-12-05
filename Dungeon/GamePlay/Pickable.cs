@@ -1,18 +1,17 @@
 ﻿using System.Drawing;
+using System.Windows.Forms;
 
 namespace DungeonGame
 {
-    public class Pickable : Actor
+    public class Pickable : Panel, IInteractable
     {
-        public Pickable((int x, int y) loc, string itemNum)
+        public Pickable((int x, int y) loc)
         {
-            this.itemNum = itemNum;
             Location = new Point(loc.x, loc.y);
-            BackgroundImage = ItemData.data[this.itemNum].icon;
-            Size = new Size(size.width, size.height);
+            BackgroundImage = ItemData.data[itemNum].icon;
         }
 
-        public new void Interact()
+        public void Interact()
         {
             var result = UI.inv_Player.FindEmptySlot();
             if (result.isSuccess)
@@ -31,6 +30,5 @@ namespace DungeonGame
         }
 
         public string itemNum { get; set; }
-        public static (int width, int height) size = (20, 20);
     }
 }

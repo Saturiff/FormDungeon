@@ -1,4 +1,4 @@
-﻿namespace DungeonServer
+﻿namespace DungeonServer.GamePlay
 {
     public class Pickable
     {
