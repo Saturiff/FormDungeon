@@ -56,17 +56,11 @@
     <Compile Include="Hook\KeyboardInfo.cs" />
     <Compile Include="Hook\KeyStateInfo.cs" />
     <Compile Include="Hook\KeyboardHook.cs" />
-    <Compile Include="Client\ServerMessageStatus.cs" />
+    <Compile Include="Client\ClientStatus.cs" />
     <Compile Include="GamePlay\Player.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Client\ServerMessageType.cs" />
-    <Compile Include="Inventory\InventoryGrid.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Inventory\InventoryGrid.Designer.cs">
-      <DependentUpon>InventoryGrid.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Client\ClientMessageType.cs" />
     <Compile Include="UI\UI.cs" />
     <Compile Include="Dungeon.cs">
       <SubType>Form</SubType>
@@ -76,7 +70,6 @@
     </Compile>
     <Compile Include="Map\MapManager.cs" />
     <Compile Include="Client\PlayerStatus.cs" />
-    <Compile Include="Inventory\InventorySystem.cs" />
     <Compile Include="Inventory\Item.cs" />
     <Compile Include="Inventory\ItemData.cs" />
     <Compile Include="Program.cs" />
@@ -94,9 +87,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GamePlay\Player.resx">
       <DependentUpon>Player.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Inventory\InventoryGrid.resx">
-      <DependentUpon>InventoryGrid.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Inventory\Slot.resx">
       <DependentUpon>Slot.cs</DependentUpon>

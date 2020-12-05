@@ -8,19 +8,26 @@ namespace DungeonGame
         public Pickable((int x, int y) loc)
         {
             Location = new Point(loc.x, loc.y);
-            BackgroundImage = ItemData.data[itemNum].icon;
+
+            Bitmap bmp = new Bitmap(ClientSize.Width, ClientSize.Height);
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                g.DrawImage(ItemData.data[itemNum].icon,
+                    new Rectangle(0, 0, bmp.Width, bmp.Height));
+            }
+
+            BackgroundImage = bmp;
         }
 
         public void Interact()
         {
-            var result = UI.inv_Player.FindEmptySlot();
-            if (result.isSuccess)
+            if (UI.s_Slot.item != ItemData.data["000"])
                 Pickup();
         }
 
         private void Pickup()
         {
-            UI.inv_Player.AddItem(itemNum);
+            UI.s_Slot.AddItem(itemNum);
         }
 
         public void Destory()

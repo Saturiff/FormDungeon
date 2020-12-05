@@ -30,9 +30,8 @@ namespace DungeonGame
             string[] datas = dataPack.Split('|');
             name = datas[0];
             currentHealth = Convert.ToUInt32(datas[1]);
-            coin = Convert.ToUInt32(datas[2]);
-            Location = new Point(Convert.ToInt32(datas[3]), Convert.ToInt32(datas[4]));
-            BackColor = Color.FromArgb(Convert.ToUInt16(datas[5]), Convert.ToUInt16(datas[6]), Convert.ToUInt16(datas[7]));
+            Location = new Point(Convert.ToInt32(datas[2]), Convert.ToInt32(datas[3]));
+            BackColor = Color.FromArgb(Convert.ToUInt16(datas[4]), Convert.ToUInt16(datas[5]), Convert.ToUInt16(datas[6]));
         }
 
         protected void MoveTo(Point newLoc)
@@ -55,7 +54,6 @@ namespace DungeonGame
         {
             name = default;
             currentHealth = default;
-            coin = default;
         }
 
         private Size characterSize = new Size(20, 20);
@@ -72,7 +70,6 @@ namespace DungeonGame
         public const uint maxHealth = 200;
         public int atk { get; set; }
         public int def { get; set; }
-        public uint coin { get; set; }
         public bool isAlive => currentHealth <= 0;
         public const int attackRange = 100;
         public const int pickRange = 100;

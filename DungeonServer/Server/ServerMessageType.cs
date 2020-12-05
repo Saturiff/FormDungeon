@@ -10,12 +10,6 @@
         Offline,
         TextMessage,
         Action,
-        SyncPlayerData,
-        RequestCharacterItem,
-        RequestPickItem,
-        RequestDropItem,
-        Hit,
-        SpawnItem,
-        SpawnCharacter
+        SyncPlayerData
     }
 }

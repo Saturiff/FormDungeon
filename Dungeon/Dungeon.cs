@@ -24,6 +24,7 @@ namespace DungeonGame
         {
             UI.f_Dungeon = this;
             UI.p_Viewport = P_Viewport;
+            UI.s_Slot = S_Slot;
             UI.t_SyncTicker = T_SyncTicker;
             UI.tb_Nickname = TB_Nickname;
             UI.tb_CharacterStatus = TB_CharacterStatus;
@@ -34,8 +35,6 @@ namespace DungeonGame
             UI.lb_Log = LB_Log;
             UI.b_ToggleLogin = B_ToggleLogin;
             UI.b_SendMessage = B_SendMessage;
-            UI.b_Drop = B_Drop;
-            UI.inv_Player = INV_Player;
             UI.InitControls();
         }
 

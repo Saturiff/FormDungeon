@@ -136,30 +136,6 @@ namespace DungeonServer
                             SyncAllPlayersData(name: datas[1]);
                             break;
 
-                        case ServerMessageType.RequestCharacterItem:
-                            string[] rciDatas = datas[1].Split('|');
-                            SyncPlayerItem(requestFrom: rciDatas[0], targetPlayer: rciDatas[1]);
-                            break;
-
-                        case ServerMessageType.RequestPickItem:
-                            string[] rtiDatas = datas[1].Split('|');
-                            SyncItemPick(requestFrom: rtiDatas[0], targetPlayer: rtiDatas[1], slotIdx: rtiDatas[2]);
-                            break;
-
-                        case ServerMessageType.RequestDropItem:
-                            string[] rdiDatas = datas[1].Split('|');
-                            SyncItemDrop(requestFrom: rdiDatas[0], slotIdx: rdiDatas[1]);
-                            break;
-
-                        case ServerMessageType.Hit:
-                            break;
-
-                        case ServerMessageType.SpawnItem:
-                            break;
-
-                        case ServerMessageType.SpawnCharacter:
-                            break;
-
                         default:
                             break;
                     }
@@ -221,30 +197,6 @@ namespace DungeonServer
             }
 
             SendToPlayer(ServerMessageType.SyncPlayerData, name, syncStr);
-        }
-
-        private static void SyncPlayerItem(string requestFrom, string targetPlayer) 
-            => SendToPlayer(ServerMessageType.RequestCharacterItem, requestFrom, targetPlayer + "," + players[targetPlayer].itemPack);
-
-        private static void SyncItemPick(string requestFrom, string targetPlayer, string slotIdx)
-        {
-            int idx = Convert.ToInt32(slotIdx);
-            // tansfer
-
-            // save
-
-            // SyncPlayerItem(requestFrom);
-            // SyncPlayerItem(targetPlayer);
-        }
-
-        private static void SyncItemDrop(string requestFrom, string slotIdx)
-        {
-            int idx = Convert.ToInt32(slotIdx);
-            // remove
-
-            // save
-
-            // SyncPlayerItem(requestFrom);
         }
         #endregion
 

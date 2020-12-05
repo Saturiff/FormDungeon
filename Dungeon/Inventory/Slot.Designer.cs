@@ -39,8 +39,7 @@
             this.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "Slot";
-            this.Size = new System.Drawing.Size(46, 46);
-            this.Click += new System.EventHandler(this.InventorySlot_Click);
+            this.Size = new System.Drawing.Size(50, 50);
             this.ResumeLayout(false);
 
         }

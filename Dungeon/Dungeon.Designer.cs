@@ -31,24 +31,22 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(F_Dungeon));
             this.P_Viewport = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
             this.B_ToggleLogin = new System.Windows.Forms.Button();
             this.TB_Nickname = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.TB_CharacterStatus = new System.Windows.Forms.TextBox();
             this.TB_Message = new System.Windows.Forms.TextBox();
             this.B_SendMessage = new System.Windows.Forms.Button();
-            this.B_Drop = new System.Windows.Forms.Button();
             this.TB_ItemInfo = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.T_SyncTicker = new System.Windows.Forms.Timer(this.components);
             this.LB_Message = new System.Windows.Forms.ListBox();
             this.LB_Log = new System.Windows.Forms.ListBox();
-            this.TB_EnemyStatus = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.INV_Player = new DungeonGame.InventoryGrid();
+            this.S_Slot = new DungeonGame.Slot();
+            this.label4 = new System.Windows.Forms.Label();
+            this.TB_EnemyStatus = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // P_Viewport
@@ -59,16 +57,6 @@
             this.P_Viewport.Name = "P_Viewport";
             this.P_Viewport.Size = new System.Drawing.Size(800, 440);
             this.P_Viewport.TabIndex = 0;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(559, 462);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(117, 19);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "My inventory";
             // 
             // B_ToggleLogin
             // 
@@ -108,23 +96,13 @@
             this.label3.TabIndex = 7;
             this.label3.Text = "Log";
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(275, 464);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(117, 19);
-            this.label4.TabIndex = 8;
-            this.label4.Text = "Enemy status";
-            // 
             // TB_CharacterStatus
             // 
             this.TB_CharacterStatus.Enabled = false;
-            this.TB_CharacterStatus.Location = new System.Drawing.Point(12, 486);
+            this.TB_CharacterStatus.Location = new System.Drawing.Point(516, 481);
             this.TB_CharacterStatus.Multiline = true;
             this.TB_CharacterStatus.Name = "TB_CharacterStatus";
-            this.TB_CharacterStatus.Size = new System.Drawing.Size(250, 172);
+            this.TB_CharacterStatus.Size = new System.Drawing.Size(250, 168);
             this.TB_CharacterStatus.TabIndex = 14;
             // 
             // TB_Message
@@ -145,29 +123,19 @@
             this.B_SendMessage.UseVisualStyleBackColor = true;
             this.B_SendMessage.Click += new System.EventHandler(this.B_SendMessage_Click);
             // 
-            // B_Drop
-            // 
-            this.B_Drop.Enabled = false;
-            this.B_Drop.Location = new System.Drawing.Point(683, 457);
-            this.B_Drop.Name = "B_Drop";
-            this.B_Drop.Size = new System.Drawing.Size(131, 26);
-            this.B_Drop.TabIndex = 21;
-            this.B_Drop.Text = "Drop";
-            this.B_Drop.UseVisualStyleBackColor = true;
-            // 
             // TB_ItemInfo
             // 
             this.TB_ItemInfo.Enabled = false;
-            this.TB_ItemInfo.Location = new System.Drawing.Point(841, 486);
+            this.TB_ItemInfo.Location = new System.Drawing.Point(231, 481);
             this.TB_ItemInfo.Multiline = true;
             this.TB_ItemInfo.Name = "TB_ItemInfo";
-            this.TB_ItemInfo.Size = new System.Drawing.Size(250, 156);
+            this.TB_ItemInfo.Size = new System.Drawing.Size(250, 166);
             this.TB_ItemInfo.TabIndex = 23;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(837, 464);
+            this.label6.Location = new System.Drawing.Point(227, 459);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(90, 19);
@@ -197,49 +165,59 @@
             this.LB_Log.Size = new System.Drawing.Size(250, 118);
             this.LB_Log.TabIndex = 27;
             // 
-            // TB_EnemyStatus
-            // 
-            this.TB_EnemyStatus.Enabled = false;
-            this.TB_EnemyStatus.Location = new System.Drawing.Point(279, 486);
-            this.TB_EnemyStatus.Multiline = true;
-            this.TB_EnemyStatus.Name = "TB_EnemyStatus";
-            this.TB_EnemyStatus.Size = new System.Drawing.Size(250, 172);
-            this.TB_EnemyStatus.TabIndex = 29;
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(9, 464);
+            this.label5.Location = new System.Drawing.Point(512, 459);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(90, 19);
             this.label5.TabIndex = 30;
             this.label5.Text = "My status";
             // 
-            // INV_Player
+            // S_Slot
             // 
-            this.INV_Player.Font = new System.Drawing.Font("Consolas", 7F);
-            this.INV_Player.itemPack = "000|000|000|000|000|000|000|000|000|000|000|000|000|000|000";
-            this.INV_Player.Location = new System.Drawing.Point(563, 486);
-            this.INV_Player.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.INV_Player.Name = "INV_Player";
-            this.INV_Player.selected = null;
-            this.INV_Player.Size = new System.Drawing.Size(250, 165);
-            this.INV_Player.TabIndex = 28;
+            this.S_Slot.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.S_Slot.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.S_Slot.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.S_Slot.item = null;
+            this.S_Slot.Location = new System.Drawing.Point(35, 475);
+            this.S_Slot.Margin = new System.Windows.Forms.Padding(0);
+            this.S_Slot.Name = "S_Slot";
+            this.S_Slot.Size = new System.Drawing.Size(170, 170);
+            this.S_Slot.TabIndex = 31;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(801, 459);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(117, 19);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "Enemy status";
+            // 
+            // TB_EnemyStatus
+            // 
+            this.TB_EnemyStatus.Enabled = false;
+            this.TB_EnemyStatus.Location = new System.Drawing.Point(805, 481);
+            this.TB_EnemyStatus.Multiline = true;
+            this.TB_EnemyStatus.Name = "TB_EnemyStatus";
+            this.TB_EnemyStatus.Size = new System.Drawing.Size(250, 168);
+            this.TB_EnemyStatus.TabIndex = 29;
             // 
             // F_Dungeon
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1104, 661);
+            this.Controls.Add(this.S_Slot);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.TB_EnemyStatus);
-            this.Controls.Add(this.INV_Player);
             this.Controls.Add(this.LB_Log);
             this.Controls.Add(this.LB_Message);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.TB_ItemInfo);
-            this.Controls.Add(this.B_Drop);
             this.Controls.Add(this.B_SendMessage);
             this.Controls.Add(this.TB_Message);
             this.Controls.Add(this.TB_CharacterStatus);
@@ -248,7 +226,6 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.TB_Nickname);
             this.Controls.Add(this.B_ToggleLogin);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.P_Viewport);
             this.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -264,24 +241,22 @@
         #endregion
 
         private System.Windows.Forms.Panel P_Viewport;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button B_ToggleLogin;
         private System.Windows.Forms.TextBox TB_Nickname;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox TB_CharacterStatus;
         private System.Windows.Forms.TextBox TB_Message;
         private System.Windows.Forms.Button B_SendMessage;
-        private System.Windows.Forms.Button B_Drop;
         private System.Windows.Forms.TextBox TB_ItemInfo;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Timer T_SyncTicker;
         private System.Windows.Forms.ListBox LB_Message;
         private System.Windows.Forms.ListBox LB_Log;
-        private InventoryGrid INV_Player;
-        private System.Windows.Forms.TextBox TB_EnemyStatus;
         private System.Windows.Forms.Label label5;
+        private Slot S_Slot;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox TB_EnemyStatus;
     }
 }
 

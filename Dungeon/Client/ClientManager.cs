@@ -30,7 +30,7 @@ namespace DungeonGame
         /// <param name="name"></param>
         public static void Login(string name)
         {
-            svMsgStatus = ServerMessageStatus.None;
+            svMsgStatus = ClientStatus.None;
             isWaitingPlayerData = true;
             playerName = name;
 
@@ -43,18 +43,18 @@ namespace DungeonGame
                 tcpThread.IsBackground = true;
                 tcpThread.Start();
 
-                SendToServer(ServerMessageType.Verification, playerName);
+                SendToServer(ClientMessageType.Verification, playerName);
 
-                svMsgStatus = ServerMessageStatus.Waiting;
-                while (svMsgStatus == ServerMessageStatus.Waiting) ;
+                svMsgStatus = ClientStatus.Waiting;
+                while (svMsgStatus == ClientStatus.Waiting) ;
 
-                if (svMsgStatus == ServerMessageStatus.Success)
+                if (svMsgStatus == ClientStatus.Success)
                 {
                     status = OnlineStatus.Online;
-                    SendToServer(ServerMessageType.Online, playerName);
+                    SendToServer(ClientMessageType.Online, playerName);
                 }
 
-                svMsgStatus = ServerMessageStatus.None;
+                svMsgStatus = ClientStatus.None;
             }
             catch { }
         }
@@ -64,18 +64,8 @@ namespace DungeonGame
         /// </summary>
         public static void UpdatePlayerLocation()
         {
-            SendToServer(ServerMessageType.Action, string.Format("{0}|{1}|{2}",
+            SendToServer(ClientMessageType.Action, string.Format("{0}|{1}|{2}",
                 playerName, UI.player.Location.X, UI.player.Location.Y));
-        }
-
-        /// <summary>
-        /// 玩家對目標造成傷害
-        /// </summary>
-        /// <param name="name">目標名稱</param>
-        /// <param name="damage">傷害值</param>
-        public static void Hit(string name, int damage)
-        {
-            SendToServer(ServerMessageType.Hit, name + "|" + damage.ToString());
         }
 
         /// <summary>
@@ -83,7 +73,7 @@ namespace DungeonGame
         /// </summary>
         /// <param name="msg">玩家發送的訊息</param>
         public static void SendMessage(string msg)
-            => SendToServer(ServerMessageType.TextMessage, playerName + " : " + msg);
+            => SendToServer(ClientMessageType.TextMessage, playerName + " : " + msg);
 
         /// <summary>
         /// 由伺服器回傳的資料進行介面更新，會不斷執行
@@ -96,44 +86,13 @@ namespace DungeonGame
             playerUpdateStatus[playerName] = true;
 
             UI.tb_CharacterStatus.Text = players[playerName].status;
-
-            if (UI.focusEnemyName != "")
-                RequestCharacterItem(UI.focusEnemyName);
         }
 
         /// <summary>
         /// 向伺服器請求玩家狀態
         /// </summary>
         private static void RequestPlayersData()
-            => SendToServer(ServerMessageType.SyncPlayerData, playerName);
-
-        /// <summary>
-        /// 向伺服器請求玩家物品欄，僅在登入時執行一次
-        /// </summary>
-        public static void RequestCharacterItem()
-            => SendToServer(ServerMessageType.RequestCharacterItem, playerName + "|" + playerName);
-
-        /// <summary>
-        /// 向伺服器請求特定玩家物品欄
-        /// </summary>
-        /// <param name="name">玩家名稱</param>
-        public static void RequestCharacterItem(string name)
-            => SendToServer(ServerMessageType.RequestCharacterItem, playerName + "|" + name);
-
-        /// <summary>
-        /// 撿取物品
-        /// </summary>
-        /// <param name="targetName"></param>
-        /// <param name="slotIdx"></param>
-        public static void RequestPickItem(string targetName, int slotIdx)
-            => SendToServer(ServerMessageType.RequestPickItem, playerName + "|" + targetName + "|" + slotIdx.ToString());
-
-        /// <summary>
-        /// 丟棄物品
-        /// </summary>
-        /// <param name="slotIdx"></param>
-        public static void RequestDropItem(int slotIdx)
-            => SendToServer(ServerMessageType.RequestDropItem, playerName + "|" + slotIdx);
+            => SendToServer(ClientMessageType.SyncPlayerData, playerName);
 
         /// <summary>
         /// 查詢玩家
@@ -155,7 +114,7 @@ namespace DungeonGame
         {
             try
             {
-                SendToServer(ServerMessageType.Offline, playerName);
+                SendToServer(ClientMessageType.Offline, playerName);
             }
             catch { }
 
@@ -176,9 +135,9 @@ namespace DungeonGame
         /// </summary>
         /// <param name="type">伺服器請求的種類指令碼</param>
         /// <param name="inMsg">欲傳送之資料</param>
-        private static void SendToServer(ServerMessageType type, string inMsg)
+        private static void SendToServer(ClientMessageType type, string inMsg)
         {
-            string msg = EnumEx<ServerMessageType>.GetOrderByEnum(type).ToString() + ">" + inMsg;
+            string msg = EnumEx<ClientMessageType>.GetOrderByEnum(type).ToString() + ">" + inMsg;
 
             byte[] data = Encoding.Default.GetBytes(msg);
             socket.Send(data, 0, data.Length, SocketFlags.None);
@@ -197,7 +156,7 @@ namespace DungeonGame
             string rawData;
             string[] datas;
             int cmdOrder;
-            ServerMessageType cmd;
+            ClientMessageType cmd;
 
             while (true)
             {
@@ -214,47 +173,28 @@ namespace DungeonGame
                 rawData = Encoding.Default.GetString(byteDatas, 0, inLen);
                 datas = rawData.Split('>');
                 cmdOrder = Convert.ToInt32(datas[0]);
-                cmd = EnumEx<ServerMessageType>.GetEnumByOrder(cmdOrder);
+                cmd = EnumEx<ClientMessageType>.GetEnumByOrder(cmdOrder);
                 
                 switch (cmd)
                 {
-                    case ServerMessageType.Offline:
+                    case ClientMessageType.Offline:
                         ForceOffline();
                         break;
 
-                    case ServerMessageType.Verification:
+                    case ClientMessageType.Verification:
                         ContinueVerification(datas[1]);
                         break;
 
-                    case ServerMessageType.Online:
+                    case ClientMessageType.Online:
                         LoadPlayerCharacterStatus(datas[1]);
                         break;
 
-                    case ServerMessageType.TextMessage:
+                    case ClientMessageType.TextMessage:
                         ReceiveTextMessage(datas[1]);
                         break;
 
-                    case ServerMessageType.SyncPlayerData:
+                    case ClientMessageType.SyncPlayerData:
                         SyncAllPlayersData(datas[1]);
-                        break;
-
-                    case ServerMessageType.RequestCharacterItem:
-                        SyncPlayerItem(datas[1]);
-                        break;
-
-                    case ServerMessageType.RequestPickItem:
-                        break;
-
-                    case ServerMessageType.RequestDropItem:
-                        break;
-
-                    case ServerMessageType.Hit:
-                        break;
-
-                    case ServerMessageType.SpawnItem:
-                        break;
-
-                    case ServerMessageType.SpawnCharacter:
                         break;
 
                     default:
@@ -279,7 +219,7 @@ namespace DungeonGame
         private static void ContinueVerification(string result)
         {
             int resultIdx = Convert.ToInt32(result);
-            svMsgStatus = EnumEx<ServerMessageStatus>.GetEnumByOrder(resultIdx);
+            svMsgStatus = EnumEx<ClientStatus>.GetEnumByOrder(resultIdx);
         }
 
         /// <summary>
@@ -369,17 +309,6 @@ namespace DungeonGame
                     }
                 }
         }
-
-        /// <summary>
-        /// 更新特定玩家物品欄資料
-        /// </summary>
-        /// <param name="sciData">伺服器傳來的原始資料</param>
-        private static void SyncPlayerItem(string sciData)
-        {
-            string[] datas = sciData.Split(',');
-            
-            UI.inventory.Update(name: datas[0], itemPack: datas[1]);
-        }
         #endregion
 
         public static bool isOnline => status == OnlineStatus.Online;
@@ -388,7 +317,7 @@ namespace DungeonGame
         private static string ip { get; set; }
         private const int port = 8800;
         private const int dataSize = 0x3ff;
-        private static ServerMessageStatus svMsgStatus = ServerMessageStatus.None;
+        private static ClientStatus svMsgStatus = ClientStatus.None;
         private static OnlineStatus status = OnlineStatus.Offline;
         private static Socket socket { get; set; }
         private static Thread tcpThread { get; set; }

@@ -1,5 +1,4 @@
-﻿using DungeonGame.Inventory;
-using System;
+﻿using System;
 using System.Windows.Forms;
 
 namespace DungeonGame
@@ -16,14 +15,11 @@ namespace DungeonGame
         /// </summary>
         public static void InitControls()
         {
-            inv_Their = new InventoryGrid();
-            inventory = new InventorySystem();
-
             tb_ItemInfo.Font = new System.Drawing.Font(tb_ItemInfo.Font.Name, 10);
-            
+            s_Slot.RemoveItem();
+
             BindFormEvents();
             BindViewportEvents();
-            BindInventoryEvents();
         }
 
         private static void BindFormEvents()
@@ -63,14 +59,6 @@ namespace DungeonGame
                 p_Viewport.BorderStyle = BorderStyle.None;
             };
 
-        }
-
-        private static void BindInventoryEvents()
-        {
-            b_Drop.Click += delegate (object sender, EventArgs e)
-            {
-                inventory.Drop();
-            };
         }
         #endregion
 
@@ -155,7 +143,6 @@ namespace DungeonGame
 
                 while (ClientManager.isWaitingPlayerData) ;
                 player = ClientManager.GetPlayerCharacter();
-                ClientManager.RequestCharacterItem();
 
                 AddLog("Welcome, " + player.name + "!");
 
@@ -165,7 +152,6 @@ namespace DungeonGame
 
                 t_SyncTicker.Enabled = true;
                 b_SendMessage.Enabled = true;
-                b_Drop.Enabled = true;
 
                 kbHook.Hook();
 
@@ -208,13 +194,10 @@ namespace DungeonGame
 
             t_SyncTicker.Enabled = false;
             b_SendMessage.Enabled = false;
-            b_Drop.Enabled = false;
 
             kbHook.Unhook();
 
             ClientManager.Logout();
-
-            inventory.Clear(inv_Player);
 
             tb_CharacterStatus.Text = "";
             tb_EnemyStatus.Text = "";
@@ -231,13 +214,12 @@ namespace DungeonGame
 
         public static Player player;
         public static MapManager map;
-        public static InventoryGrid inv_Their;
-        public static InventorySystem inventory;
         public static string focusEnemyName;
         public static bool isInViewport => p_Viewport.Focused;
 
         public static Form f_Dungeon;
         public static Panel p_Viewport;
+        public static Slot s_Slot;
         public static Timer t_SyncTicker;
         public static TextBox tb_Nickname;
         public static TextBox tb_CharacterStatus;
@@ -248,7 +230,5 @@ namespace DungeonGame
         public static ListBox lb_Log;
         public static Button b_ToggleLogin;
         public static Button b_SendMessage;
-        public static Button b_Drop;
-        public static InventoryGrid inv_Player;
     }
 }

@@ -44,11 +44,10 @@ namespace DungeonGame
                 return "Name:\t" + name
                 + Environment.NewLine + "Health:\t" + currentHealth + " / " + maxHealth
                 + Environment.NewLine + "Atk:\t" + atk
-                + Environment.NewLine + "Def:\t" + def
-                + Environment.NewLine + "Coin:\t" + coin;
+                + Environment.NewLine + "Def:\t" + def;
             }
         }
-        public new int atk => (name == UI.player.name ? UI.inv_Player : UI.inv_Their).atk;
-        public new int def => (name == UI.player.name ? UI.inv_Player : UI.inv_Their).def;
+        public new int atk => UI.s_Slot.item.atk;
+        public new int def => UI.s_Slot.item.def;
     }
 }
