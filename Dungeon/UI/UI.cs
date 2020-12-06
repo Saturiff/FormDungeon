@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace DungeonGame
@@ -15,11 +16,13 @@ namespace DungeonGame
         /// </summary>
         public static void InitControls()
         {
-            tb_ItemInfo.Font = new System.Drawing.Font(tb_ItemInfo.Font.Name, 10);
+            tb_ItemInfo.Font = new Font(tb_ItemInfo.Font.Name, 10);
             s_Slot.RemoveItem();
 
             BindFormEvents();
             BindViewportEvents();
+
+            SetDoubleBuffered(p_Viewport);
         }
 
         private static void BindFormEvents()
@@ -51,14 +54,48 @@ namespace DungeonGame
 
             p_Viewport.GotFocus += delegate (object sender, EventArgs e)
             {
-                p_Viewport.BorderStyle = BorderStyle.FixedSingle;
+                p_Viewport.Refresh();
             };
 
             p_Viewport.LostFocus += delegate (object sender, EventArgs e)
             {
-                p_Viewport.BorderStyle = BorderStyle.None;
+                p_Viewport.Refresh();
             };
 
+            p_Viewport.Paint += delegate (object sender, PaintEventArgs e)
+            {
+                if (ClientManager.isOnline)
+                {
+                    if (p_Viewport.Focused)
+                        ControlPaint.DrawBorder(e.Graphics, p_Viewport.ClientRectangle,
+                            Color.DarkOrange, 5, ButtonBorderStyle.Solid,  // left
+                            Color.DarkOrange, 5, ButtonBorderStyle.Solid,  // top
+                            Color.DarkOrange, 5, ButtonBorderStyle.Solid,  // right
+                            Color.DarkOrange, 5, ButtonBorderStyle.Solid); // bottom
+                    else
+                        ControlPaint.DrawBorder(e.Graphics, p_Viewport.ClientRectangle,
+                            Color.DarkGreen, 3, ButtonBorderStyle.Solid,  // left
+                            Color.DarkGreen, 3, ButtonBorderStyle.Solid,  // top
+                            Color.DarkGreen, 3, ButtonBorderStyle.Solid,  // right
+                            Color.DarkGreen, 3, ButtonBorderStyle.Solid); // bottom
+                }
+            };
+        }
+
+        private static void SetDoubleBuffered(Control c)
+        {
+            // Taxes: Remote Desktop Connection and painting
+            // http://blogs.msdn.com/oldnewthing/archive/2006/01/03/508694.aspx
+            if (SystemInformation.TerminalServerSession)
+                return;
+
+            System.Reflection.PropertyInfo aProp =
+                  typeof(Control).GetProperty(
+                        "DoubleBuffered",
+                        System.Reflection.BindingFlags.NonPublic |
+                        System.Reflection.BindingFlags.Instance);
+
+            aProp.SetValue(c, true, null);
         }
         #endregion
 
@@ -115,7 +152,7 @@ namespace DungeonGame
         {
             if (sender is IInteractable obj)
             {
-                if(obj is Player p && p != player)
+                if (obj is Player p && p != player)
                     focusEnemyName = p.name;
                 else if (obj is Pickable item)
                     item.Interact();
@@ -182,7 +219,7 @@ namespace DungeonGame
         /// <returns>是否為合法姓名</returns>
         private static bool IsVaildName(string name)
         {
-            if (name == string.Empty) 
+            if (name == string.Empty)
                 return false;
 
             foreach (var s in new string[] {
