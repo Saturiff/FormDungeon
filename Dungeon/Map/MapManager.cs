@@ -87,8 +87,8 @@ namespace DungeonGame
             return false;
         }
 
-        private const int row = 11;   // 440/40
-        private const int col = 20;   // 800/40
+        private const int row = 11; // 440/40
+        private const int col = 20; // 800/40
         private Size tileSize = new Size(40, 40);
         private Dictionary<Point, TileType> tilesData = new Dictionary<Point, TileType>(row * col);
         private Dictionary<TileType, Brush> palette = new Dictionary<TileType, Brush>

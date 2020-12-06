@@ -46,20 +46,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GamePlay\CharacterBase.cs">
+    <Compile Include="Gameplay\CharacterBase.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GamePlay\IInteractable.cs" />
-    <Compile Include="GamePlay\Pickable.cs">
+    <Compile Include="Gameplay\Pickable.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Gameplay\Player.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Gameplay\IInteractable.cs" />
+    <Compile Include="Map\MapManager.cs" />
+    <Compile Include="Map\TileType.cs" />
     <Compile Include="Hook\KeyboardInfo.cs" />
     <Compile Include="Hook\KeyStateInfo.cs" />
     <Compile Include="Hook\KeyboardHook.cs" />
-    <Compile Include="Client\ClientStatus.cs" />
-    <Compile Include="GamePlay\Player.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Client\ServerMessageStatus.cs" />
     <Compile Include="Client\ClientMessageType.cs" />
     <Compile Include="UI\UI.cs" />
     <Compile Include="Dungeon.cs">
@@ -68,7 +70,6 @@
     <Compile Include="Dungeon.Designer.cs">
       <DependentUpon>Dungeon.cs</DependentUpon>
     </Compile>
-    <Compile Include="Map\MapManager.cs" />
     <Compile Include="Client\PlayerStatus.cs" />
     <Compile Include="Inventory\Item.cs" />
     <Compile Include="Inventory\ItemData.cs" />
@@ -81,12 +82,11 @@
     <Compile Include="Inventory\Slot.Designer.cs">
       <DependentUpon>Slot.cs</DependentUpon>
     </Compile>
-    <Compile Include="Map\TileType.cs" />
+    <EmbeddedResource Include="Gameplay\Player.resx">
+      <DependentUpon>Player.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dungeon.resx">
       <DependentUpon>Dungeon.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GamePlay\Player.resx">
-      <DependentUpon>Player.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Inventory\Slot.resx">
       <DependentUpon>Slot.cs</DependentUpon>

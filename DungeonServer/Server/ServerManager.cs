@@ -46,7 +46,24 @@ namespace DungeonServer
         private static void SpawnTimer_Tick(object sender, EventArgs e)
         {
             (int x, int y) spawnLoc = Rand.GetRandPointInRect(playGround);
-            //SendAll(code + ">" + spawnLoc.x + "|" + spawnLoc.y);
+
+            UI.AddLog("spawn a item.");
+
+            // if spawned item < 5
+            /*if (spawnedItems.Count < 5)
+            {
+                // if can spawn
+                Item item = new Item();
+                item.location = spawnLoc();
+
+                if (map.IsWalkable(Item.rect))
+                {
+                    // add to spawn list
+                    spawnedItems.Add()
+                    // SendAll( name | x | y );
+
+                }
+            }*/
         }
 
         private static void ServerLoop()
@@ -238,17 +255,12 @@ namespace DungeonServer
         private static Thread serverThread { get; set; }
         private static Thread clientThread { get; set; }
         private static Timer spawnTimer { get; set; }
-        private static Rect playGround = new Rect()
-        {
-            x0y0 = (0, 0),
-            x0y1 = (0, 440),
-            x1y0 = (800, 0),
-            x1y1 = (800, 440)
-        };
-
+        private static Rect playGround = new Rect(800, 440);
+        
         // 所有連線清單，[玩家名稱 : 連線物件]
         private static Hashtable socketHT = new Hashtable();
         // 所有玩家清單，[玩家名稱 : 角色物件]
         private static Dictionary<string, Character> players = new Dictionary<string, Character>();
+        private static Dictionary<string, (int x, int y)> spawnedItems = new Dictionary<string, (int x, int y)>();
     }
 }

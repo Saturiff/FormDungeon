@@ -30,7 +30,7 @@ namespace DungeonGame
         /// <param name="name"></param>
         public static void Login(string name)
         {
-            svMsgStatus = ClientStatus.None;
+            svMsgStatus = ServerMessageStatus.None;
             isWaitingPlayerData = true;
             playerName = name;
 
@@ -45,16 +45,16 @@ namespace DungeonGame
 
                 SendToServer(ClientMessageType.Verification, playerName);
 
-                svMsgStatus = ClientStatus.Waiting;
-                while (svMsgStatus == ClientStatus.Waiting) ;
+                svMsgStatus = ServerMessageStatus.Waiting;
+                while (svMsgStatus == ServerMessageStatus.Waiting) ;
 
-                if (svMsgStatus == ClientStatus.Success)
+                if (svMsgStatus == ServerMessageStatus.Success)
                 {
                     status = OnlineStatus.Online;
                     SendToServer(ClientMessageType.Online, playerName);
                 }
 
-                svMsgStatus = ClientStatus.None;
+                svMsgStatus = ServerMessageStatus.None;
             }
             catch { }
         }
@@ -221,7 +221,7 @@ namespace DungeonGame
         private static void ContinueVerification(string result)
         {
             int resultIdx = Convert.ToInt32(result);
-            svMsgStatus = EnumEx<ClientStatus>.GetEnumByOrder(resultIdx);
+            svMsgStatus = EnumEx<ServerMessageStatus>.GetEnumByOrder(resultIdx);
         }
 
         /// <summary>
@@ -319,7 +319,7 @@ namespace DungeonGame
         private static string ip { get; set; }
         private const int port = 8800;
         private const int dataSize = 0x3ff;
-        private static ClientStatus svMsgStatus = ClientStatus.None;
+        private static ServerMessageStatus svMsgStatus = ServerMessageStatus.None;
         private static OnlineStatus status = OnlineStatus.Offline;
         private static Socket socket { get; set; }
         private static Thread tcpThread { get; set; }

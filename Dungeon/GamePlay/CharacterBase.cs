@@ -58,19 +58,13 @@ namespace DungeonGame
         }
 
         private Size characterSize = new Size(20, 20);
-        private Rect rect => new Rect()
-        {
-            x0y0 = (Location.X, Location.Y),
-            x0y1 = (Location.X, Location.Y + Size.Width),
-            x1y0 = (Location.X + Size.Height, Location.Y),
-            x1y1 = (Location.X + Size.Height, Location.Y + Size.Width)
-        };
+        private Rect rect => new Rect(Location.X, Location.Y, Size.Width, Size.Height);
 
         public string name { get; set; }
         public uint currentHealth { get; set; }
         public const uint maxHealth = 200;
-        public int atk { get; set; }
-        public int def { get; set; }
+        public int atk => 20 + item.atk;
+        public int def => item.def;
         public bool isAlive => currentHealth <= 0;
         public const int attackRange = 100;
         public const int pickRange = 100;

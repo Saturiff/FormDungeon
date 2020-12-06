@@ -47,7 +47,5 @@ namespace DungeonGame
                 + Environment.NewLine + "Def:\t" + def;
             }
         }
-        public new int atk => item.atk;
-        public new int def => item.def;
     }
 }
