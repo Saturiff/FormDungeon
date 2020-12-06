@@ -10,6 +10,7 @@
         Offline,
         TextMessage,
         Action,
-        SyncPlayerData
+        SyncPlayerData,
+        SpawnItem
     }
 }

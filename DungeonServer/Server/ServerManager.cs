@@ -32,6 +32,8 @@ namespace DungeonServer
             ip = UI.tb_ServerIP.Text;
             port = UI.tb_ServerPort.Text;
 
+            map.GenerateRoomData();
+
             serverThread = new Thread(ServerLoop);
             serverThread.IsBackground = true;
             serverThread.Start();
@@ -45,25 +47,21 @@ namespace DungeonServer
 
         private static void SpawnTimer_Tick(object sender, EventArgs e)
         {
-            (int x, int y) spawnLoc = Rand.GetRandPointInRect(playGround);
-
-            UI.AddLog("spawn a item.");
-
-            // if spawned item < 5
-            /*if (spawnedItems.Count < 5)
+            if (spawnedPickables.Count < 5 && players.Count != 0)
             {
-                // if can spawn
-                Item item = new Item();
-                item.location = spawnLoc();
+                (int x, int y) spawnLoc = Map.GetRandomPointInPlayGround();
+                Pickable p = new Pickable();
+                p.location = spawnLoc;
+                p.itemNum = Pickable.GetRandomItemNum();
 
-                if (map.IsWalkable(Item.rect))
+                if (map.IsWalkable(p.rect))
                 {
-                    // add to spawn list
-                    spawnedItems.Add()
-                    // SendAll( name | x | y );
+                    UI.AddLog("spawn success");
+                    spawnedPickables.Add(p);
 
+                    SendToAll(ServerMessageType.SpawnItem, p.ToString());
                 }
-            }*/
+            }
         }
 
         private static void ServerLoop()
@@ -100,6 +98,7 @@ namespace DungeonServer
             finally
             {
                 status = ServerStatus.Offline;
+                spawnedPickables.Clear();
             }
         }
         #endregion
@@ -135,7 +134,9 @@ namespace DungeonServer
 
                         case ServerMessageType.Online:
                             PlayerOnline(playerName: datas[1], sk);
-                            SendToPlayer(ServerMessageType.Online, playerName: datas[1], datas[1] + "|" + players[datas[1]].dataPackWithItem);
+
+                            SendToPlayer(ServerMessageType.Online, playerName: datas[1], string.Format("{0: Player name}|{1: Data Pack With Item},{2: Floor Datas}",
+                                                                                                       datas[1], players[datas[1]].dataPackWithItem, floorItemDatas));
                             break;
 
                         case ServerMessageType.TextMessage:
@@ -255,12 +256,24 @@ namespace DungeonServer
         private static Thread serverThread { get; set; }
         private static Thread clientThread { get; set; }
         private static Timer spawnTimer { get; set; }
-        private static Rect playGround = new Rect(800, 440);
-        
+        private static Map map = new Map();
+
         // 所有連線清單，[玩家名稱 : 連線物件]
         private static Hashtable socketHT = new Hashtable();
         // 所有玩家清單，[玩家名稱 : 角色物件]
         private static Dictionary<string, Character> players = new Dictionary<string, Character>();
-        private static Dictionary<string, (int x, int y)> spawnedItems = new Dictionary<string, (int x, int y)>();
+        private static List<Pickable> spawnedPickables = new List<Pickable>();
+        private static string floorItemDatas
+        {
+            get
+            {
+                List<string> datas = new List<string>();
+
+                foreach (Pickable p in spawnedPickables)
+                    datas.Add(p.ToString());
+
+                return string.Join("|", datas);
+            }
+        }
     }
 }

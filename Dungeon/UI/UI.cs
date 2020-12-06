@@ -123,6 +123,20 @@ namespace DungeonGame
         }
         #endregion
 
+        #region Pickable
+        public static void SpawnInViewport(Pickable p) => p_Viewport.BeginInvoke((Action)delegate ()
+        {
+            p_Viewport.Controls.Add(p);
+
+        });
+
+        public static void DestroyFromViewport(Pickable p) => p_Viewport.BeginInvoke((Action)delegate ()
+        {
+            p_Viewport.Controls.Remove(p);
+        });
+
+        #endregion
+
         #region Login/Logout
         /// <summary>
         /// 按下登入按鍵時所呼叫
@@ -189,7 +203,6 @@ namespace DungeonGame
         /// </summary>
         public static void Destroy()
         {
-            DestroyFromViewport(player);
             player = default;
 
             t_SyncTicker.Enabled = false;

@@ -87,11 +87,12 @@ namespace DungeonGame
             return false;
         }
 
-        private const int row = 11; // 440/40
-        private const int col = 20; // 800/40
-        private Size tileSize = new Size(40, 40);
+        private readonly static Size playGround = new Size(800, 440);
+        private readonly static Size tileSize = new Size(40, 40);
+        private readonly static int row = playGround.Height / tileSize.Width;
+        private readonly static int col = playGround.Width / tileSize.Height;
         private Dictionary<Point, TileType> tilesData = new Dictionary<Point, TileType>(row * col);
-        private Dictionary<TileType, Brush> palette = new Dictionary<TileType, Brush>
+        private readonly Dictionary<TileType, Brush> palette = new Dictionary<TileType, Brush>
         {
             { TileType.None,    new SolidBrush(Color.FromArgb(70,75,82)) },
             { TileType.Wall,    new SolidBrush(Color.FromArgb(177,188,208)) },

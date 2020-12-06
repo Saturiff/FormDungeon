@@ -5,11 +5,14 @@ namespace DungeonGame
 {
     public class Pickable : Panel, IInteractable
     {
-        public Pickable((int x, int y) loc)
+        public Pickable(string itemNum, (int x, int y) loc)
         {
-            Location = new Point(loc.x, loc.y);
+            this.itemNum = itemNum;
 
-            Bitmap bmp = new Bitmap(ClientSize.Width, ClientSize.Height);
+            Location = new Point(loc.x, loc.y);
+            Size = size;
+
+            Bitmap bmp = new Bitmap(size.Width, size.Height);
             using (Graphics g = Graphics.FromImage(bmp))
             {
                 g.DrawImage(ItemData.data[itemNum].icon,
@@ -37,5 +40,6 @@ namespace DungeonGame
         }
 
         public string itemNum { get; set; }
+        public static readonly Size size = new Size(20, 20);
     }
 }

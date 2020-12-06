@@ -86,7 +86,7 @@ namespace DungeonGame
             playerUpdateStatus[playerName] = true;
 
             UI.tb_CharacterStatus.Text = players[playerName].status;
-            if(UI.focusEnemyName != "" && UI.focusEnemyName != null)
+            if (UI.focusEnemyName != "" && UI.focusEnemyName != null)
                 UI.tb_EnemyStatus.Text = players[UI.focusEnemyName].status;
         }
 
@@ -120,10 +120,7 @@ namespace DungeonGame
             }
             catch { }
 
-            foreach (Player c in players.Values)
-            {
-                UI.DestroyFromViewport(c);
-            }
+            UI.p_Viewport.Controls.Clear();
 
             players.Clear();
             playerUpdateStatus.Clear();
@@ -176,7 +173,7 @@ namespace DungeonGame
                 datas = rawData.Split('>');
                 cmdOrder = Convert.ToInt32(datas[0]);
                 cmd = EnumEx<ClientMessageType>.GetEnumByOrder(cmdOrder);
-                
+
                 switch (cmd)
                 {
                     case ClientMessageType.Offline:
@@ -188,7 +185,18 @@ namespace DungeonGame
                         break;
 
                     case ClientMessageType.Online:
-                        LoadPlayerCharacterStatus(datas[1]);
+                        string[] dataArr = datas[1].Split(',');
+                        string dataPack = dataArr[0];
+                        string floorItems = dataArr[1];
+
+                        LoadPlayerCharacterStatus(dataPack);
+
+                        if (floorItems != "")
+                            LoadFloorItems(floorItems);
+                        break;
+
+                    case ClientMessageType.SpawnItem:
+                        AddFloorItems(datas[1]);
                         break;
 
                     case ClientMessageType.TextMessage:
@@ -198,6 +206,7 @@ namespace DungeonGame
                     case ClientMessageType.SyncPlayerData:
                         SyncAllPlayersData(datas[1]);
                         break;
+
 
                     default:
                         Console.WriteLine("bad data: " + cmdOrder);
@@ -233,6 +242,23 @@ namespace DungeonGame
             Player c = new Player(dataPack);
             players.Add(playerName, c);
             isWaitingPlayerData = false;
+        }
+
+        private static void LoadFloorItems(string floorItems)
+        {
+            string[] itemDatas = floorItems.Split('|');
+            if (itemDatas.Length % 3 != 0) return;
+
+            for (int i = 0; i < itemDatas.Length; i += 3)
+                UI.SpawnInViewport(new Pickable(itemDatas[i], (Convert.ToInt32(itemDatas[i + 1]), Convert.ToInt32(itemDatas[i + 2]))));
+        }
+
+        private static void AddFloorItems(string floorItem)
+        {
+            string[] itemData = floorItem.Split('|');
+            if (itemData.Length % 3 != 0) return;
+
+            UI.SpawnInViewport(new Pickable(itemData[0], (Convert.ToInt32(itemData[1]), Convert.ToInt32(itemData[2]))));
         }
 
         /// <summary>

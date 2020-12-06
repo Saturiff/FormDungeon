@@ -144,7 +144,7 @@
             // 
             // T_SyncTicker
             // 
-            this.T_SyncTicker.Interval = 32;
+            this.T_SyncTicker.Interval = 50;
             this.T_SyncTicker.Tick += new System.EventHandler(this.T_SyncTicker_Tick);
             // 
             // LB_Message
