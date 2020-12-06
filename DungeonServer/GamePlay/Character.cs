@@ -45,7 +45,7 @@ namespace DungeonServer
         private string dataPath => @"./saves/" + name;
         private static Random r = new Random();
 
-        // 玩家現有的物品，不予保存
+        // 玩家現有的物品，不予保存，但會在遊戲時同步給所有玩家
         public string item = "000";
         private string dataPack => string.Format("{0}|{1}|{2}|{3}|{4}|{5}",
             health.ToString(), loc.x, loc.y, color.r, color.g, color.b);

@@ -49,6 +49,9 @@
     <Compile Include="Gameplay\CharacterBase.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Gameplay\Actor.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Gameplay\Pickable.cs">
       <SubType>Component</SubType>
     </Compile>

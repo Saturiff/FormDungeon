@@ -37,15 +37,7 @@ namespace DungeonGame
         public bool isMovingDown;
         public bool isMovingLeft;
         public bool isMovingRight;
-        public string status
-        {
-            get
-            {
-                return "Name:\t" + name
-                + Environment.NewLine + "Health:\t" + currentHealth + " / " + maxHealth
-                + Environment.NewLine + "Atk:\t" + atk
-                + Environment.NewLine + "Def:\t" + def;
-            }
-        }
+        public static readonly int attackRange = 50;
+        public static readonly int pickRange = 50;
     }
 }

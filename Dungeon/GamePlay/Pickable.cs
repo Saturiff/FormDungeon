@@ -1,9 +1,9 @@
-﻿using System.Drawing;
-using System.Windows.Forms;
+﻿using System;
+using System.Drawing;
 
 namespace DungeonGame
 {
-    public class Pickable : Panel, IInteractable
+    public class Pickable : Actor
     {
         public Pickable(string itemNum, (int x, int y) loc)
         {
@@ -22,15 +22,17 @@ namespace DungeonGame
             BackgroundImage = bmp;
         }
 
-        public void Interact()
+        public Pickable(string itemInfo)
         {
-            if (UI.s_Slot.item != ItemData.data["000"])
-                Pickup();
+            string[] infos = itemInfo.Split('|');
+            itemNum = infos[0];
+            Location = new Point(Convert.ToInt32(infos[1]), Convert.ToInt32(infos[2]));
         }
 
-        private void Pickup()
+        public new void Interact()
         {
-            UI.s_Slot.AddItem(itemNum);
+            if (DistanceOf(UI.player) < Player.pickRange)
+                ClientManager.RequestPickup(this);
         }
 
         public void Destory()
@@ -38,6 +40,20 @@ namespace DungeonGame
             UI.p_Viewport.Controls.Remove(this);
             Dispose();
         }
+
+        public static bool operator ==(Pickable a, Pickable b)
+        {
+            return (a.itemNum == b.itemNum)
+                && (a.Location == b.Location);
+        }
+
+        public static bool operator !=(Pickable a, Pickable b)
+        {
+            return !((a.itemNum == b.itemNum)
+                && (a.Location == b.Location));
+        }
+
+        public new string ToString() => string.Format("{0}|{1}|{2}", itemNum, Location.X, Location.Y);
 
         public string itemNum { get; set; }
         public static readonly Size size = new Size(20, 20);

@@ -169,7 +169,12 @@ namespace DungeonGame
 
         public static void DestroyFromViewport(Pickable p) => p_Viewport.BeginInvoke((Action)delegate ()
         {
-            p_Viewport.Controls.Remove(p);
+            for (int i = 0; i < p_Viewport.Controls.Count; i++)
+                if (p_Viewport.Controls[i] is Pickable _p && _p == p)
+                {
+                    p_Viewport.Controls.Remove(p_Viewport.Controls[i]);
+                    break;
+                }
         });
 
         #endregion
@@ -240,7 +245,7 @@ namespace DungeonGame
         /// </summary>
         public static void Destroy()
         {
-            player = default;
+            player.Dispose();
 
             t_SyncTicker.Enabled = false;
             b_SendMessage.Enabled = false;
@@ -249,6 +254,7 @@ namespace DungeonGame
 
             ClientManager.Logout();
 
+            s_Slot.RemoveItem();
             tb_CharacterStatus.Text = "";
             tb_EnemyStatus.Text = "";
             tb_ItemInfo.Text = "";

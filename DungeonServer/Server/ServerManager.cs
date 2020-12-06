@@ -32,7 +32,7 @@ namespace DungeonServer
             ip = UI.tb_ServerIP.Text;
             port = UI.tb_ServerPort.Text;
 
-            map.GenerateRoomData();
+            map = new Map();
 
             serverThread = new Thread(ServerLoop);
             serverThread.IsBackground = true;
@@ -40,7 +40,7 @@ namespace DungeonServer
             status = ServerStatus.Online;
 
             spawnTimer = new Timer();
-            spawnTimer.Interval = 5000;
+            spawnTimer.Interval = 3000;
             spawnTimer.Tick += SpawnTimer_Tick;
             spawnTimer.Start();
         }
@@ -50,13 +50,10 @@ namespace DungeonServer
             if (spawnedPickables.Count < 5 && players.Count != 0)
             {
                 (int x, int y) spawnLoc = Map.GetRandomPointInPlayGround();
-                Pickable p = new Pickable();
-                p.location = spawnLoc;
-                p.itemNum = Pickable.GetRandomItemNum();
-
+                Pickable p = new Pickable(Pickable.GetRandomItemNum(), spawnLoc);
+                
                 if (map.IsWalkable(p.rect))
                 {
-                    UI.AddLog("spawn success");
                     spawnedPickables.Add(p);
 
                     SendToAll(ServerMessageType.SpawnItem, p.ToString());
@@ -154,6 +151,10 @@ namespace DungeonServer
                             SyncAllPlayersData(name: datas[1]);
                             break;
 
+                        case ServerMessageType.PickItem:
+                            PlayerPickItem(ppiInfo: datas[1]);
+                            break;
+
                         default:
                             break;
                     }
@@ -216,6 +217,29 @@ namespace DungeonServer
 
             SendToPlayer(ServerMessageType.SyncPlayerData, name, syncStr);
         }
+
+        // 玩家撿起物品
+        private static void PlayerPickItem(string ppiInfo)
+        {
+            lock (spawnedPickables)
+            {
+                string[] infos = ppiInfo.Split(',');
+
+                Pickable p = new Pickable(infos[1]);
+                for (int i = 0; i < spawnedPickables.Count; i++)
+                    if (spawnedPickables[i] == p)
+                    {
+                        if (spawnedPickables.Remove(spawnedPickables[i]))
+                        {
+                            foreach (string name in players.Keys)
+                                SendToPlayer(ServerMessageType.PickItem, playerName: name, ((name != infos[0]) ? "-" : "") + p.ToString());
+
+                            players[infos[0]].item = p.itemNum;
+                        }
+                        break;
+                    }
+            }
+        }
         #endregion
 
         #region 傳遞位元組資料
@@ -256,7 +280,7 @@ namespace DungeonServer
         private static Thread serverThread { get; set; }
         private static Thread clientThread { get; set; }
         private static Timer spawnTimer { get; set; }
-        private static Map map = new Map();
+        private static Map map;
 
         // 所有連線清單，[玩家名稱 : 連線物件]
         private static Hashtable socketHT = new Hashtable();

@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace DungeonGame
 {
-    public class CharacterBase : Panel, IInteractable
+    public class CharacterBase : Actor
     {
         protected CharacterBase()
         {
@@ -45,12 +45,6 @@ namespace DungeonGame
 
         public void Interact() { }
 
-        protected double DistanceOf(CharacterBase target)
-        {
-            return Math.Sqrt((Location.X - target.Location.X) * (Location.X - target.Location.X) +
-                (Location.Y - target.Location.Y) * (Location.Y - target.Location.Y));
-        }
-
         protected void Destory()
         {
             name = default;
@@ -66,8 +60,16 @@ namespace DungeonGame
         public int atk => 20 + item.atk;
         public int def => item.def;
         public bool isAlive => currentHealth <= 0;
-        public const int attackRange = 100;
-        public const int pickRange = 100;
         public Item item;
+        public string status
+        {
+            get
+            {
+                return "Name:\t" + name
+                + Environment.NewLine + "Health:\t" + currentHealth + " / " + maxHealth
+                + Environment.NewLine + "Atk:\t" + string.Format("{0}\r\n      (base:{1}, item:{2})", 20 + item.atk, 20, item.atk)
+                + Environment.NewLine + "Def:\t" + string.Format("{0}\r\n      (base:{1}, item:{2})", item.def, 0, item.def);
+            }
+        }
     }
 }

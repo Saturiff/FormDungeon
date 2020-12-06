@@ -11,6 +11,7 @@
         TextMessage,
         Action,
         SyncPlayerData,
-        SpawnItem
+        SpawnItem,
+        PickItem
     }
 }

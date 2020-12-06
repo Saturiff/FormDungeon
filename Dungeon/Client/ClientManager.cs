@@ -109,6 +109,11 @@ namespace DungeonGame
         /// <returns>Character物件</returns>
         public static Player GetPlayerCharacter(string name) => players[name];
 
+        public static void RequestPickup(Pickable p)
+        {
+            SendToServer(ClientMessageType.PickItem, playerName + "," + p.ToString());
+        }
+
         /// <summary>
         /// 傳送登出請求與玩家名稱
         /// </summary>
@@ -205,6 +210,10 @@ namespace DungeonGame
 
                     case ClientMessageType.SyncPlayerData:
                         SyncAllPlayersData(datas[1]);
+                        break;
+
+                    case ClientMessageType.PickItem:
+                        PickItem(datas[1]);
                         break;
 
 
@@ -336,6 +345,24 @@ namespace DungeonGame
                         UI.tb_EnemyStatus.Text = "";
                     }
                 }
+        }
+
+        // 玩家撿起物品
+        private static void PickItem(string itemInfos)
+        {
+            Pickable p;
+            if (itemInfos[0] == '-')
+            {
+                p = new Pickable(itemInfos.Substring(1));
+            }
+            else
+            {
+                p = new Pickable(itemInfos);
+                UI.s_Slot.AddItem(p.itemNum);
+                players[playerName].item = ItemData.data[p.itemNum];
+            }
+            
+            UI.DestroyFromViewport(p);
         }
         #endregion
 

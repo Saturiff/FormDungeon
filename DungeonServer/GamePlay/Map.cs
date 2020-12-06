@@ -9,6 +9,8 @@ namespace DungeonServer
 {
     public class Map
     {
+        public Map() => GenerateRoomData();
+        
         private string[] ReadMapFromFile()
         {
             string path = @".\Maps\Map.csv";
@@ -29,6 +31,7 @@ namespace DungeonServer
 
         public void GenerateRoomData()
         {
+            tilesData.Clear();
             string[] mapData = ReadMapFromFile();
 
             for (int i = 0; i < col * row; i++)
