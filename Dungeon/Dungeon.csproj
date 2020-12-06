@@ -85,6 +85,7 @@
     <Compile Include="Inventory\Slot.Designer.cs">
       <DependentUpon>Slot.cs</DependentUpon>
     </Compile>
+    <Compile Include="Gameplay\WeaponType.cs" />
     <EmbeddedResource Include="Gameplay\Player.resx">
       <DependentUpon>Player.cs</DependentUpon>
     </EmbeddedResource>

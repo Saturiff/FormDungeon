@@ -66,7 +66,7 @@ namespace DungeonGame
             {
                 if (ClientManager.isOnline)
                 {
-                    if (p_Viewport.Focused)
+                    if (isInViewport)
                         ControlPaint.DrawBorder(e.Graphics, p_Viewport.ClientRectangle,
                             Color.DarkOrange, 5, ButtonBorderStyle.Solid,  // left
                             Color.DarkOrange, 5, ButtonBorderStyle.Solid,  // top

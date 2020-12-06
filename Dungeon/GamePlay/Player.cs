@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 using System.Drawing;
 
 namespace DungeonGame
@@ -14,14 +14,9 @@ namespace DungeonGame
 
         public void Attack(CharacterBase target)
         {
-            double dist = DistanceOf(target);
-            if (dist > attackRange)
-                return;
+            // ClientManager.RequestFire();
 
-            int damage = 10 + (int)(atk * (attackRange - dist)) / 100;
-            Console.WriteLine("damage = " + damage);
-            // todo
-            // ClientManager.Hit(target.name, damage);
+
         }
 
         public void CalcMove()

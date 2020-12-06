@@ -67,8 +67,8 @@ namespace DungeonGame
             {
                 return "Name:\t" + name
                 + Environment.NewLine + "Health:\t" + currentHealth + " / " + maxHealth
-                + Environment.NewLine + "Atk:\t" + string.Format("{0}\r\n      (base:{1}, item:{2})", 20 + item.atk, 20, item.atk)
-                + Environment.NewLine + "Def:\t" + string.Format("{0}\r\n      (base:{1}, item:{2})", item.def, 0, item.def);
+                + Environment.NewLine + "Atk:\t" + string.Format("{0}\r\n      (base:{1}, item:{2})", atk, 20, item.atk)
+                + Environment.NewLine + "Def:\t" + string.Format("{0}\r\n      (base:{1}, item:{2})", def, 0, item.def);
             }
         }
     }
