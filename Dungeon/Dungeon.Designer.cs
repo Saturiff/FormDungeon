@@ -44,9 +44,9 @@
             this.LB_Message = new System.Windows.Forms.ListBox();
             this.LB_Log = new System.Windows.Forms.ListBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.S_Slot = new DungeonGame.Slot();
             this.label4 = new System.Windows.Forms.Label();
             this.TB_EnemyStatus = new System.Windows.Forms.TextBox();
+            this.S_Slot = new DungeonGame.Slot();
             this.SuspendLayout();
             // 
             // P_Viewport
@@ -175,18 +175,6 @@
             this.label5.TabIndex = 30;
             this.label5.Text = "My status";
             // 
-            // S_Slot
-            // 
-            this.S_Slot.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.S_Slot.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.S_Slot.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.S_Slot.item = null;
-            this.S_Slot.Location = new System.Drawing.Point(35, 475);
-            this.S_Slot.Margin = new System.Windows.Forms.Padding(0);
-            this.S_Slot.Name = "S_Slot";
-            this.S_Slot.Size = new System.Drawing.Size(170, 170);
-            this.S_Slot.TabIndex = 31;
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -205,6 +193,18 @@
             this.TB_EnemyStatus.Name = "TB_EnemyStatus";
             this.TB_EnemyStatus.Size = new System.Drawing.Size(250, 168);
             this.TB_EnemyStatus.TabIndex = 29;
+            // 
+            // S_Slot
+            // 
+            this.S_Slot.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.S_Slot.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.S_Slot.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.S_Slot.item = null;
+            this.S_Slot.Location = new System.Drawing.Point(35, 475);
+            this.S_Slot.Margin = new System.Windows.Forms.Padding(0);
+            this.S_Slot.Name = "S_Slot";
+            this.S_Slot.Size = new System.Drawing.Size(170, 170);
+            this.S_Slot.TabIndex = 31;
             // 
             // F_Dungeon
             // 
