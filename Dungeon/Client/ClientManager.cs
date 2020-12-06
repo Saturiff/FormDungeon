@@ -86,6 +86,8 @@ namespace DungeonGame
             playerUpdateStatus[playerName] = true;
 
             UI.tb_CharacterStatus.Text = players[playerName].status;
+            if(UI.focusEnemyName != "" && UI.focusEnemyName != null)
+                UI.tb_EnemyStatus.Text = players[UI.focusEnemyName].status;
         }
 
         /// <summary>

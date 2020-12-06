@@ -32,6 +32,7 @@ namespace DungeonGame
             currentHealth = Convert.ToUInt32(datas[1]);
             Location = new Point(Convert.ToInt32(datas[2]), Convert.ToInt32(datas[3]));
             BackColor = Color.FromArgb(Convert.ToUInt16(datas[4]), Convert.ToUInt16(datas[5]), Convert.ToUInt16(datas[6]));
+            item = ItemData.data[datas[7]];
         }
 
         protected void MoveTo(Point newLoc)
@@ -73,5 +74,6 @@ namespace DungeonGame
         public bool isAlive => currentHealth <= 0;
         public const int attackRange = 100;
         public const int pickRange = 100;
+        public Item item;
     }
 }

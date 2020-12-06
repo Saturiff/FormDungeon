@@ -118,7 +118,7 @@ namespace DungeonServer
 
                         case ServerMessageType.Online:
                             PlayerOnline(playerName: datas[1], sk);
-                            SendToPlayer(ServerMessageType.Online, playerName: datas[1], datas[1] + "|" + players[datas[1]].dataPack);
+                            SendToPlayer(ServerMessageType.Online, playerName: datas[1], datas[1] + "|" + players[datas[1]].dataPackWithItem);
                             break;
 
                         case ServerMessageType.TextMessage:
@@ -193,7 +193,7 @@ namespace DungeonServer
             foreach (var key in players.Keys)
             {
                 if (key != name)
-                    syncStr += "," + key + "|" + players[key].dataPack;
+                    syncStr += "," + key + "|" + players[key].dataPackWithItem;
             }
 
             SendToPlayer(ServerMessageType.SyncPlayerData, name, syncStr);

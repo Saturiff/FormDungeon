@@ -45,7 +45,11 @@ namespace DungeonServer
         private string dataPath => @"./saves/" + name;
         private static Random r = new Random();
 
-        public string dataPack => string.Format("{0}|{1}|{2}|{3}|{4}|{5}",
+        // 玩家現有的物品，不予保存
+        public string item = "000";
+        private string dataPack => string.Format("{0}|{1}|{2}|{3}|{4}|{5}",
             health.ToString(), loc.x, loc.y, color.r, color.g, color.b);
+        public string dataPackWithItem => string.Format("{0}|{1}",
+            dataPack, item);
     }
 }
