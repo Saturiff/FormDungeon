@@ -5,8 +5,7 @@ using System.Windows.Forms;
 namespace DungeonGame
 {
     /// <summary>
-    /// 所有類別可對表單控件進行訪問的唯一渠道
-    /// <para>* 僅在跨類別時使用</para>
+    /// 主遊戲類，包含著遊戲初始化、客戶端、與表單控件之參考
     /// </summary>
     public static class Game
     {

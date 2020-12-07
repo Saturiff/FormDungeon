@@ -3,6 +3,9 @@ using System.IO;
 
 namespace DungeonServer
 {
+    /// <summary>
+    /// 伺服器端的玩家類，提供新建、儲存、載入存檔之功能，與保存玩家在遊戲中的狀態
+    /// </summary>
     public class Character
     {
         public Character(string inName) => name = inName;

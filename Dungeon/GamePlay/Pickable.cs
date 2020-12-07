@@ -3,6 +3,9 @@ using System.Drawing;
 
 namespace DungeonGame
 {
+    /// <summary>
+    /// 在Viewport地面生成的可撿起物件
+    /// </summary>
     public class Pickable : Actor
     {
         public Pickable(string itemNum, (int x, int y) loc)

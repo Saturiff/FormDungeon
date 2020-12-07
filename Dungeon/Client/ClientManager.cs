@@ -104,6 +104,10 @@ namespace DungeonGame
         /// <returns>Character物件</returns>
         public Player GetPlayerCharacter(string name) => players[name];
 
+        /// <summary>
+        /// 向伺服器請求撿起物品
+        /// </summary>
+        /// <param name="p">可撿取的目標物件</param>
         public void RequestPickup(Pickable p)
         {
             SendToServer(ClientMessageType.PickItem, playerName + "," + p.ToString());
@@ -250,6 +254,10 @@ namespace DungeonGame
             isWaitingPlayerData = false;
         }
 
+        /// <summary>
+        /// 載入地面所有物品，會在玩家登入時收到該訊號
+        /// </summary>
+        /// <param name="floorItems">封裝過的物品資料</param>
         private void LoadFloorItems(string floorItems)
         {
             string[] itemDatas = floorItems.Split('|');
@@ -259,6 +267,10 @@ namespace DungeonGame
                 Game.SpawnInViewport(new Pickable(itemDatas[i], (Convert.ToInt32(itemDatas[i + 1]), Convert.ToInt32(itemDatas[i + 2]))));
         }
 
+        /// <summary>
+        /// 新增地面物品，玩家會在伺服器在地面新增物品時收到該訊號
+        /// </summary>
+        /// <param name="floorItem"></param>
         private void AddFloorItems(string floorItem)
         {
             string[] itemData = floorItem.Split('|');
@@ -269,7 +281,7 @@ namespace DungeonGame
 
         /// <summary>
         /// 由伺服器傳來的資料做玩家資料的分割整理
-        /// 格式: other_player_count,name|{datapack},name|{datapack}, ...
+        /// <para>格式: other_player_count,name|{datapack},name|{datapack}, ...</para>
         /// </summary>
         /// <param name="dataPacks">伺服器傳來的原始資料</param>
         /// <returns></returns>
@@ -344,7 +356,12 @@ namespace DungeonGame
                 }
         }
 
-        // 玩家撿起物品
+        /// <summary>
+        /// 當任何玩家撿起物品時接收到該訊號，若物品編號帶有'-'，則為其他玩家撿到，會移除物品
+        /// <para>正常撿起格式: "001"</para>
+        /// <para>由地面移除格式: "-001"</para>
+        /// </summary>
+        /// <param name="itemInfos"></param>
         private void PickItem(string itemInfos)
         {
             Pickable p;

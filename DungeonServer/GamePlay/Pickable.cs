@@ -3,6 +3,9 @@ using System;
 
 namespace DungeonServer
 {
+    /// <summary>
+    /// 伺服器可撿起類，保存著一個Item類編號，隨機生成在地圖中
+    /// </summary>
     public class Pickable
     {
         public Pickable(string itemNum, (int x, int y) loc)

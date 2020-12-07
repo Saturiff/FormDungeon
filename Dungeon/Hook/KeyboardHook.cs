@@ -6,6 +6,9 @@ using System.Windows.Forms;
 
 namespace DungeonGame
 {
+    /// <summary>
+    /// 全域鍵盤掛勾類
+    /// </summary>
     public class KeyboardHook
     {
         public void Hook()

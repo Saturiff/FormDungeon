@@ -2,6 +2,9 @@
 
 namespace DungeonGame.Hook
 {
+    /// <summary>
+    /// 鍵盤按鍵狀態結構
+    /// </summary>
     public struct KeyStateInfo
     {
         public KeyStateInfo(Keys key, bool ispressed, bool istoggled)

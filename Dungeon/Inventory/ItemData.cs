@@ -3,6 +3,9 @@ using System.Drawing;
 
 namespace DungeonGame
 {
+    /// <summary>
+    /// 物品資料，由此提取Item類
+    /// </summary>
     public static class ItemData
     {
         public static readonly Dictionary<string, Item> data = new Dictionary<string, Item>

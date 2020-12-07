@@ -3,7 +3,9 @@ using System.Windows.Forms;
 
 namespace DungeonGame.Hook
 {
-
+    /// <summary>
+    /// 鍵盤資訊，取得基礎按鍵狀態，回傳鍵盤按鍵狀態結構
+    /// </summary>
     public class KeyboardInfo
     {
         public static KeyStateInfo GetKeyState(Keys key)

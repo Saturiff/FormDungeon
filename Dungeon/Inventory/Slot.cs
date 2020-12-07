@@ -3,7 +3,7 @@
 namespace DungeonGame
 {
     /// <summary>
-    /// 用於存放物品
+    /// 物品格子類，用於存放Item類
     /// </summary>
     public partial class Slot : UserControl
     {

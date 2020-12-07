@@ -11,23 +11,16 @@ using Timer = System.Windows.Forms.Timer;
 
 namespace DungeonServer
 {
-    public static class ServerListener
+    /// <summary>
+    /// 對客戶端進行接收、傳送資料，根據遊戲性做資料處理
+    /// </summary>
+    public class ServerManager
     {
-        #region 雜項
-        public static string GetMyIP()
-        {
-            IPAddress[] ips = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
-
-            foreach (IPAddress ip in ips)
-                if (ip.AddressFamily == AddressFamily.InterNetwork)
-                    return ip.ToString();
-
-            return "";
-        }
-        #endregion
-
         #region 伺服器：啟動、監聽、終止
-        public static void StartServer()
+        /// <summary>
+        /// 啟用伺服器，開始接收客戶端資料，初始化地圖物件隨機生成器
+        /// </summary>
+        public void StartServer()
         {
             ip = UI.tb_ServerIP.Text;
             port = UI.tb_ServerPort.Text;
@@ -45,13 +38,18 @@ namespace DungeonServer
             spawnTimer.Start();
         }
 
-        private static void SpawnTimer_Tick(object sender, EventArgs e)
+        /// <summary>
+        /// 隨機生成地圖帶有Item類的Pickable類，3秒執行一次
+        /// </summary>
+        /// <param name="sender">Timer物件</param>
+        /// <param name="e">EventArgs參數</param>
+        private void SpawnTimer_Tick(object sender, EventArgs e)
         {
             if (spawnedPickables.Count < 5 && players.Count != 0)
             {
                 (int x, int y) spawnLoc = Map.GetRandomPointInPlayGround();
                 Pickable p = new Pickable(Pickable.GetRandomItemNum(), spawnLoc);
-                
+
                 if (map.IsWalkable(p.rect))
                 {
                     spawnedPickables.Add(p);
@@ -61,7 +59,10 @@ namespace DungeonServer
             }
         }
 
-        private static void ServerLoop()
+        /// <summary>
+        /// 處理Socket類連線
+        /// </summary>
+        private void ServerLoop()
         {
             IPEndPoint ipEP = new IPEndPoint(IPAddress.Parse(ip), int.Parse(port));
             svListener = new TcpListener(ipEP);
@@ -76,7 +77,10 @@ namespace DungeonServer
             }
         }
 
-        public static void StopServer()
+        /// <summary>
+        /// 終止伺服器，告知所有玩家伺服器下線消息，釋放資源
+        /// </summary>
+        public void StopServer()
         {
             try
             {
@@ -96,12 +100,17 @@ namespace DungeonServer
             {
                 status = ServerStatus.Offline;
                 spawnedPickables.Clear();
+
+                GC.Collect();
             }
         }
         #endregion
 
         #region 監聽客戶端訊息迴圈
-        private static void Listen()
+        /// <summary>
+        /// 監聽與處理客戶端傳來的所有資料
+        /// </summary>
+        private void Listen()
         {
             Socket sk = svSocket;
             Thread th = clientThread;
@@ -130,14 +139,11 @@ namespace DungeonServer
                             break;
 
                         case ServerMessageType.Online:
-                            PlayerOnline(playerName: datas[1], sk);
-
-                            SendToPlayer(ServerMessageType.Online, playerName: datas[1], string.Format("{0: Player name}|{1: Data Pack With Item},{2: Floor Datas}",
-                                                                                                       datas[1], players[datas[1]].dataPackWithItem, floorItemDatas));
+                            PlayerOnline(name: datas[1], sk);
                             break;
 
                         case ServerMessageType.TextMessage:
-                            SendTextToAll(ServerMessageType.TextMessage, message: datas[1]);
+                            SendTextToAll(message: datas[1]);
                             break;
 
                         case ServerMessageType.Action:
@@ -166,8 +172,12 @@ namespace DungeonServer
             }
         }
 
-        // 由玩家池移除，保存紀錄，中斷連線
-        private static void PlayerOffline(string name, Thread th)
+        /// <summary>
+        /// 由玩家池移除，保存紀錄，中斷連線
+        /// </summary>
+        /// <param name="name">玩家名稱</param>
+        /// <param name="th">玩家線程類</param>
+        private void PlayerOffline(string name, Thread th)
         {
             players[name].Save();
             players.Remove(name);
@@ -180,33 +190,51 @@ namespace DungeonServer
             th.Abort();
         }
 
-        // 新增至玩家池，(新增)讀取紀錄
-        private static void PlayerOnline(string playerName, Socket sk)
+        /// <summary>
+        /// 新增至玩家池，新增或讀取紀錄檔
+        /// </summary>
+        /// <param name="name">玩家名稱</param>
+        /// <param name="sk"></param>
+        private void PlayerOnline(string name, Socket sk)
         {
-            players.Add(playerName, new Character(playerName));
-            players[playerName].Read();
+            players.Add(name, new Character(name));
+            players[name].Read();
 
-            socketHT.Add(playerName, sk);
+            socketHT.Add(name, sk);
 
-            UI.AddToPlayerList(playerName);
-            UI.AddLog(playerName + " online.");
+            SendToPlayer(ServerMessageType.Online, name, string.Format("{0: Player name}|{1: Data Pack With Item},{2: Floor Datas}",
+                                                            name, players[name].dataPackWithItem, floorItemDatas));
+
+            UI.AddToPlayerList(name);
+            UI.AddLog(name + " online.");
         }
 
-        // 對所有玩家發送訊息
-        private static void SendTextToAll(ServerMessageType type, string message)
+        /// <summary>
+        /// 對所有玩家發送文字訊息
+        /// </summary>
+        /// <param name="message">文字訊息</param>
+        private void SendTextToAll(string message)
         {
-            SendToAll(type, message);
+            SendToAll(ServerMessageType.TextMessage, message);
 
             UI.AddLog(message);
         }
 
-        // 更新玩家位置
-        private static void UpdatePlayerLocation(string name, int x, int y)
+        /// <summary>
+        /// 更新玩家位置
+        /// </summary>
+        /// <param name="name">玩家名稱</param>
+        /// <param name="x">在Viewport中的座標X</param>
+        /// <param name="y">在Viewport中的座標Y</param>
+        private void UpdatePlayerLocation(string name, int x, int y)
             => players[name].UpdateLocation(x, y);
 
-        // 同步所有玩家資料，傳給所有玩家除了自己以外的資料
-        // 格式 = 同步代碼,其他玩家數,玩家1名稱|玩家素質(由管線符號'|'分隔),玩家2名稱| ...
-        private static void SyncAllPlayersData(string name)
+        /// <summary>
+        /// 同步所有玩家資料，傳給所有玩家除了自己以外的資料
+        /// <para>格式 = 同步代碼,其他玩家數,玩家1名稱|玩家素質(由管線符號'|'分隔),玩家2名稱| ...</para>
+        /// </summary>
+        /// <param name="name">排除的玩家名稱</param>
+        private void SyncAllPlayersData(string name)
         {
             string syncStr = (players.Count - 1).ToString();
             foreach (var key in players.Keys)
@@ -218,8 +246,11 @@ namespace DungeonServer
             SendToPlayer(ServerMessageType.SyncPlayerData, name, syncStr);
         }
 
-        // 玩家撿起物品
-        private static void PlayerPickItem(string ppiInfo)
+        /// <summary>
+        /// 玩家撿起物品
+        /// </summary>
+        /// <param name="ppiInfo"></param>
+        private void PlayerPickItem(string ppiInfo)
         {
             lock (spawnedPickables)
             {
@@ -243,21 +274,38 @@ namespace DungeonServer
         #endregion
 
         #region 傳遞位元組資料
-        private static void SendToPlayer(ServerMessageType type, string playerName, string inMsg)
+        /// <summary>
+        /// 傳送給目標玩家(玩家名稱)
+        /// </summary>
+        /// <param name="type">伺服器訊息種類</param>
+        /// <param name="playerName">玩家名稱</param>
+        /// <param name="inMsg">已封裝的訊息</param>
+        private void SendToPlayer(ServerMessageType type, string playerName, string inMsg)
         {
             string code = EnumEx<ServerMessageType>.GetOrderByEnum(type).ToString();
             byte[] byteDatas = Encoding.Default.GetBytes(code + ">" + inMsg);
             SendToClient((Socket)socketHT[playerName], byteDatas);
         }
 
-        private static void SendToSocket(ServerMessageType type, Socket sk, string inMsg)
+        /// <summary>
+        /// 傳送給目標玩家(玩家插槽)
+        /// </summary>
+        /// <param name="type">伺服器訊息種類</param>
+        /// <param name="sk">目標玩家的插槽</param>
+        /// <param name="inMsg">已封裝的訊息</param>
+        private void SendToSocket(ServerMessageType type, Socket sk, string inMsg)
         {
             string code = EnumEx<ServerMessageType>.GetOrderByEnum(type).ToString();
             byte[] byteDatas = Encoding.Default.GetBytes(code + ">" + inMsg);
             SendToClient(sk, byteDatas);
         }
 
-        private static void SendToAll(ServerMessageType type, string inMsg = "")
+        /// <summary>
+        /// 傳送給所有玩家
+        /// </summary>
+        /// <param name="type">伺服器訊息種類</param>
+        /// <param name="inMsg">已封裝的訊息</param>
+        private void SendToAll(ServerMessageType type, string inMsg = "")
         {
             string code = EnumEx<ServerMessageType>.GetOrderByEnum(type).ToString();
             byte[] byteDatas = Encoding.Default.GetBytes(code + ">" + inMsg);
@@ -265,29 +313,34 @@ namespace DungeonServer
                 SendToClient(sk, byteDatas);
         }
 
-        private static void SendToClient(Socket sk, byte[] byteDatas) => sk.Send(byteDatas, 0, byteDatas.Length, SocketFlags.None);
+        /// <summary>
+        /// 傳送給目標插槽，不應直接使用此方法進行傳遞
+        /// </summary>
+        /// <param name="sk">目標插槽</param>
+        /// <param name="byteDatas">轉換過的位元組資料</param>
+        private void SendToClient(Socket sk, byte[] byteDatas) => sk.Send(byteDatas, 0, byteDatas.Length, SocketFlags.None);
         #endregion
 
-        private static ServerStatus status = ServerStatus.Offline;
-        public static bool isOnline => status == ServerStatus.Online;
+        private ServerStatus status = ServerStatus.Offline;
+        public bool isOnline => status == ServerStatus.Online;
 
         private const int dataSize = 0x3ff;
         private const int maxPlayers = 5;
-        private static string ip { get; set; }
-        private static string port { get; set; }
-        private static TcpListener svListener { get; set; }
-        private static Socket svSocket { get; set; }
-        private static Thread serverThread { get; set; }
-        private static Thread clientThread { get; set; }
-        private static Timer spawnTimer { get; set; }
-        private static Map map;
+        private string ip { get; set; }
+        private string port { get; set; }
+        private TcpListener svListener { get; set; }
+        private Socket svSocket { get; set; }
+        private Thread serverThread { get; set; }
+        private Thread clientThread { get; set; }
+        private Timer spawnTimer { get; set; }
+        private Map map;
 
         // 所有連線清單，[玩家名稱 : 連線物件]
-        private static Hashtable socketHT = new Hashtable();
+        private Hashtable socketHT = new Hashtable();
         // 所有玩家清單，[玩家名稱 : 角色物件]
-        private static Dictionary<string, Character> players = new Dictionary<string, Character>();
-        private static List<Pickable> spawnedPickables = new List<Pickable>();
-        private static string floorItemDatas
+        private Dictionary<string, Character> players = new Dictionary<string, Character>();
+        private List<Pickable> spawnedPickables = new List<Pickable>();
+        private string floorItemDatas
         {
             get
             {

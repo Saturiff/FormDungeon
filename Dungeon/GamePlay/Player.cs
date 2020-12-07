@@ -4,7 +4,7 @@ using System.Drawing;
 namespace DungeonGame
 {
     /// <summary>
-    /// 玩家角色
+    /// 玩家角色類
     /// </summary>
     public class Player : CharacterBase
     {

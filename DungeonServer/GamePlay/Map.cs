@@ -7,6 +7,9 @@ using System.Text;
 
 namespace DungeonServer
 {
+    /// <summary>
+    /// 伺服器地圖類，生成地圖以供隨機生成物品時使用
+    /// </summary>
     public class Map
     {
         public Map() => GenerateRoomData();
@@ -65,11 +68,11 @@ namespace DungeonServer
         public static (int x, int y) GetRandomPointInPlayGround()
             => Rand.GetRandPointInRect(playGround);
 
-        private readonly static Rect playGround = new Rect(800, 440);
-        private readonly static Rect tileSize = new Rect(40, 40);
-        private readonly static int row = playGround.height / tileSize.width;
-        private readonly static int col = playGround.width / tileSize.height;
-        private readonly Dictionary<Point, TileType> tilesData = new Dictionary<Point, TileType>(row * col);
+        private static readonly Rect playGround = new Rect(800, 440);
+        private static readonly Rect tileSize = new Rect(40, 40);
+        private static readonly int row = playGround.height / tileSize.width;
+        private static readonly int col = playGround.width / tileSize.height;
+        private Dictionary<Point, TileType> tilesData = new Dictionary<Point, TileType>(row * col);
 
         public enum TileType
         {

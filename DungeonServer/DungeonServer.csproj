@@ -87,9 +87,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Misc\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\DungeonUtility\DungeonUtility.csproj">
       <Project>{b7b103a4-5aac-4062-837b-47ade482cf2b}</Project>

@@ -8,6 +8,9 @@ using System.Text;
 
 namespace DungeonGame
 {
+    /// <summary>
+    /// 地圖類，產生地圖與提供判定是否可行走的功能
+    /// </summary>
     public class MapManager
     {
         public MapManager()
@@ -87,10 +90,10 @@ namespace DungeonGame
             return false;
         }
 
-        private readonly static Size playGround = new Size(800, 440);
-        private readonly static Size tileSize = new Size(40, 40);
-        private readonly static int row = playGround.Height / tileSize.Width;
-        private readonly static int col = playGround.Width / tileSize.Height;
+        private static readonly Size playGround = new Size(800, 440);
+        private static readonly Size tileSize = new Size(40, 40);
+        private static readonly int row = playGround.Height / tileSize.Width;
+        private static readonly int col = playGround.Width / tileSize.Height;
         private Dictionary<Point, TileType> tilesData = new Dictionary<Point, TileType>(row * col);
         private readonly Dictionary<TileType, Brush> palette = new Dictionary<TileType, Brush>
         {

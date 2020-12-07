@@ -48,7 +48,6 @@
             this.B_ToggleServer.TabIndex = 1;
             this.B_ToggleServer.Text = "Start server";
             this.B_ToggleServer.UseVisualStyleBackColor = true;
-            this.B_ToggleServer.Click += new System.EventHandler(this.B_ToggleServer_Click);
             // 
             // label1
             // 
@@ -139,7 +138,6 @@
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "DungeonServer";
             this.Text = "Dungeon Server";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DungeonServer_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

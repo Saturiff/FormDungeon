@@ -5,6 +5,9 @@ using System.Windows.Forms;
 
 namespace DungeonGame
 {
+    /// <summary>
+    /// 玩家角色之基底類
+    /// </summary>
     public class CharacterBase : Actor
     {
         protected CharacterBase()
@@ -51,7 +54,7 @@ namespace DungeonGame
             currentHealth = default;
         }
 
-        private Size characterSize = new Size(20, 20);
+        private static readonly Size characterSize = new Size(20, 20);
         private Rect rect => new Rect(Location.X, Location.Y, Size.Width, Size.Height);
 
         public string name { get; set; }
