@@ -42,7 +42,7 @@ namespace DungeonGame
 
         private static int KeyboardHookProc(int nCode, IntPtr wParam, IntPtr lParam)
         {
-            if (Game.isInViewport)
+            if (Game.IsInViewport)
             {
                 bool isPressed = (lParam.ToInt32() & 0x80000000) == 0;
 
@@ -54,10 +54,10 @@ namespace DungeonGame
                 KeyStateInfo keyS = KeyboardInfo.GetKeyState(Keys.S);
                 KeyStateInfo keyD = KeyboardInfo.GetKeyState(Keys.D);
 
-                Game.player.isMovingUp = keyW.IsPressed ? true : false;
-                Game.player.isMovingDown = keyS.IsPressed ? true : false;
-                Game.player.isMovingLeft = keyA.IsPressed ? true : false;
-                Game.player.isMovingRight = keyD.IsPressed ? true : false;
+                Game.player.isMovingUp = keyW.IsPressed;
+                Game.player.isMovingDown = keyS.IsPressed;
+                Game.player.isMovingLeft = keyA.IsPressed;
+                Game.player.isMovingRight = keyD.IsPressed;
 
                 Game.player.CalcMove();
             }

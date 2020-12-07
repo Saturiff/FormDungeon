@@ -13,7 +13,7 @@ namespace DungeonServer
         public void UpdateLocation(int newX, int newY) => loc = (newX, newY);
 
         // call when logout
-        public void Save() => File.WriteAllText(dataPath, dataPack);
+        public void Save() => File.WriteAllText(dataPath, DataPack);
 
         // call when login
         public void Read()
@@ -26,7 +26,7 @@ namespace DungeonServer
             // 5: Color.B
             if (!File.Exists(dataPath))
                 using (StreamWriter sw = File.CreateText(dataPath))
-                    sw.WriteLine(dataPack);
+                    sw.WriteLine(DataPack);
 
             string rawData = "";
             using (StreamReader sr = File.OpenText(dataPath))
@@ -41,7 +41,7 @@ namespace DungeonServer
 
         private static int GetNextRandomByte() => r.Next(255);
 
-        private string name { get; set; }
+        private string name;
         private uint health { get => 200; set { } }
         private (int x, int y) loc = (400, 220);
         private (int r, int g, int b) color = (GetNextRandomByte(), GetNextRandomByte(), GetNextRandomByte());
@@ -50,9 +50,9 @@ namespace DungeonServer
 
         // 玩家現有的物品，不予保存，但會在遊戲時同步給所有玩家
         public string item = "000";
-        private string dataPack => string.Format("{0}|{1}|{2}|{3}|{4}|{5}",
+        private string DataPack => string.Format("{0}|{1}|{2}|{3}|{4}|{5}",
             health.ToString(), loc.x, loc.y, color.r, color.g, color.b);
-        public string dataPackWithItem => string.Format("{0}|{1}",
-            dataPack, item);
+        public string DataPackWithItem => string.Format("{0}|{1}",
+            DataPack, item);
     }
 }

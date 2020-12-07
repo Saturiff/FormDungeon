@@ -9,18 +9,18 @@ namespace DungeonGame.Hook
     {
         public KeyStateInfo(Keys key, bool ispressed, bool istoggled)
         {
-            m_Key = key;
-            m_IsPressed = ispressed;
-            m_IsToggled = istoggled;
+            MKey = key;
+            MIsPressed = ispressed;
+            MIsToggled = istoggled;
         }
 
         public static KeyStateInfo Default => new KeyStateInfo(Keys.None, false, false);
-        public Keys Key => m_Key;
-        public bool IsPressed => m_IsPressed;
-        public bool IsToggled => m_IsToggled;
+        public Keys Key => MKey;
+        public bool IsPressed => MIsPressed;
+        public bool IsToggled => MIsToggled;
 
-        private Keys m_Key { get; set; }
-        private bool m_IsPressed { get; set; }
-        private bool m_IsToggled { get; set; }
+        private Keys MKey { get; set; }
+        private bool MIsPressed { get; set; }
+        private bool MIsToggled { get; set; }
     }
 }

@@ -196,7 +196,7 @@
             this.S_Slot.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.S_Slot.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.S_Slot.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.S_Slot.item = null;
+            this.S_Slot.Item = null;
             this.S_Slot.Location = new System.Drawing.Point(35, 475);
             this.S_Slot.Margin = new System.Windows.Forms.Padding(0);
             this.S_Slot.Name = "S_Slot";

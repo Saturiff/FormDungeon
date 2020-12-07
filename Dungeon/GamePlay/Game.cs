@@ -33,19 +33,19 @@ namespace DungeonGame
             // form
             f_Dungeon.Activated += delegate (object sender, EventArgs e)
             {
-                if (client.isOnline)
+                if (client.IsOnline)
                     kbHook.Hook();
             };
 
             f_Dungeon.Deactivate += delegate (object sender, EventArgs e)
             {
-                if (client.isOnline)
+                if (client.IsOnline)
                     kbHook.Unhook();
             };
 
             f_Dungeon.FormClosing += delegate (object sender, FormClosingEventArgs e)
             {
-                if (client.isOnline)
+                if (client.IsOnline)
                     client.Logout();
 
                 Application.ExitThread();
@@ -54,7 +54,7 @@ namespace DungeonGame
             // button
             b_ToggleLogin.Click += delegate (object sender, EventArgs e)
             {
-                if (!client.isOnline)
+                if (!client.IsOnline)
                 {
                     BeginPlay();
                 }
@@ -93,9 +93,9 @@ namespace DungeonGame
 
             p_Viewport.Paint += delegate (object sender, PaintEventArgs e)
             {
-                if (client.isOnline)
+                if (client.IsOnline)
                 {
-                    if (isInViewport)
+                    if (IsInViewport)
                         ControlPaint.DrawBorder(e.Graphics, p_Viewport.ClientRectangle,
                             Color.DarkOrange, 5, ButtonBorderStyle.Solid,  // left
                             Color.DarkOrange, 5, ButtonBorderStyle.Solid,  // top
@@ -188,7 +188,7 @@ namespace DungeonGame
             if (sender is IInteractable obj)
             {
                 if (obj is Player p && p != player)
-                    focusEnemyName = p.name;
+                    focusEnemyName = p.Name;
                 else if (obj is Pickable item)
                     item.Interact();
             }
@@ -228,14 +228,14 @@ namespace DungeonGame
             else
                 AddLog("Invalid name.");
 
-            if (client.isOnline)
+            if (client.IsOnline)
             {
                 tb_Nickname.Enabled = false;
 
                 while (client.isWaitingPlayerData) ;
                 player = client.GetPlayerCharacter();
 
-                AddLog("Welcome, " + player.name + "!");
+                AddLog("Welcome, " + player.Name + "!");
 
                 map = new MapManager();
 
@@ -302,12 +302,12 @@ namespace DungeonGame
         #endregion
 
         private static KeyboardHook kbHook;
+
+        public static string focusEnemyName;
+        public static bool IsInViewport => p_Viewport.Focused;
         public static ClientManager client;
         public static Player player;
         public static MapManager map;
-        public static string focusEnemyName;
-        public static bool isInViewport => p_Viewport.Focused;
-
         public static Form f_Dungeon;
         public static Panel p_Viewport;
         public static Slot s_Slot;

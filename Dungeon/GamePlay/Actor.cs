@@ -10,10 +10,8 @@ namespace DungeonGame
     {
         public void Interact() { }
 
-        public double DistanceOf(Actor target)
-        {
-            return Math.Sqrt((Location.X - target.Location.X) * (Location.X - target.Location.X) +
+        public double DistanceOf(Actor target) 
+            => Math.Sqrt((Location.X - target.Location.X) * (Location.X - target.Location.X) +
                 (Location.Y - target.Location.Y) * (Location.Y - target.Location.Y));
-        }
     }
 }

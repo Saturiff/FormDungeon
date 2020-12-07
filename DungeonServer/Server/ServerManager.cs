@@ -50,7 +50,7 @@ namespace DungeonServer
                 (int x, int y) spawnLoc = Map.GetRandomPointInPlayGround();
                 Pickable p = new Pickable(Pickable.GetRandomItemNum(), spawnLoc);
 
-                if (map.IsWalkable(p.rect))
+                if (map.IsWalkable(p.Rect))
                 {
                     spawnedPickables.Add(p);
 
@@ -203,7 +203,7 @@ namespace DungeonServer
             socketHT.Add(name, sk);
 
             SendToPlayer(ServerMessageType.Online, name, string.Format("{0: Player name}|{1: Data Pack With Item},{2: Floor Datas}",
-                                                            name, players[name].dataPackWithItem, floorItemDatas));
+                                                            name, players[name].DataPackWithItem, FloorItemDatas));
 
             UI.AddToPlayerList(name);
             UI.AddLog(name + " online.");
@@ -240,7 +240,7 @@ namespace DungeonServer
             foreach (var key in players.Keys)
             {
                 if (key != name)
-                    syncStr += "," + key + "|" + players[key].dataPackWithItem;
+                    syncStr += "," + key + "|" + players[key].DataPackWithItem;
             }
 
             SendToPlayer(ServerMessageType.SyncPlayerData, name, syncStr);
@@ -265,7 +265,7 @@ namespace DungeonServer
                             foreach (string name in players.Keys)
                                 SendToPlayer(ServerMessageType.PickItem, playerName: name, ((name != infos[0]) ? "-" : "") + p.ToString());
 
-                            players[infos[0]].item = p.itemNum;
+                            players[infos[0]].item = p.ItemNum;
                         }
                         break;
                     }
@@ -322,17 +322,15 @@ namespace DungeonServer
         #endregion
 
         private ServerStatus status = ServerStatus.Offline;
-        public bool isOnline => status == ServerStatus.Online;
-
         private const int dataSize = 0x3ff;
         private const int maxPlayers = 5;
-        private string ip { get; set; }
-        private string port { get; set; }
-        private TcpListener svListener { get; set; }
-        private Socket svSocket { get; set; }
-        private Thread serverThread { get; set; }
-        private Thread clientThread { get; set; }
-        private Timer spawnTimer { get; set; }
+        private string ip;
+        private string port;
+        private TcpListener svListener;
+        private Socket svSocket;
+        private Thread serverThread;
+        private Thread clientThread;
+        private Timer spawnTimer;
         private Map map;
 
         // 所有連線清單，[玩家名稱 : 連線物件]
@@ -340,7 +338,7 @@ namespace DungeonServer
         // 所有玩家清單，[玩家名稱 : 角色物件]
         private Dictionary<string, Character> players = new Dictionary<string, Character>();
         private List<Pickable> spawnedPickables = new List<Pickable>();
-        private string floorItemDatas
+        private string FloorItemDatas
         {
             get
             {
@@ -352,5 +350,7 @@ namespace DungeonServer
                 return string.Join("|", datas);
             }
         }
+
+        public bool IsOnline => status == ServerStatus.Online;
     }
 }

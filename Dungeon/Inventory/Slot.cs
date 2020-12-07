@@ -11,13 +11,13 @@ namespace DungeonGame
 
         public void AddItem(string itemNum)
         {
-            item = ItemData.data[itemNum];
-            BackgroundImage = item.icon;
-            Game.tb_ItemInfo.Text = item.info;
+            Item = ItemData.data[itemNum];
+            BackgroundImage = Item.Icon;
+            Game.tb_ItemInfo.Text = Item.Info;
         }
 
         public void RemoveItem() => AddItem("000");
 
-        public Item item { get; set; }
+        public Item Item { get; set; }
     }
 }

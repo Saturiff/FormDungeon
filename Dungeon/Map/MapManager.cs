@@ -13,10 +13,7 @@ namespace DungeonGame
     /// </summary>
     public class MapManager
     {
-        public MapManager()
-        {
-            GenerateRoom();
-        }
+        public MapManager() => GenerateRoom();
 
         private string[] ReadMapFromFile()
         {
@@ -53,8 +50,8 @@ namespace DungeonGame
                     Rectangle rect = new Rectangle(pos, tileSize);
 
                     TileType tileType = EnumEx<TileType>.GetEnumByOrder(Convert.ToUInt16(mapData[i]));
-                    tilesData.Add(new Point(i % col, i / col), tileType);
-                    g.FillRectangle(palette[tileType], rect);
+                    _tilesData.Add(new Point(i % col, i / col), tileType);
+                    g.FillRectangle(_palette[tileType], rect);
                 }
             }
 
@@ -66,7 +63,7 @@ namespace DungeonGame
             p = (p.x / tileSize.Width, p.y / tileSize.Height);
 
             if (p.x > -1 && p.x < col && p.y > -1 && p.y < row)
-                return tilesData[new Point(p.x, p.y)];
+                return _tilesData[new Point(p.x, p.y)];
 
             return null;
         }
@@ -94,8 +91,8 @@ namespace DungeonGame
         private static readonly Size tileSize = new Size(40, 40);
         private static readonly int row = playGround.Height / tileSize.Width;
         private static readonly int col = playGround.Width / tileSize.Height;
-        private Dictionary<Point, TileType> tilesData = new Dictionary<Point, TileType>(row * col);
-        private readonly Dictionary<TileType, Brush> palette = new Dictionary<TileType, Brush>
+        private Dictionary<Point, TileType> _tilesData = new Dictionary<Point, TileType>(row * col);
+        private readonly Dictionary<TileType, Brush> _palette = new Dictionary<TileType, Brush>
         {
             { TileType.None,    new SolidBrush(Color.FromArgb(70,75,82)) },
             { TileType.Wall,    new SolidBrush(Color.FromArgb(177,188,208)) },

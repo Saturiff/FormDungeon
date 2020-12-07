@@ -9,3 +9,5 @@ health bar
 死亡時噴裝
 重生時滿血
 畫面震動
+
+test sv side health set { } area

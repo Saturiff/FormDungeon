@@ -19,7 +19,7 @@ namespace DungeonServer
         {
             b_ToggleServer.Click += delegate (object sender, EventArgs e)
             {
-                if (!server.isOnline)
+                if (!server.IsOnline)
                 {
                     Start();
                 }
@@ -31,7 +31,7 @@ namespace DungeonServer
 
             f_DungeonServer.FormClosing += delegate (object sender, FormClosingEventArgs e)
             {
-                if (server.isOnline)
+                if (server.IsOnline)
                     server.StopServer();
 
                 Application.ExitThread();
@@ -68,7 +68,6 @@ namespace DungeonServer
         }
 
         public static ServerManager server;
-
         public static Form f_DungeonServer;
         public static TextBox tb_ServerIP;
         public static TextBox tb_ServerPort;

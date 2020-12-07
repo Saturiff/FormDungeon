@@ -80,9 +80,9 @@ namespace DungeonGame
             players[playerName] = GetPlayerCharacter();
             playerUpdateStatus[playerName] = true;
 
-            Game.tb_CharacterStatus.Text = players[playerName].status;
+            Game.tb_CharacterStatus.Text = players[playerName].Status;
             if (Game.focusEnemyName != "" && Game.focusEnemyName != null)
-                Game.tb_EnemyStatus.Text = players[Game.focusEnemyName].status;
+                Game.tb_EnemyStatus.Text = players[Game.focusEnemyName].Status;
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace DungeonGame
                 SendToServer(ClientMessageType.Offline, playerName);
             }
             catch { }
-            
+
             Game.p_Viewport.Controls.Clear();
 
             players.Clear();
@@ -330,11 +330,11 @@ namespace DungeonGame
                 {
                     Player c = new Player(dataPack);
 
-                    players.Add(c.name, c);
+                    players.Add(c.Name, c);
 
-                    Game.SpawnInViewport(players[c.name]);
+                    Game.SpawnInViewport(players[c.Name]);
 
-                    playerUpdateStatus.Add(c.name, true);
+                    playerUpdateStatus.Add(c.Name, true);
                 }
             }
 
@@ -372,30 +372,29 @@ namespace DungeonGame
             else
             {
                 p = new Pickable(itemInfos);
-                Game.s_Slot.AddItem(p.itemNum);
-                players[playerName].item = ItemData.data[p.itemNum];
+                Game.s_Slot.AddItem(p.ItemNum);
+                players[playerName].item = ItemData.data[p.ItemNum];
             }
-            
+
             Game.DestroyFromViewport(p);
         }
         #endregion
 
-        public bool isOnline => status == OnlineStatus.Online;
-
-        private string playerName { get; set; }
-        private string ip = "127.0.0.1";
+        private string playerName;
+        private const string ip = "127.0.0.1";
         private const int port = 8800;
         private const int dataSize = 0x3ff;
         private ServerMessageStatus svMsgStatus = ServerMessageStatus.None;
         private OnlineStatus status = OnlineStatus.Offline;
-        private Socket socket { get; set; }
-        private Thread tcpThread { get; set; }
+        private Socket socket;
+        private Thread tcpThread;
 
-        // 是否在等待伺服器回傳玩家狀態資料
-        public bool isWaitingPlayerData = true;
+        public bool IsOnline => status == OnlineStatus.Online;
         // 線上玩家清單，[玩家名稱 : 角色物件]
         private Dictionary<string, Player> players = new Dictionary<string, Player>();
         // 玩家更新狀態，若同步資料後該玩家沒更新過，則會移除該玩家，[玩家名稱 : 是否更新過]
         private Dictionary<string, bool> playerUpdateStatus = new Dictionary<string, bool>();
+        // 是否在等待伺服器回傳玩家狀態資料
+        public bool isWaitingPlayerData = true;
     }
 }

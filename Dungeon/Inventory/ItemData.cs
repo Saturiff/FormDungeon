@@ -10,21 +10,21 @@ namespace DungeonGame
     {
         public static readonly Dictionary<string, Item> data = new Dictionary<string, Item>
         {
-            { "000", new Item { name = "None", atk = 0,  def = 0, desc = "", icon = emptyImage } },
-            { "001", new Item { name = "Pendant", atk = 500,  def = 500, desc = "墜飾", icon = Properties.Resources.item001 } },
-            { "002", new Item { name = "Buff",    atk = 150,  def = 150, desc = "增益", icon = Properties.Resources.item002 } },
-            { "003", new Item { name = "Ring A",  atk = 5,  def = 5, desc = "戒指 A", icon = Properties.Resources.item003 } },
-            { "004", new Item { name = "Ring B",  atk = 25,  def = 25, desc = "戒指 B", icon = Properties.Resources.item004 } },
-            { "005", new Item { name = "Ring C",  atk = 75, def = 75, desc = "戒指 C", icon = Properties.Resources.item005  } },
-            { "006", new Item { name = "Atk++ A", atk = 10,  def = 5, desc = "攻擊 A", icon = Properties.Resources.item006 } },
-            { "007", new Item { name = "Atk++ B", atk = 50,  def = 25, desc = "攻擊 B", icon = Properties.Resources.item007 } },
-            { "008", new Item { name = "Atk++ C", atk = 100, def = 50, desc = "攻擊 C", icon = Properties.Resources.item008 } },
-            { "009", new Item { name = "Def++ A", atk = 5,   def = 10, desc = "防禦 A", icon = Properties.Resources.item009 } },
-            { "010", new Item { name = "Def++ B", atk = 25,  def = 50, desc = "防禦 B", icon = Properties.Resources.item010 } },
-            { "011", new Item { name = "Def++ C", atk = 50,  def = 100, desc = "防禦 C", icon = Properties.Resources.item011 } }
+            { "000", new Item { Name = "None", Atk = 0,  Def = 0, Desc = "", Icon = EmptyImage } },
+            { "001", new Item { Name = "Pendant", Atk = 500,  Def = 500, Desc = "墜飾", Icon = Properties.Resources.item001 } },
+            { "002", new Item { Name = "Buff",    Atk = 150,  Def = 150, Desc = "增益", Icon = Properties.Resources.item002 } },
+            { "003", new Item { Name = "Ring A",  Atk = 5,  Def = 5, Desc = "戒指 A", Icon = Properties.Resources.item003 } },
+            { "004", new Item { Name = "Ring B",  Atk = 25,  Def = 25, Desc = "戒指 B", Icon = Properties.Resources.item004 } },
+            { "005", new Item { Name = "Ring C",  Atk = 75, Def = 75, Desc = "戒指 C", Icon = Properties.Resources.item005  } },
+            { "006", new Item { Name = "Atk++ A", Atk = 10,  Def = 5, Desc = "攻擊 A", Icon = Properties.Resources.item006 } },
+            { "007", new Item { Name = "Atk++ B", Atk = 50,  Def = 25, Desc = "攻擊 B", Icon = Properties.Resources.item007 } },
+            { "008", new Item { Name = "Atk++ C", Atk = 100, Def = 50, Desc = "攻擊 C", Icon = Properties.Resources.item008 } },
+            { "009", new Item { Name = "Def++ A", Atk = 5,   Def = 10, Desc = "防禦 A", Icon = Properties.Resources.item009 } },
+            { "010", new Item { Name = "Def++ B", Atk = 25,  Def = 50, Desc = "防禦 B", Icon = Properties.Resources.item010 } },
+            { "011", new Item { Name = "Def++ C", Atk = 50,  Def = 100, Desc = "防禦 C", Icon = Properties.Resources.item011 } }
         };
 
-        private static Bitmap emptyImage
+        private static Bitmap EmptyImage
         {
             get
             {
