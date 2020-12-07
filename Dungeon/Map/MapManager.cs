@@ -37,7 +37,7 @@ namespace DungeonGame
         {
             string[] mapData = ReadMapFromFile();
 
-            Bitmap bg = new Bitmap(UI.p_Viewport.Width, UI.p_Viewport.Height);
+            Bitmap bg = new Bitmap(Game.p_Viewport.Width, Game.p_Viewport.Height);
             using (Graphics g = Graphics.FromImage(bg))
             {
                 g.Clear(Color.Black);
@@ -55,7 +55,7 @@ namespace DungeonGame
                 }
             }
 
-            UI.p_Viewport.BackgroundImage = bg;
+            Game.p_Viewport.BackgroundImage = bg;
         }
 
         private TileType? GetTileType((int x, int y) p)

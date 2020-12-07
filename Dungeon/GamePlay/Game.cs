@@ -8,7 +8,7 @@ namespace DungeonGame
     /// 所有類別可對表單控件進行訪問的唯一渠道
     /// <para>* 僅在跨類別時使用</para>
     /// </summary>
-    public static class UI
+    public static class Game
     {
         #region 初始化
         /// <summary>
@@ -16,32 +16,62 @@ namespace DungeonGame
         /// </summary>
         public static void InitControls()
         {
+            client = new ClientManager();
+
+            kbHook = new KeyboardHook();
+
             tb_ItemInfo.Font = new Font(tb_ItemInfo.Font.Name, 10);
+
             s_Slot.RemoveItem();
 
-            BindFormEvents();
-            BindViewportEvents();
+            BindEvents();
 
             SetDoubleBuffered(p_Viewport);
         }
 
-        private static void BindFormEvents()
+        private static void BindEvents()
         {
+            // form
             f_Dungeon.Activated += delegate (object sender, EventArgs e)
             {
-                if (ClientManager.isOnline)
+                if (client.isOnline)
                     kbHook.Hook();
             };
 
             f_Dungeon.Deactivate += delegate (object sender, EventArgs e)
             {
-                if (ClientManager.isOnline)
+                if (client.isOnline)
                     kbHook.Unhook();
             };
-        }
 
-        private static void BindViewportEvents()
-        {
+            f_Dungeon.FormClosing += delegate (object sender, FormClosingEventArgs e)
+            {
+                if (client.isOnline)
+                    client.Logout();
+
+                Application.ExitThread();
+            };
+
+            // button
+            b_ToggleLogin.Click += delegate (object sender, EventArgs e)
+            {
+                if (!client.isOnline)
+                {
+                    BeginPlay();
+                }
+                else
+                {
+                    Destroy();
+                }
+            };
+
+            b_SendMessage.Click += delegate (object sender, EventArgs e)
+            {
+                client.SendMessage(tb_Message.Text);
+                tb_Message.Clear();
+            };
+
+            // viewport
             p_Viewport.ControlAdded += delegate (object sender, ControlEventArgs e)
             {
                 e.Control.Click += Interact;
@@ -64,7 +94,7 @@ namespace DungeonGame
 
             p_Viewport.Paint += delegate (object sender, PaintEventArgs e)
             {
-                if (ClientManager.isOnline)
+                if (client.isOnline)
                 {
                     if (isInViewport)
                         ControlPaint.DrawBorder(e.Graphics, p_Viewport.ClientRectangle,
@@ -79,6 +109,12 @@ namespace DungeonGame
                             Color.DarkGreen, 3, ButtonBorderStyle.Solid,  // right
                             Color.DarkGreen, 3, ButtonBorderStyle.Solid); // bottom
                 }
+            };
+
+            // timer
+            t_SyncTicker.Tick += delegate (object sender, EventArgs e)
+            {
+                client.UpdateUI();
             };
         }
 
@@ -189,16 +225,16 @@ namespace DungeonGame
         public static void BeginPlay()
         {
             if (IsVaildName(tb_Nickname.Text))
-                ClientManager.Login(tb_Nickname.Text);
+                client.Login(tb_Nickname.Text);
             else
                 AddLog("Invalid name.");
 
-            if (ClientManager.isOnline)
+            if (client.isOnline)
             {
                 tb_Nickname.Enabled = false;
 
-                while (ClientManager.isWaitingPlayerData) ;
-                player = ClientManager.GetPlayerCharacter();
+                while (client.isWaitingPlayerData) ;
+                player = client.GetPlayerCharacter();
 
                 AddLog("Welcome, " + player.name + "!");
 
@@ -252,7 +288,7 @@ namespace DungeonGame
 
             kbHook.Unhook();
 
-            ClientManager.Logout();
+            client.Logout();
 
             s_Slot.RemoveItem();
             tb_CharacterStatus.Text = "";
@@ -266,8 +302,8 @@ namespace DungeonGame
         }
         #endregion
 
-        private static KeyboardHook kbHook = new KeyboardHook();
-
+        private static KeyboardHook kbHook;
+        public static ClientManager client;
         public static Player player;
         public static MapManager map;
         public static string focusEnemyName;

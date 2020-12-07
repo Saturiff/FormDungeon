@@ -66,7 +66,6 @@
             this.B_ToggleLogin.TabIndex = 3;
             this.B_ToggleLogin.Text = "Login";
             this.B_ToggleLogin.UseVisualStyleBackColor = true;
-            this.B_ToggleLogin.Click += new System.EventHandler(this.B_ToggleLogin_Click);
             // 
             // TB_Nickname
             // 
@@ -121,7 +120,6 @@
             this.B_SendMessage.TabIndex = 17;
             this.B_SendMessage.Text = "Send";
             this.B_SendMessage.UseVisualStyleBackColor = true;
-            this.B_SendMessage.Click += new System.EventHandler(this.B_SendMessage_Click);
             // 
             // TB_ItemInfo
             // 
@@ -145,7 +143,6 @@
             // T_SyncTicker
             // 
             this.T_SyncTicker.Interval = 50;
-            this.T_SyncTicker.Tick += new System.EventHandler(this.T_SyncTicker_Tick);
             // 
             // LB_Message
             // 
@@ -232,7 +229,6 @@
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "F_Dungeon";
             this.Text = " Dungeon Game";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Dungeon_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

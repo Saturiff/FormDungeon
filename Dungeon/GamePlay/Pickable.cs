@@ -31,13 +31,13 @@ namespace DungeonGame
 
         public new void Interact()
         {
-            if (DistanceOf(UI.player) < Player.pickRange)
-                ClientManager.RequestPickup(this);
+            if (DistanceOf(Game.player) < Player.pickRange)
+                Game.client.RequestPickup(this);
         }
 
         public void Destory()
         {
-            UI.p_Viewport.Controls.Remove(this);
+            Game.p_Viewport.Controls.Remove(this);
             Dispose();
         }
 

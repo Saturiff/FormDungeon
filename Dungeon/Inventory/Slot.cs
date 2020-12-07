@@ -13,7 +13,7 @@ namespace DungeonGame
         {
             item = ItemData.data[itemNum];
             BackgroundImage = item.icon;
-            UI.tb_ItemInfo.Text = item.info;
+            Game.tb_ItemInfo.Text = item.info;
         }
 
         public void RemoveItem() => AddItem("000");

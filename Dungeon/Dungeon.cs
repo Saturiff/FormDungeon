@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace DungeonGame
 {
@@ -14,7 +13,6 @@ namespace DungeonGame
             MaximizeBox = false;
 
             BindUI();
-            ClientManager.SetServerIP();
         }
 
         /// <summary>
@@ -22,50 +20,20 @@ namespace DungeonGame
         /// </summary>
         private void BindUI()
         {
-            UI.f_Dungeon = this;
-            UI.p_Viewport = P_Viewport;
-            UI.s_Slot = S_Slot;
-            UI.t_SyncTicker = T_SyncTicker;
-            UI.tb_Nickname = TB_Nickname;
-            UI.tb_CharacterStatus = TB_CharacterStatus;
-            UI.tb_EnemyStatus = TB_EnemyStatus;
-            UI.tb_Message = TB_Message;
-            UI.tb_ItemInfo = TB_ItemInfo;
-            UI.lb_Message = LB_Message;
-            UI.lb_Log = LB_Log;
-            UI.b_ToggleLogin = B_ToggleLogin;
-            UI.b_SendMessage = B_SendMessage;
-            UI.InitControls();
+            Game.f_Dungeon = this;
+            Game.p_Viewport = P_Viewport;
+            Game.s_Slot = S_Slot;
+            Game.t_SyncTicker = T_SyncTicker;
+            Game.tb_Nickname = TB_Nickname;
+            Game.tb_CharacterStatus = TB_CharacterStatus;
+            Game.tb_EnemyStatus = TB_EnemyStatus;
+            Game.tb_Message = TB_Message;
+            Game.tb_ItemInfo = TB_ItemInfo;
+            Game.lb_Message = LB_Message;
+            Game.lb_Log = LB_Log;
+            Game.b_ToggleLogin = B_ToggleLogin;
+            Game.b_SendMessage = B_SendMessage;
+            Game.InitControls();
         }
-
-        #region 表單控件事件
-        private void B_ToggleLogin_Click(object sender, EventArgs e)
-        {
-            if (!ClientManager.isOnline)
-            {
-                UI.BeginPlay();
-            }
-            else
-            {
-                UI.Destroy();
-            }
-        }
-
-        private void B_SendMessage_Click(object sender, EventArgs e)
-        {
-            ClientManager.SendMessage(TB_Message.Text);
-            TB_Message.Clear();
-        }
-
-        private void Dungeon_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (ClientManager.isOnline)
-                ClientManager.Logout();
-
-            Application.ExitThread();
-        }
-
-        private void T_SyncTicker_Tick(object sender, EventArgs e) => ClientManager.UpdateUI();
-        #endregion
     }
 }

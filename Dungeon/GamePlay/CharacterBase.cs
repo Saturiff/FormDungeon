@@ -37,13 +37,13 @@ namespace DungeonGame
 
         protected void MoveTo(Point newLoc)
         {
-            if (UI.map.IsWalkable(rect.Offset((newLoc.X, newLoc.Y))))
+            if (Game.map.IsWalkable(rect.Offset((newLoc.X, newLoc.Y))))
                 Location = newLoc;
 
-            ClientManager.UpdatePlayerLocation();
+            Game.client.UpdatePlayerLocation();
         }
 
-        public void Interact() { }
+        public new void Interact() { }
 
         protected void Destory()
         {

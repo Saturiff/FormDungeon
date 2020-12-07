@@ -13,12 +13,8 @@ namespace DungeonGame
     /// <summary>
     /// 對遊戲伺服器進行傳送資料與接收資料
     /// </summary>
-    public static class ClientManager
+    public class ClientManager
     {
-        #region 初始化
-        public static void SetServerIP(string inIP = "127.0.0.1") => ip = inIP;
-        #endregion
-
         #region 傳送資料
         /// <summary>
         /// 登入伺服器
@@ -28,17 +24,16 @@ namespace DungeonGame
         /// <para>4. 登入成功則傳送登入請求與玩家名稱至伺服器</para>
         /// </summary>
         /// <param name="name"></param>
-        public static void Login(string name)
+        public void Login(string name)
         {
             svMsgStatus = ServerMessageStatus.None;
             isWaitingPlayerData = true;
             playerName = name;
 
-            IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             try
             {
-                socket.Connect(ipEndPoint);
+                socket.Connect(new IPEndPoint(IPAddress.Parse(ip), port));
                 tcpThread = new Thread(Listen);
                 tcpThread.IsBackground = true;
                 tcpThread.Start();
@@ -62,54 +57,54 @@ namespace DungeonGame
         /// <summary>
         /// 玩家移動後對伺服器傳送玩家的新位置
         /// </summary>
-        public static void UpdatePlayerLocation()
+        public void UpdatePlayerLocation()
         {
             SendToServer(ClientMessageType.Action, string.Format("{0}|{1}|{2}",
-                playerName, UI.player.Location.X, UI.player.Location.Y));
+                playerName, Game.player.Location.X, Game.player.Location.Y));
         }
 
         /// <summary>
         /// 玩家對所有在線玩家發送訊息
         /// </summary>
         /// <param name="msg">玩家發送的訊息</param>
-        public static void SendMessage(string msg)
+        public void SendMessage(string msg)
             => SendToServer(ClientMessageType.TextMessage, playerName + " : " + msg);
 
         /// <summary>
         /// 由伺服器回傳的資料進行介面更新，會不斷執行
         /// </summary>
-        public static void UpdateUI()
+        public void UpdateUI()
         {
             RequestPlayersData();
 
             players[playerName] = GetPlayerCharacter();
             playerUpdateStatus[playerName] = true;
 
-            UI.tb_CharacterStatus.Text = players[playerName].status;
-            if (UI.focusEnemyName != "" && UI.focusEnemyName != null)
-                UI.tb_EnemyStatus.Text = players[UI.focusEnemyName].status;
+            Game.tb_CharacterStatus.Text = players[playerName].status;
+            if (Game.focusEnemyName != "" && Game.focusEnemyName != null)
+                Game.tb_EnemyStatus.Text = players[Game.focusEnemyName].status;
         }
 
         /// <summary>
         /// 向伺服器請求玩家狀態
         /// </summary>
-        private static void RequestPlayersData()
+        private void RequestPlayersData()
             => SendToServer(ClientMessageType.SyncPlayerData, playerName);
 
         /// <summary>
         /// 查詢玩家
         /// </summary>
         /// <returns>Character物件</returns>
-        public static Player GetPlayerCharacter() => players[playerName];
+        public Player GetPlayerCharacter() => players[playerName];
 
         /// <summary>
         /// 查詢指定名稱玩家
         /// </summary>
         /// <param name="name">玩家名稱</param>
         /// <returns>Character物件</returns>
-        public static Player GetPlayerCharacter(string name) => players[name];
+        public Player GetPlayerCharacter(string name) => players[name];
 
-        public static void RequestPickup(Pickable p)
+        public void RequestPickup(Pickable p)
         {
             SendToServer(ClientMessageType.PickItem, playerName + "," + p.ToString());
         }
@@ -117,21 +112,23 @@ namespace DungeonGame
         /// <summary>
         /// 傳送登出請求與玩家名稱
         /// </summary>
-        public static void Logout()
+        public void Logout()
         {
             try
             {
                 SendToServer(ClientMessageType.Offline, playerName);
             }
             catch { }
-
-            UI.p_Viewport.Controls.Clear();
+            
+            Game.p_Viewport.Controls.Clear();
 
             players.Clear();
             playerUpdateStatus.Clear();
 
             status = OnlineStatus.Offline;
             socket.Close();
+
+            GC.Collect();
         }
 
         /// <summary>
@@ -139,7 +136,7 @@ namespace DungeonGame
         /// </summary>
         /// <param name="type">伺服器請求的種類指令碼</param>
         /// <param name="inMsg">欲傳送之資料</param>
-        private static void SendToServer(ClientMessageType type, string inMsg)
+        private void SendToServer(ClientMessageType type, string inMsg)
         {
             string msg = EnumEx<ClientMessageType>.GetOrderByEnum(type).ToString() + ">" + inMsg;
 
@@ -152,7 +149,7 @@ namespace DungeonGame
         /// <summary>
         /// 監聽伺服器資料，會不斷執行
         /// </summary>
-        private static void Listen()
+        private void Listen()
         {
             EndPoint svEndpoint = socket.RemoteEndPoint;
             byte[] byteDatas = new byte[dataSize];
@@ -227,16 +224,16 @@ namespace DungeonGame
         /// <summary>
         /// 伺服器離線，玩家自動下線
         /// </summary>
-        private static void ForceOffline()
+        private void ForceOffline()
         {
-            UI.Destroy();
-            UI.AddLog("Server offline.");
+            Game.Destroy();
+            Game.AddLog("Server offline.");
         }
 
         /// <summary>
         /// 伺服器端驗證角色名稱
         /// </summary>
-        private static void ContinueVerification(string result)
+        private void ContinueVerification(string result)
         {
             int resultIdx = Convert.ToInt32(result);
             svMsgStatus = EnumEx<ServerMessageStatus>.GetEnumByOrder(resultIdx);
@@ -246,28 +243,28 @@ namespace DungeonGame
         /// 玩家上線接收自己的角色資料
         /// </summary>
         /// <param name="rawData">伺服器傳來的原始資料</param>
-        private static void LoadPlayerCharacterStatus(string dataPack)
+        private void LoadPlayerCharacterStatus(string dataPack)
         {
             Player c = new Player(dataPack);
             players.Add(playerName, c);
             isWaitingPlayerData = false;
         }
 
-        private static void LoadFloorItems(string floorItems)
+        private void LoadFloorItems(string floorItems)
         {
             string[] itemDatas = floorItems.Split('|');
             if (itemDatas.Length % 3 != 0) return;
 
             for (int i = 0; i < itemDatas.Length; i += 3)
-                UI.SpawnInViewport(new Pickable(itemDatas[i], (Convert.ToInt32(itemDatas[i + 1]), Convert.ToInt32(itemDatas[i + 2]))));
+                Game.SpawnInViewport(new Pickable(itemDatas[i], (Convert.ToInt32(itemDatas[i + 1]), Convert.ToInt32(itemDatas[i + 2]))));
         }
 
-        private static void AddFloorItems(string floorItem)
+        private void AddFloorItems(string floorItem)
         {
             string[] itemData = floorItem.Split('|');
             if (itemData.Length % 3 != 0) return;
 
-            UI.SpawnInViewport(new Pickable(itemData[0], (Convert.ToInt32(itemData[1]), Convert.ToInt32(itemData[2]))));
+            Game.SpawnInViewport(new Pickable(itemData[0], (Convert.ToInt32(itemData[1]), Convert.ToInt32(itemData[2]))));
         }
 
         /// <summary>
@@ -276,7 +273,7 @@ namespace DungeonGame
         /// </summary>
         /// <param name="dataPacks">伺服器傳來的原始資料</param>
         /// <returns></returns>
-        private static IEnumerable<string> ExtractDataPack(string dataPacks)
+        private IEnumerable<string> ExtractDataPack(string dataPacks)
         {
             string[] datas = dataPacks.Split(',');
 
@@ -293,13 +290,13 @@ namespace DungeonGame
         /// 接收文字訊息
         /// </summary>
         /// <param name="rawData">伺服器傳來的原始資料</param>
-        private static void ReceiveTextMessage(string textMessage) => UI.AddTextMessage(textMessage);
+        private void ReceiveTextMessage(string textMessage) => Game.AddTextMessage(textMessage);
 
         /// <summary>
         /// 同步所有其他玩家狀態資料，並在有玩家登出時移除該玩家
         /// </summary>
         /// <param name="playerDatas">伺服器傳來的原始資料</param>
-        private static void SyncAllPlayersData(string playerDatas)
+        private void SyncAllPlayersData(string playerDatas)
         {
             // 初始化判斷離線的參數
             foreach (string name in playerUpdateStatus.Keys.ToList())
@@ -323,7 +320,7 @@ namespace DungeonGame
 
                     players.Add(c.name, c);
 
-                    UI.SpawnInViewport(players[c.name]);
+                    Game.SpawnInViewport(players[c.name]);
 
                     playerUpdateStatus.Add(c.name, true);
                 }
@@ -333,22 +330,22 @@ namespace DungeonGame
             foreach (string name in playerUpdateStatus.Keys.ToList())
                 if (!playerUpdateStatus[name])
                 {
-                    UI.DestroyFromViewport(players[name]);
+                    Game.DestroyFromViewport(players[name]);
 
                     playerUpdateStatus.Remove(name);
 
                     players.Remove(name);
 
-                    if (UI.focusEnemyName == name)
+                    if (Game.focusEnemyName == name)
                     {
-                        UI.focusEnemyName = "";
-                        UI.tb_EnemyStatus.Text = "";
+                        Game.focusEnemyName = "";
+                        Game.tb_EnemyStatus.Text = "";
                     }
                 }
         }
 
         // 玩家撿起物品
-        private static void PickItem(string itemInfos)
+        private void PickItem(string itemInfos)
         {
             Pickable p;
             if (itemInfos[0] == '-')
@@ -358,30 +355,30 @@ namespace DungeonGame
             else
             {
                 p = new Pickable(itemInfos);
-                UI.s_Slot.AddItem(p.itemNum);
+                Game.s_Slot.AddItem(p.itemNum);
                 players[playerName].item = ItemData.data[p.itemNum];
             }
             
-            UI.DestroyFromViewport(p);
+            Game.DestroyFromViewport(p);
         }
         #endregion
 
-        public static bool isOnline => status == OnlineStatus.Online;
+        public bool isOnline => status == OnlineStatus.Online;
 
-        private static string playerName { get; set; }
-        private static string ip { get; set; }
+        private string playerName { get; set; }
+        private string ip = "127.0.0.1";
         private const int port = 8800;
         private const int dataSize = 0x3ff;
-        private static ServerMessageStatus svMsgStatus = ServerMessageStatus.None;
-        private static OnlineStatus status = OnlineStatus.Offline;
-        private static Socket socket { get; set; }
-        private static Thread tcpThread { get; set; }
+        private ServerMessageStatus svMsgStatus = ServerMessageStatus.None;
+        private OnlineStatus status = OnlineStatus.Offline;
+        private Socket socket { get; set; }
+        private Thread tcpThread { get; set; }
 
         // 是否在等待伺服器回傳玩家狀態資料
-        public static bool isWaitingPlayerData = true;
+        public bool isWaitingPlayerData = true;
         // 線上玩家清單，[玩家名稱 : 角色物件]
-        private static Dictionary<string, Player> players = new Dictionary<string, Player>();
+        private Dictionary<string, Player> players = new Dictionary<string, Player>();
         // 玩家更新狀態，若同步資料後該玩家沒更新過，則會移除該玩家，[玩家名稱 : 是否更新過]
-        private static Dictionary<string, bool> playerUpdateStatus = new Dictionary<string, bool>();
+        private Dictionary<string, bool> playerUpdateStatus = new Dictionary<string, bool>();
     }
 }
