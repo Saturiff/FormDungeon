@@ -24,3 +24,4 @@ health bar
 畫面震動
 
 test sv side health set { } area
+玩家移動速度

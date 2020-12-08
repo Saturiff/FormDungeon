@@ -56,17 +56,13 @@ namespace DungeonGame
 
         public Item item;
         public new string Name { get; set; }
-        public int Atk => 20 + item.Atk;
-        public int Def => item.Def;
         public bool IsAlive => CurrentHealth <= 0;
         public string Status
         {
             get
             {
-                return "Name:\t" + Name
-                + Environment.NewLine + "Health:\t" + CurrentHealth + " / " + maxHealth
-                + Environment.NewLine + "Atk:\t" + string.Format("{0}\r\n      (base:{1}, item:{2})", Atk, 20, item.Atk)
-                + Environment.NewLine + "Def:\t" + string.Format("{0}\r\n      (base:{1}, item:{2})", Def, 0, item.Def);
+                return "Name:\t" + Name + Environment.NewLine 
+                + "Health:\t" + CurrentHealth + " / " + maxHealth;
             }
         }
     }

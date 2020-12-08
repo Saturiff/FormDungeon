@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Gameplay\AmmunitionType.cs" />
     <Compile Include="Gameplay\Projectile.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -121,10 +122,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Misc\Note.md" />
-    <None Include="Resources\item009.png" />
-    <None Include="Resources\item011.png" />
-    <None Include="Resources\item010.png" />
-    <None Include="Resources\item008.png" />
     <None Include="Resources\item007.png" />
     <None Include="Resources\item006.png" />
     <None Include="Resources\item005.png" />

@@ -139,16 +139,4 @@
   <data name="item007" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\item007.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="item008" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\item008.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="item009" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\item009.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="item010" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\item010.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="item011" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\item011.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
 </root>
