@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace DungeonGame
@@ -23,9 +24,15 @@ namespace DungeonGame
             CalcMove();
         }
 
-        public void Attack(CharacterBase target)
+        public void AttackTo(Point loc)
         {
-            // ClientManager.RequestFire();
+            if (item != null || item.Name != "000")
+            {
+                
+
+
+
+            }
         }
 
         // bind to tick
@@ -47,7 +54,6 @@ namespace DungeonGame
         public bool isMovingDown;
         public bool isMovingLeft;
         public bool isMovingRight;
-        public static readonly int attackRange = 50;
         public static readonly int pickRange = 50;
     }
 }

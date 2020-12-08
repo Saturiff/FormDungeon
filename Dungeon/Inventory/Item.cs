@@ -4,6 +4,7 @@ namespace DungeonGame
 {
     public class Item
     {
+        public WeaponType Type { get; set; }
         public string Name { get; set; }
         public int Atk { get; set; }
         public int Def { get; set; }

@@ -142,7 +142,7 @@ namespace DungeonGame
         /// <param name="inMsg">欲傳送之資料</param>
         private void SendToServer(ClientMessageType type, string inMsg)
         {
-            string msg = EnumEx<ClientMessageType>.GetOrderByEnum(type).ToString() + ">" + inMsg;
+            string msg = EnumEx.GetOrderByEnum(type).ToString() + ">" + inMsg;
 
             byte[] data = Encoding.Default.GetBytes(msg);
             socket.Send(data, 0, data.Length, SocketFlags.None);
@@ -178,7 +178,7 @@ namespace DungeonGame
                 rawData = Encoding.Default.GetString(byteDatas, 0, inLen);
                 datas = rawData.Split('>');
                 cmdOrder = Convert.ToInt32(datas[0]);
-                cmd = EnumEx<ClientMessageType>.GetEnumByOrder(cmdOrder);
+                cmd = EnumEx.GetEnumByOrder<ClientMessageType>(cmdOrder);
 
                 switch (cmd)
                 {
@@ -240,7 +240,7 @@ namespace DungeonGame
         private void ContinueVerification(string result)
         {
             int resultIdx = Convert.ToInt32(result);
-            svMsgStatus = EnumEx<ServerMessageStatus>.GetEnumByOrder(resultIdx);
+            svMsgStatus = EnumEx.GetEnumByOrder<ServerMessageStatus>(resultIdx);
         }
 
         /// <summary>
@@ -377,6 +377,7 @@ namespace DungeonGame
             }
 
             Game.DestroyFromViewport(p);
+            p.Dispose();
         }
         #endregion
 

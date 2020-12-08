@@ -6,11 +6,12 @@
     public enum WeaponType
     {
         None,
-        Sniper,
-        Shotgun,
-        HeavyMachineGun,
         Rifle,
+        Shotgun,
+        Sniper,
+        HeavyMachineGun,
         Laser,
-        Grenade
+        Grenade,
+        RPG
     }
 }

@@ -49,7 +49,7 @@ namespace DungeonGame
                     Point pos = new Point(colPos, rowPos);
                     Rectangle rect = new Rectangle(pos, tileSize);
 
-                    TileType tileType = EnumEx<TileType>.GetEnumByOrder(Convert.ToUInt16(mapData[i]));
+                    TileType tileType = EnumEx.GetEnumByOrder<TileType>(Convert.ToUInt16(mapData[i]));
                     _tilesData.Add(new Point(i % col, i / col), tileType);
                     g.FillRectangle(_palette[tileType], rect);
                 }
@@ -74,14 +74,6 @@ namespace DungeonGame
                 && (GetTileType(objRect.x1y0) == TileType.Floor)
                 && (GetTileType(objRect.x0y1) == TileType.Floor)
                 && (GetTileType(objRect.x1y1) == TileType.Floor))
-                return true;
-
-            return false;
-        }
-
-        private bool IsInteractable(Point p)
-        {
-            if (GetTileType((p.X, p.Y)) == TileType.Floor)
                 return true;
 
             return false;

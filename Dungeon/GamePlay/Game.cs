@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
@@ -68,6 +67,9 @@ namespace DungeonGame
             p_Viewport.Click += delegate (object sender, EventArgs e)
             {
                 p_Viewport.Focus();
+
+                if(client.IsOnline)
+                    Interact(sender, e);
             };
 
             p_Viewport.PreviewKeyDown += delegate (object sender, PreviewKeyDownEventArgs e)
@@ -162,9 +164,6 @@ namespace DungeonGame
 
         private static void SetDoubleBuffered(Control c)
         {
-            if (SystemInformation.TerminalServerSession)
-                return;
-
             System.Reflection.PropertyInfo aProp =
                   typeof(Control).GetProperty(
                         "DoubleBuffered",
@@ -207,20 +206,24 @@ namespace DungeonGame
         }
         #endregion
 
-        #region Character
-        public static void SpawnInViewport(CharacterBase c) => p_Viewport.BeginInvoke((Action)delegate ()
+        #region Interactable
+        public static void SpawnInViewport(Actor c) => p_Viewport.BeginInvoke((Action)delegate ()
             {
                 p_Viewport.Controls.Add(c);
-
             });
 
-        public static void DestroyFromViewport(CharacterBase c) => p_Viewport.BeginInvoke((Action)delegate ()
+        public static void DestroyFromViewport<T>(T control) => p_Viewport.BeginInvoke((Action)delegate ()
             {
-                p_Viewport.Controls.Remove(c);
+                for (int i = 0; i < p_Viewport.Controls.Count; i++)
+                    if (p_Viewport.Controls[i] is T c && c.Equals(control))
+                    {
+                        p_Viewport.Controls.Remove(p_Viewport.Controls[i]);
+                        break;
+                    }
             });
 
         /// <summary>
-        /// 鼠標與Viewport中的物件互動
+        /// 鼠標與Viewport中的物件互動，根據不同情況做不同行為
         /// </summary>
         /// <param name="sender">被點擊物件</param>
         /// <param name="e">EventArgs參數</param>
@@ -228,31 +231,22 @@ namespace DungeonGame
         {
             if (sender is IInteractable obj)
             {
-                if (obj is PlayerCharacter p && p != player)
-                    focusEnemyName = p.Name;
-                else if (obj is Pickable item)
-                    item.Interact();
-            }
-        }
-        #endregion
-
-        #region Pickable
-        public static void SpawnInViewport(Pickable p) => p_Viewport.BeginInvoke((Action)delegate ()
-        {
-            p_Viewport.Controls.Add(p);
-
-        });
-
-        public static void DestroyFromViewport(Pickable p) => p_Viewport.BeginInvoke((Action)delegate ()
-        {
-            for (int i = 0; i < p_Viewport.Controls.Count; i++)
-                if (p_Viewport.Controls[i] is Pickable _p && _p == p)
+                if (obj is PlayerCharacter p)
                 {
-                    p_Viewport.Controls.Remove(p_Viewport.Controls[i]);
-                    break;
-                }
-        });
+                    if (p != player)
+                        focusEnemyName = p.Name;
 
+                    player.AttackTo(p.Location);
+                }
+                else if (obj is Pickable item)
+                    if (item.DistanceOf(player) < PlayerCharacter.pickRange)
+                        item.Interact();
+                    else
+                        player.AttackTo(item.Location);
+            }
+            else
+                player.AttackTo(((MouseEventArgs)e).Location);
+        }
         #endregion
 
         #region Login/Logout
@@ -321,9 +315,11 @@ namespace DungeonGame
             player.Dispose();
 
             t_SyncTicker.Enabled = false;
-            Thread.Sleep(200);
+            b_ToggleLogin.Enabled = false;
+            Thread.Sleep(100);
 
             client.Logout();
+            b_ToggleLogin.Enabled = true;
 
             b_SendMessage.Enabled = false;
             s_Slot.RemoveItem();

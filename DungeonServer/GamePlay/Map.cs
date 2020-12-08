@@ -39,7 +39,7 @@ namespace DungeonServer
 
             for (int i = 0; i < col * row; i++)
             {
-                TileType tileType = EnumEx<TileType>.GetEnumByOrder(Convert.ToUInt16(mapData[i]));
+                TileType tileType = EnumEx.GetEnumByOrder<TileType>(Convert.ToUInt16(mapData[i]));
                 tilesData.Add(new Point(i % col, i / col), tileType);
             }
         }

@@ -10,7 +10,7 @@ namespace DungeonGame
     {
         public Pickable(string itemNum, (int x, int y) loc)
         {
-            this.ItemNum = itemNum;
+            ItemNum = itemNum;
 
             Location = new Point(loc.x, loc.y);
             Size = size;
@@ -32,15 +32,12 @@ namespace DungeonGame
             Location = new Point(Convert.ToInt32(infos[1]), Convert.ToInt32(infos[2]));
         }
 
-        public new void Interact()
-        {
-            if (DistanceOf(Game.player) < PlayerCharacter.pickRange)
-                Game.client.RequestPickup(this);
-        }
+        public new void Interact() 
+            => Game.client.RequestPickup(this);
 
         public void Destory()
         {
-            Game.p_Viewport.Controls.Remove(this);
+            Game.DestroyFromViewport(this);
             Dispose();
         }
 
@@ -50,17 +47,17 @@ namespace DungeonGame
                 && (a.Location == b.Location);
         }
 
-        public static bool operator !=(Pickable a, Pickable b)
-        {
-            return !((a.ItemNum == b.ItemNum)
-                && (a.Location == b.Location));
-        }
+        public static bool operator !=(Pickable a, Pickable b) 
+            => !((a.ItemNum == b.ItemNum) && (a.Location == b.Location));
 
-        public override bool Equals(object obj) => base.Equals(obj);
+        public override bool Equals(object obj) 
+            => (obj is Pickable p) && this == p;
 
-        public override int GetHashCode() => base.GetHashCode();
+        public override int GetHashCode() 
+            => base.GetHashCode();
 
-        public override string ToString() => string.Format("{0}|{1}|{2}", ItemNum, Location.X, Location.Y);
+        public override string ToString() 
+            => string.Format("{0}|{1}|{2}", ItemNum, Location.X, Location.Y);
 
         private static readonly Size size = new Size(20, 20);
 

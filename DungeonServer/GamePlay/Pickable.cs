@@ -10,7 +10,7 @@ namespace DungeonServer
     {
         public Pickable(string itemNum, (int x, int y) loc)
         {
-            this.ItemNum = itemNum;
+            ItemNum = itemNum;
             Location = loc;
         }
 
@@ -23,7 +23,7 @@ namespace DungeonServer
 
         public static string GetRandomItemNum()
         {
-            int num = Rand.GetRandNum(1, 11);
+            int num = Rand.GetRandNum(1, 7);
 
             return ((num < 10) ? "00" : "0") + num.ToString();
         }

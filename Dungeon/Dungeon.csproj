@@ -46,6 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Gameplay\Projectile.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Gameplay\CharacterBase.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -55,7 +58,7 @@
     <Compile Include="Gameplay\Pickable.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Gameplay\Player.cs">
+    <Compile Include="Gameplay\PlayerCharacter.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Gameplay\IInteractable.cs" />
@@ -83,8 +86,8 @@
       <DependentUpon>Slot.cs</DependentUpon>
     </Compile>
     <Compile Include="Gameplay\WeaponType.cs" />
-    <EmbeddedResource Include="Gameplay\Player.resx">
-      <DependentUpon>Player.cs</DependentUpon>
+    <EmbeddedResource Include="Gameplay\PlayerCharacter.resx">
+      <DependentUpon>PlayerCharacter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dungeon.resx">
       <DependentUpon>Dungeon.cs</DependentUpon>

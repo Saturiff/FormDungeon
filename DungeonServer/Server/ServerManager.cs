@@ -124,7 +124,7 @@ namespace DungeonServer
                     string rawData = Encoding.Default.GetString(byteDatas, index: 0, inLen);
                     string[] datas = rawData.Split('>');
                     int cmdOrder = Convert.ToInt32(datas[0]);
-                    ServerMessageType cmd = EnumEx<ServerMessageType>.GetEnumByOrder(cmdOrder);
+                    ServerMessageType cmd = EnumEx.GetEnumByOrder<ServerMessageType>(cmdOrder);
 
                     switch (cmd)
                     {
@@ -133,8 +133,8 @@ namespace DungeonServer
                             break;
 
                         case ServerMessageType.Verification:
-                            string res = EnumEx<ServerMessageStatus>.GetOrderByEnum(players.ContainsKey(datas[1]) ? ServerMessageStatus.Fail
-                                                                                                                  : ServerMessageStatus.Success).ToString();
+                            string res = EnumEx.GetOrderByEnum(players.ContainsKey(datas[1]) ? ServerMessageStatus.Fail
+                                                                                             : ServerMessageStatus.Success).ToString();
                             SendToSocket(ServerMessageType.Verification, sk, res);
                             break;
 
@@ -282,7 +282,7 @@ namespace DungeonServer
         /// <param name="inMsg">已封裝的訊息</param>
         private void SendToPlayer(ServerMessageType type, string playerName, string inMsg)
         {
-            string code = EnumEx<ServerMessageType>.GetOrderByEnum(type).ToString();
+            string code = EnumEx.GetOrderByEnum(type).ToString();
             byte[] byteDatas = Encoding.Default.GetBytes(code + ">" + inMsg);
             SendToClient((Socket)socketHT[playerName], byteDatas);
         }
@@ -295,7 +295,7 @@ namespace DungeonServer
         /// <param name="inMsg">已封裝的訊息</param>
         private void SendToSocket(ServerMessageType type, Socket sk, string inMsg)
         {
-            string code = EnumEx<ServerMessageType>.GetOrderByEnum(type).ToString();
+            string code = EnumEx.GetOrderByEnum(type).ToString();
             byte[] byteDatas = Encoding.Default.GetBytes(code + ">" + inMsg);
             SendToClient(sk, byteDatas);
         }
@@ -307,7 +307,7 @@ namespace DungeonServer
         /// <param name="inMsg">已封裝的訊息</param>
         private void SendToAll(ServerMessageType type, string inMsg = "")
         {
-            string code = EnumEx<ServerMessageType>.GetOrderByEnum(type).ToString();
+            string code = EnumEx.GetOrderByEnum(type).ToString();
             byte[] byteDatas = Encoding.Default.GetBytes(code + ">" + inMsg);
             foreach (Socket sk in socketHT.Values)
                 SendToClient(sk, byteDatas);
