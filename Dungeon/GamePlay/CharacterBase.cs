@@ -10,11 +10,6 @@ namespace DungeonGame
     /// </summary>
     public class CharacterBase : Actor
     {
-        protected CharacterBase()
-        {
-            Init();
-        }
-
         protected CharacterBase(string dataPack)
         {
             UpdateByDataPack(dataPack);

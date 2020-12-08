@@ -61,7 +61,7 @@
     <Compile Include="Server\ServerMessageType.cs" />
     <Compile Include="Server\ServerManager.cs" />
     <Compile Include="Server\ServerStatus.cs" />
-    <Compile Include="UI\UI.cs" />
+    <Compile Include="Server\UI.cs" />
     <EmbeddedResource Include="DungeonServer.resx">
       <DependentUpon>DungeonServer.cs</DependentUpon>
     </EmbeddedResource>

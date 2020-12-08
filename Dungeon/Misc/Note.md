@@ -1,6 +1,19 @@
 ﻿### Todo:
 鼠標點擊Viewport對該方向開火，由不同種類的武器決定開火方式
-為了減少服務器負擔，除了純單發射擊與只能使用一次的武器之外，只傳遞開火與停火訊號至服務器
+
+Client to server:
+fire ->
+code|player_name|is_fire?|direction
+hit ->
+code|to_player|damage
+
+Client:
+fire:
+draw by weapon type
+projection = rect(a, b)
+hit
+
+傳遞開火與停火訊號至服務器
 玩家名稱 + 開火
 玩家名稱 + 停火
 製作武器Dist<>

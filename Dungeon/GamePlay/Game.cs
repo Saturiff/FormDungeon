@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Threading;
 using System.Windows.Forms;
+using Timer = System.Windows.Forms.Timer;
 
 namespace DungeonGame
 {
@@ -17,8 +20,6 @@ namespace DungeonGame
         {
             client = new ClientManager();
 
-            kbHook = new KeyboardHook();
-
             tb_ItemInfo.Font = new Font(tb_ItemInfo.Font.Name, 10);
 
             s_Slot.RemoveItem();
@@ -31,18 +32,6 @@ namespace DungeonGame
         private static void BindEvents()
         {
             // form
-            f_Dungeon.Activated += delegate (object sender, EventArgs e)
-            {
-                if (client.IsOnline)
-                    kbHook.Hook();
-            };
-
-            f_Dungeon.Deactivate += delegate (object sender, EventArgs e)
-            {
-                if (client.IsOnline)
-                    kbHook.Unhook();
-            };
-
             f_Dungeon.FormClosing += delegate (object sender, FormClosingEventArgs e)
             {
                 if (client.IsOnline)
@@ -81,6 +70,31 @@ namespace DungeonGame
                 p_Viewport.Focus();
             };
 
+            p_Viewport.PreviewKeyDown += delegate (object sender, PreviewKeyDownEventArgs e)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.Up:
+                    case Keys.Down:
+                    case Keys.Left:
+                    case Keys.Right:
+                        e.IsInputKey = true;
+                        break;
+                }
+            };
+
+            p_Viewport.KeyDown += delegate (object sender, KeyEventArgs e)
+            {
+                if (client.IsOnline && IsHotkey(e.KeyCode))
+                    UpdateKeyboardStatus(e, isButtonDown: true);
+            };
+
+            p_Viewport.KeyUp += delegate (object sender, KeyEventArgs e)
+            {
+                if (client.IsOnline && IsHotkey(e.KeyCode))
+                    UpdateKeyboardStatus(e, isButtonDown: false);
+            };
+
             p_Viewport.GotFocus += delegate (object sender, EventArgs e)
             {
                 p_Viewport.Refresh();
@@ -89,6 +103,9 @@ namespace DungeonGame
             p_Viewport.LostFocus += delegate (object sender, EventArgs e)
             {
                 p_Viewport.Refresh();
+
+                if (client.IsOnline)
+                    ClearKeyboardStatus();
             };
 
             p_Viewport.Paint += delegate (object sender, PaintEventArgs e)
@@ -114,13 +131,37 @@ namespace DungeonGame
             t_SyncTicker.Tick += delegate (object sender, EventArgs e)
             {
                 client.UpdateUI();
+                player.CalcMove();
             };
         }
 
+        private static bool IsHotkey(Keys k)
+            => (k == Keys.W)
+            || (k == Keys.S)
+            || (k == Keys.A)
+            || (k == Keys.D)
+            || (k == Keys.Up)
+            || (k == Keys.Down)
+            || (k == Keys.Left)
+            || (k == Keys.Right);
+
+        private static void UpdateKeyboardStatus(KeyEventArgs e, bool isButtonDown)
+        {
+            if ((e.KeyCode == Keys.W) || (e.KeyCode == Keys.Up))
+                player.isMovingUp = isButtonDown;
+            else if ((e.KeyCode == Keys.S) || (e.KeyCode == Keys.Down))
+                player.isMovingDown = isButtonDown;
+            else if ((e.KeyCode == Keys.A) || (e.KeyCode == Keys.Left))
+                player.isMovingLeft = isButtonDown;
+            else if ((e.KeyCode == Keys.D) || (e.KeyCode == Keys.Right))
+                player.isMovingRight = isButtonDown;
+        }
+
+        private static void ClearKeyboardStatus() 
+            => player.isMovingUp = player.isMovingDown = player.isMovingLeft = player.isMovingRight = false;
+
         private static void SetDoubleBuffered(Control c)
         {
-            // Taxes: Remote Desktop Connection and painting
-            // http://blogs.msdn.com/oldnewthing/archive/2006/01/03/508694.aspx
             if (SystemInformation.TerminalServerSession)
                 return;
 
@@ -187,7 +228,7 @@ namespace DungeonGame
         {
             if (sender is IInteractable obj)
             {
-                if (obj is Player p && p != player)
+                if (obj is PlayerCharacter p && p != player)
                     focusEnemyName = p.Name;
                 else if (obj is Pickable item)
                     item.Interact();
@@ -234,7 +275,7 @@ namespace DungeonGame
 
                 while (client.isWaitingPlayerData) ;
                 player = client.GetPlayerCharacter();
-
+                player.InitTick();
                 AddLog("Welcome, " + player.Name + "!");
 
                 map = new MapManager();
@@ -243,9 +284,6 @@ namespace DungeonGame
 
                 t_SyncTicker.Enabled = true;
                 b_SendMessage.Enabled = true;
-
-                kbHook.Hook();
-
                 b_ToggleLogin.Text = "Logout";
             }
             else
@@ -283,12 +321,11 @@ namespace DungeonGame
             player.Dispose();
 
             t_SyncTicker.Enabled = false;
-            b_SendMessage.Enabled = false;
-
-            kbHook.Unhook();
+            Thread.Sleep(200);
 
             client.Logout();
 
+            b_SendMessage.Enabled = false;
             s_Slot.RemoveItem();
             tb_CharacterStatus.Text = "";
             tb_EnemyStatus.Text = "";
@@ -301,12 +338,10 @@ namespace DungeonGame
         }
         #endregion
 
-        private static KeyboardHook kbHook;
-
         public static string focusEnemyName;
         public static bool IsInViewport => p_Viewport.Focused;
         public static ClientManager client;
-        public static Player player;
+        public static PlayerCharacter player;
         public static MapManager map;
         public static Form f_Dungeon;
         public static Panel p_Viewport;

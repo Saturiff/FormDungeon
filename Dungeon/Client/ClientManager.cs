@@ -95,14 +95,14 @@ namespace DungeonGame
         /// 查詢玩家
         /// </summary>
         /// <returns>Character物件</returns>
-        public Player GetPlayerCharacter() => players[playerName];
+        public PlayerCharacter GetPlayerCharacter() => players[playerName];
 
         /// <summary>
         /// 查詢指定名稱玩家
         /// </summary>
         /// <param name="name">玩家名稱</param>
         /// <returns>Character物件</returns>
-        public Player GetPlayerCharacter(string name) => players[name];
+        public PlayerCharacter GetPlayerCharacter(string name) => players[name];
 
         /// <summary>
         /// 向伺服器請求撿起物品
@@ -249,7 +249,7 @@ namespace DungeonGame
         /// <param name="rawData">伺服器傳來的原始資料</param>
         private void LoadPlayerCharacterStatus(string dataPack)
         {
-            Player c = new Player(dataPack);
+            PlayerCharacter c = new PlayerCharacter(dataPack);
             players.Add(playerName, c);
             isWaitingPlayerData = false;
         }
@@ -328,7 +328,7 @@ namespace DungeonGame
                 }
                 else
                 {
-                    Player c = new Player(dataPack);
+                    PlayerCharacter c = new PlayerCharacter(dataPack);
 
                     players.Add(c.Name, c);
 
@@ -391,7 +391,7 @@ namespace DungeonGame
 
         public bool IsOnline => status == OnlineStatus.Online;
         // 線上玩家清單，[玩家名稱 : 角色物件]
-        private Dictionary<string, Player> players = new Dictionary<string, Player>();
+        private Dictionary<string, PlayerCharacter> players = new Dictionary<string, PlayerCharacter>();
         // 玩家更新狀態，若同步資料後該玩家沒更新過，則會移除該玩家，[玩家名稱 : 是否更新過]
         private Dictionary<string, bool> playerUpdateStatus = new Dictionary<string, bool>();
         // 是否在等待伺服器回傳玩家狀態資料

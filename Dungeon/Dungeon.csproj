@@ -61,9 +61,6 @@
     <Compile Include="Gameplay\IInteractable.cs" />
     <Compile Include="Map\MapManager.cs" />
     <Compile Include="Map\TileType.cs" />
-    <Compile Include="Hook\KeyboardInfo.cs" />
-    <Compile Include="Hook\KeyStateInfo.cs" />
-    <Compile Include="Hook\KeyboardHook.cs" />
     <Compile Include="Client\ServerMessageStatus.cs" />
     <Compile Include="Client\ClientMessageType.cs" />
     <Compile Include="Gameplay\Game.cs" />

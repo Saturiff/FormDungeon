@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DungeonServer", "DungeonSer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DungeonUtility", "DungeonUtility\DungeonUtility.csproj", "{B7B103A4-5AAC-4062-837B-47ADE482CF2B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Git", "Git", "{1B2C7492-C4CC-4E3E-907F-21F35DBAD67C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Git", "Git", "{084870CD-1684-4C3A-ADF4-A551791FFEAF}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection

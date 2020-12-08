@@ -34,7 +34,7 @@ namespace DungeonGame
 
         public new void Interact()
         {
-            if (DistanceOf(Game.player) < Player.pickRange)
+            if (DistanceOf(Game.player) < PlayerCharacter.pickRange)
                 Game.client.RequestPickup(this);
         }
 
