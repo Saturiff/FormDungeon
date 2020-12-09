@@ -25,3 +25,6 @@ health bar
 
 test sv side health set { } area
 玩家移動速度
+
+玩家只需計算自己是否被碰到?
+伺服器只轉接武器開火/停火信號

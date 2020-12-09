@@ -46,10 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Gameplay\AmmunitionType.cs" />
-    <Compile Include="Gameplay\Projectile.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Weapons\AmmunitionType.cs" />
     <Compile Include="Gameplay\CharacterBase.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -86,7 +83,31 @@
     <Compile Include="Inventory\Slot.Designer.cs">
       <DependentUpon>Slot.cs</DependentUpon>
     </Compile>
-    <Compile Include="Gameplay\WeaponType.cs" />
+    <Compile Include="Weapons\Grenade.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Weapons\HmgBullet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Weapons\LaserBullet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Weapons\Projectile.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Weapons\RifleBullet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Weapons\Rpg.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Weapons\ShotgunBullet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Weapons\SniperBullet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Weapons\WeaponType.cs" />
     <EmbeddedResource Include="Gameplay\PlayerCharacter.resx">
       <DependentUpon>PlayerCharacter.cs</DependentUpon>
     </EmbeddedResource>

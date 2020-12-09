@@ -162,7 +162,7 @@ namespace DungeonGame
         private static void ClearKeyboardStatus() 
             => player.isMovingUp = player.isMovingDown = player.isMovingLeft = player.isMovingRight = false;
 
-        private static void SetDoubleBuffered(Control c)
+        public static void SetDoubleBuffered(Control c)
         {
             System.Reflection.PropertyInfo aProp =
                   typeof(Control).GetProperty(

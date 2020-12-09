@@ -19,7 +19,7 @@ namespace DungeonGame
             movementTick.Start();
         }
 
-        private void MovementTick_Tick(object sender, System.EventArgs e)
+        private void MovementTick_Tick(object sender, EventArgs e)
         {
             CalcMove();
         }
@@ -28,10 +28,12 @@ namespace DungeonGame
         {
             if (item != null || item.Name != "000")
             {
-                
-
-
-
+                Projectile p = new Projectile();
+                p = new RifleBullet();
+                p.begin = (Location.X, Location.Y);
+                p.dest = (loc.X, loc.Y);
+                Game.SpawnInViewport(p);
+                p.Start();
             }
         }
 
