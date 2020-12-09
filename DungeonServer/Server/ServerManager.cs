@@ -168,6 +168,15 @@ namespace DungeonServer
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
+
+                    foreach(string name in socketHT.Keys)
+                    {
+                        if(socketHT[name] == sk)
+                        {
+                            socketHT.Remove(name);
+                            PlayerOffline(name, th);
+                        }
+                    }
                 }
             }
         }
@@ -318,7 +327,8 @@ namespace DungeonServer
         /// </summary>
         /// <param name="sk">目標插槽</param>
         /// <param name="byteDatas">轉換過的位元組資料</param>
-        private void SendToClient(Socket sk, byte[] byteDatas) => sk.Send(byteDatas, 0, byteDatas.Length, SocketFlags.None);
+        private void SendToClient(Socket sk, byte[] byteDatas)
+            => sk.Send(byteDatas, 0, byteDatas.Length, SocketFlags.None);
         #endregion
 
         private ServerStatus status = ServerStatus.Offline;

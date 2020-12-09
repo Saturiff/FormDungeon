@@ -13,33 +13,25 @@ namespace DungeonGame
             BackColor = Color.Red;
 
             renderTimer = new Timer();
-            renderTimer.Interval = 10;
+            renderTimer.Interval = 50;
             renderTimer.Tick += RenderTimer_Tick;
         }
 
         private void RenderTimer_Tick(object sender, EventArgs e)
         {
-            // if (interTime >= 1)
-            // {
-            //     // interTime -= 1;
-            //     Game.DestroyFromViewport(this);
-            //     Dispose();
-            // }
+            if (time >= lifetime / renderTimer.Interval)
+            {
+                Game.DestroyFromViewport(this);
+                Dispose();
+            }
 
             (double x, double y) = (begin.x + speed * time++ * Math.Cos(angle), 
                                     begin.y + speed * time++ * Math.Sin(angle));
 
             Location = new Point((int)x, (int)y);
         }
-        int time = 1;
-        double angle = 0;
-        private void LifetimeTimer_Tick(object sender, System.EventArgs e)
-        {
-            // Game.DestroyFromViewport(this);
-            // Dispose();
-        }
-
-        public double CalcAngle((int x, int y) a, (int x, int y) b) // ?
+        
+        public double CalcAngle((int x, int y) a, (int x, int y) b)
         {
             double h = a.y - b.y;
             double w = a.x - b.x;
@@ -72,23 +64,10 @@ namespace DungeonGame
         {
             angle = Math.PI / 180 * CalcAngle(dest, begin);
             renderTimer.Start();
-            
-            // while(true) // not arrived || not overlapped
-            // for (int i = 0; i < 100; i++)
-            // {
-            // 
-            //     await Task.Delay(11 - speed);
-            // }
         }
 
-        // lifetimeTimer.Interval = lifetime;
-        // lifetimeTimer.Tick += LifetimeTimer_Tick;
-        // lifetimeTimer.Start();
-        // for (int i = 0; i< 100; i++)
-        // {
-        //     Top++;
-        //     await Task.Delay(10);
-        // }
+        private int time = 1;
+        private double angle = 0;
 
         public AmmunitionType type;
         public int damage;

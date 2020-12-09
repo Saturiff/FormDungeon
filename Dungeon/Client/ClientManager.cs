@@ -173,6 +173,7 @@ namespace DungeonGame
                 {
                     socket.Close();
                     tcpThread.Abort();
+                    break;
                 }
 
                 rawData = Encoding.Default.GetString(byteDatas, 0, inLen);

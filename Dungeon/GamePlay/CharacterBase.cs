@@ -52,7 +52,7 @@ namespace DungeonGame
         private static readonly Size characterSize = new Size(20, 20);
         private const uint maxHealth = 200;
         private uint CurrentHealth { get; set; }
-        private Rect Rect => new Rect(Location.X, Location.Y, Size.Width, Size.Height);
+        private new Rect Rect => new Rect(Location.X, Location.Y, Size.Width, Size.Height);
 
         public Item item;
         public new string Name { get; set; }

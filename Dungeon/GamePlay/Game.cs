@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
@@ -68,7 +69,7 @@ namespace DungeonGame
             {
                 p_Viewport.Focus();
 
-                if(client.IsOnline)
+                if (client.IsOnline)
                     Interact(sender, e);
             };
 
@@ -159,7 +160,7 @@ namespace DungeonGame
                 player.isMovingRight = isButtonDown;
         }
 
-        private static void ClearKeyboardStatus() 
+        private static void ClearKeyboardStatus()
             => player.isMovingUp = player.isMovingDown = player.isMovingLeft = player.isMovingRight = false;
 
         public static void SetDoubleBuffered(Control c)
@@ -207,9 +208,59 @@ namespace DungeonGame
         #endregion
 
         #region Interactable
-        public static void SpawnInViewport(Actor c) => p_Viewport.BeginInvoke((Action)delegate ()
+        public static void SpawnInViewport(Actor actor) => p_Viewport.BeginInvoke((Action)delegate ()
             {
-                p_Viewport.Controls.Add(c);
+                p_Viewport.Controls.Add(actor);
+
+                // int idx = p_Viewport.Controls.GetChildIndex(actor);
+                //spawnedControls.Add(idx, actor);
+
+                /*for (int i = 0; i < p_Viewport.Controls.Count; i++)
+                {
+                    if (p_Viewport.Controls[i] is PlayerCharacter pc)
+                        p_Viewport.Controls.SetChildIndex(pc, 99);
+                }
+                */
+                /*
+                for (int i = 0; i < p_Viewport.Controls.Count; i++)
+                {
+                    if (p_Viewport.Controls[i] is Projectile pr)
+                        p_Viewport.Controls.SetChildIndex(pr, 0);
+                }*/
+                // 0 = top
+                // if (actor is Pickable pi)
+                // {
+                //     pi.SendToBack();
+                // }
+                // spawnedControls.Add(actor);
+                // 
+                // if (actor is PlayerCharacter pc)
+                // {
+                //     spawnedControls.Add(pc);
+                // }
+                // else if (actor is Pickable pi)
+                // {
+                //     spawnedControls.Add(pi);
+                // }
+                // else if (actor is Projectile pr)
+                // {
+                //     spawnedControls.Add(pr);
+                // }
+
+                /*
+                for (int i = 0; i < p_Viewport.Controls.Count; i++)
+                {
+                    if (p_Viewport.Controls[i] is Pickable p)
+                    {
+                        // int zIndex = p_Viewport.Controls.GetChildIndex(pc);
+                        p.SendToBack();
+                        // pc.BringToFront();
+                        // p_Viewport.Controls.SetChildIndex(pc, zIndex);
+                    }
+                }*/
+
+                // int idx = p_Viewport.Controls.GetChildIndex(actor);
+                // Console.WriteLine(idx);
             });
 
         public static void DestroyFromViewport<T>(T control) => p_Viewport.BeginInvoke((Action)delegate ()
@@ -217,6 +268,7 @@ namespace DungeonGame
                 for (int i = 0; i < p_Viewport.Controls.Count; i++)
                     if (p_Viewport.Controls[i] is T c && c.Equals(control))
                     {
+                        spawnedControls.RemoveAt(i);
                         p_Viewport.Controls.Remove(p_Viewport.Controls[i]);
                         break;
                     }
@@ -333,6 +385,8 @@ namespace DungeonGame
             b_ToggleLogin.Text = "Login";
         }
         #endregion
+
+        private static List<Control> spawnedControls = new List<Control>();
 
         public static string focusEnemyName;
         public static bool IsInViewport => p_Viewport.Focused;
