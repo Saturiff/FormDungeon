@@ -107,6 +107,7 @@
     <Compile Include="Weapons\SniperBullet.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Weapons\Weapon.cs" />
     <Compile Include="Weapons\WeaponType.cs" />
     <EmbeddedResource Include="Gameplay\PlayerCharacter.resx">
       <DependentUpon>PlayerCharacter.cs</DependentUpon>

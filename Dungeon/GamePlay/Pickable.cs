@@ -18,7 +18,7 @@ namespace DungeonGame
             Bitmap bmp = new Bitmap(Size.Width, Size.Height);
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                g.DrawImage(ItemData.data[itemNum].Icon,
+                g.DrawImage(ItemData.weaponData[itemNum].Icon,
                     new Rectangle(0, 0, bmp.Width, bmp.Height));
             }
 

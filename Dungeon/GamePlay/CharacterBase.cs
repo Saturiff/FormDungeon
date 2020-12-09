@@ -30,7 +30,7 @@ namespace DungeonGame
             CurrentHealth = Convert.ToUInt32(datas[1]);
             Location = new Point(Convert.ToInt32(datas[2]), Convert.ToInt32(datas[3]));
             BackColor = Color.FromArgb(Convert.ToUInt16(datas[4]), Convert.ToUInt16(datas[5]), Convert.ToUInt16(datas[6]));
-            item = ItemData.data[datas[7]];
+            itemNum = datas[7];
         }
 
         protected void MoveTo(Point newLoc)
@@ -54,7 +54,7 @@ namespace DungeonGame
         private uint CurrentHealth { get; set; }
         private new Rect Rect => new Rect(Location.X, Location.Y, Size.Width, Size.Height);
 
-        public Item item;
+        public string itemNum;
         public new string Name { get; set; }
         public bool IsAlive => CurrentHealth <= 0;
         public string Status

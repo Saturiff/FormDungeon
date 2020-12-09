@@ -12,13 +12,13 @@ namespace DungeonGame
 
         public void AddItem(string itemNum)
         {
-            Item = ItemData.data[itemNum];
+            Item = ItemData.weaponData[itemNum];
             Game.tb_ItemInfo.Text = Item.Info;
 
             Bitmap bmp = new Bitmap(ClientSize.Width, ClientSize.Height);
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                g.DrawImage(ItemData.data[itemNum].Icon,
+                g.DrawImage(ItemData.weaponData[itemNum].Icon,
                     new Rectangle(0, 0, bmp.Width, bmp.Height));
             }
 

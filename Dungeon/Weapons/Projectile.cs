@@ -25,58 +25,38 @@ namespace DungeonGame
                 Dispose();
             }
 
-            (double x, double y) = (begin.x + speed * time++ * Math.Cos(angle), 
-                                    begin.y + speed * time++ * Math.Sin(angle));
+            (double x, double y) = (begin.x + speed * time++ * Math.Cos(radians),
+                                    begin.y + speed * time++ * Math.Sin(radians));
 
             Location = new Point((int)x, (int)y);
         }
-        
-        public double CalcAngle((int x, int y) a, (int x, int y) b)
+
+        public void StartNormal((int x, int y) begin, (int x, int y) dest, double radians)
         {
-            double h = a.y - b.y;
-            double w = a.x - b.x;
-            if (w == 0)
-                return a.y >= b.y ? 90 : 270;
-            else
-            {
-                double atan = Math.Atan(h / w);
-                double _angle = atan * 180.0 / Math.PI;
+            Init(begin, dest, radians);
 
-                if (atan > 0)
-                {
-                    if (a.x > b.x)
-                        return _angle;
-                    else
-                        return _angle + 180;
-                }
-                else
-                {
-                    if (a.x > b.x)
-                        return _angle + 360;
-                    else
-
-                        return _angle + 180;
-                }
-            }
-        }
-
-        public void Start()
-        {
-            angle = Math.PI / 180 * CalcAngle(dest, begin);
             renderTimer.Start();
         }
 
+        private void Init((int x, int y) begin, (int x, int y) dest, double radians)
+        {
+            this.begin = begin;
+            this.dest = dest;
+            this.radians = radians;
+
+            Game.SpawnInViewport(this);
+
+        }
+
+        private (int x, int y) begin;
+        private (int x, int y) dest;
         private int time = 1;
-        private double angle = 0;
+        private double radians = 0;
+        private Timer renderTimer = new Timer();
 
         public AmmunitionType type;
         public int damage;
         public int lifetime; // 1/1000 s
         public int speed;
-        public (int x, int y) dest;
-        public (int x, int y) begin;
-        public float interTime = 0;
-        public Timer lifetimeTimer = new Timer();
-        public Timer renderTimer = new Timer();
     }
 }

@@ -14,7 +14,7 @@ namespace DungeonGame
         public void InitTick()
         {
             movementTick = new Timer();
-            movementTick.Interval = 1;
+            movementTick.Interval = 10;
             movementTick.Tick += MovementTick_Tick;
             movementTick.Start();
         }
@@ -26,14 +26,10 @@ namespace DungeonGame
 
         public void AttackTo(Point loc)
         {
-            if (item != null || item.Name != "000")
+            if (itemNum != null && itemNum != "000")
             {
-                Projectile p = new Projectile();
-                p = new RifleBullet();
-                p.begin = (Location.X, Location.Y);
-                p.dest = (loc.X, loc.Y);
-                Game.SpawnInViewport(p);
-                p.Start();
+                Weapon weapon = new Weapon();
+                weapon.Fire(itemNum, (Location.X, Location.Y), (loc.X, loc.Y));
             }
         }
 
@@ -42,7 +38,7 @@ namespace DungeonGame
         {
             if (isMovingUp || isMovingDown || isMovingLeft || isMovingRight)
             {
-                int mult = 1;
+                int mult = 2;
                 int up = ((isMovingUp ? -1 : 0) + (isMovingDown ? 1 : 0)) * mult;
                 int right = ((isMovingRight ? 1 : 0) + (isMovingLeft ? -1 : 0)) * mult;
 

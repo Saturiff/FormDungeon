@@ -1,4 +1,4 @@
-﻿namespace DungeonGame.Weapons
+﻿namespace DungeonGame
 {
     public class SniperBullet : Projectile
     {

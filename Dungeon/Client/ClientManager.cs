@@ -374,7 +374,7 @@ namespace DungeonGame
             {
                 p = new Pickable(itemInfos);
                 Game.s_Slot.AddItem(p.ItemNum);
-                players[playerName].item = ItemData.data[p.ItemNum];
+                players[playerName].itemNum = p.ItemNum;
             }
 
             Game.DestroyFromViewport(p);
