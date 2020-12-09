@@ -31,6 +31,21 @@ namespace DungeonGame
             };
         }
 
+        public static Projectile GetBullet(AmmunitionType ammunitionType)
+        {
+            foreach (var weapon in weaponData.Values)
+                if (weapon.Bullet.type == ammunitionType)
+                    return new Projectile
+                    {
+                        type = ammunitionType,
+                        damage = weapon.Bullet.damage,
+                        lifetime = weapon.Bullet.lifetime,
+                        speed = weapon.Bullet.speed
+                    };
+
+            return null;
+        }
+
         private static Bitmap EmptyImage
         {
             get

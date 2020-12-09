@@ -19,10 +19,17 @@ namespace DungeonGame
 
         private void RenderTimer_Tick(object sender, EventArgs e)
         {
-            if (time >= lifetime / renderTimer.Interval)
+            if ((time >= lifetime / renderTimer.Interval)
+                && (!Game.map.IsWalkable(new DungeonUtility.Rect(Location.X, Location.Y, Size.Width, Size.Width))))
+                Destory();
+
+            foreach (PlayerCharacter p in Game.client.players.Values)
             {
-                Game.DestroyFromViewport(this);
-                Dispose();
+                if (p != Game.player && IsOverlapped(p.Rect))
+                {
+                    Game.client.Hit(p.Name, damage);
+                    Destory();
+                }
             }
 
             (double x, double y) = (begin.x + speed * time++ * Math.Cos(radians),
@@ -31,23 +38,40 @@ namespace DungeonGame
             Location = new Point((int)x, (int)y);
         }
 
-        public void StartNormal((int x, int y) begin, (int x, int y) dest, double radians)
+        public void StartNormal(string name, (int x, int y) begin, (int x, int y) dest, double radians)
         {
-            Init(begin, dest, radians);
+            Init(name, begin, dest, radians);
 
             renderTimer.Start();
         }
 
-        private void Init((int x, int y) begin, (int x, int y) dest, double radians)
+        public void StartDot((int x, int y) begin, (int x, int y) dest, double radians) { }
+
+        public void StartAuto((int x, int y) begin, (int x, int y) dest, double radians) { }
+
+        public void StopAuto((int x, int y) begin, (int x, int y) dest, double radians) { }
+
+        public void StartBlast((int x, int y) begin, (int x, int y) dest, double radians) { }
+
+        private void Init(string name, (int x, int y) begin, (int x, int y) dest, double radians)
         {
+            this.name = name;
             this.begin = begin;
             this.dest = dest;
             this.radians = radians;
 
-            Game.SpawnInViewport(this);
+            Location = new Point(begin.x, begin.y);
 
+            Game.SpawnInViewport(this);
         }
 
+        private void Destory()
+        {
+            Game.DestroyFromViewport(this);
+            Dispose();
+        }
+
+        private string name;
         private (int x, int y) begin;
         private (int x, int y) dest;
         private int time = 1;

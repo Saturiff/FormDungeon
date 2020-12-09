@@ -7,7 +7,7 @@ namespace DungeonGame
     /// </summary>
     public class Weapon
     {
-        public void Fire(string weaponNum, (int x, int y) startPoint, (int x, int y) endPoint)
+        public void Fire(string fromPlayer, string weaponNum, (int x, int y) startPoint, (int x, int y) endPoint)
         {
             double angle = CalcAngle(endPoint, startPoint);
             
@@ -16,19 +16,23 @@ namespace DungeonGame
             switch (ItemData.weaponData[weaponNum].Bullet.type)
             {
                 case AmmunitionType.Mult:
-                    var bullet1 = ItemData.GetBullet(weaponNum);
-                    var bullet2 = ItemData.GetBullet(weaponNum);
-                    bullet1.StartNormal(startPoint, endPoint, GetRadians(angle + 30.0));
-                    bullet2.StartNormal(startPoint, endPoint, GetRadians(angle - 30.0));
+                    var bullet1 = ItemData.GetBullet(AmmunitionType.Mult);
+                    var bullet2 = ItemData.GetBullet(AmmunitionType.Mult);
+                    bullet1.StartNormal(fromPlayer, startPoint, startPoint, GetRadians(angle + 30.0));
+                    bullet2.StartNormal(fromPlayer, startPoint, startPoint, GetRadians(angle - 30.0));
                     goto case AmmunitionType.Single;
+
                 case AmmunitionType.Single:
-                    bullet0.StartNormal(startPoint, endPoint, GetRadians(angle));
+                    bullet0.StartNormal(fromPlayer, startPoint, endPoint, GetRadians(angle));
                     break;
 
                 case AmmunitionType.Auto:
                 case AmmunitionType.Dot:
+                    bullet0.StartNormal(fromPlayer, startPoint, endPoint, GetRadians(angle));
+                    break;
+
                 case AmmunitionType.Blast:
-                    bullet0.StartNormal(startPoint, endPoint, GetRadians(angle));
+                    bullet0.StartNormal(fromPlayer, startPoint, endPoint, GetRadians(angle));
                     break;
 
                 default:

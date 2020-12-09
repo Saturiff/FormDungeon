@@ -12,6 +12,7 @@
         Action,
         SyncPlayerData,
         SpawnItem,
-        PickItem
+        PickItem,
+        Hit
     }
 }

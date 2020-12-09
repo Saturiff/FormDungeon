@@ -1,14 +1,12 @@
 ﻿### Todo:
 Client to server:
-fire ->
+fire
 code|player_name|is_fire?|direction
-hit ->
-code|to_player|damage
+!> hit
+!> code|to_player|damage
 
 Client:
 fire:
-draw by weapon type
-projection = rect(a, b)
 hit
 
 傳遞開火與停火訊號至服務器
@@ -24,3 +22,9 @@ test sv side health set { } area
 
 服務器防止生成物品重疊
 客戶端將所有可撿起物件移至最底層
+
+client fire pending
+server fire 
+
+client hit ok
+server hit pending

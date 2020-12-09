@@ -29,7 +29,7 @@ namespace DungeonGame
             if (itemNum != null && itemNum != "000")
             {
                 Weapon weapon = new Weapon();
-                weapon.Fire(itemNum, (Location.X, Location.Y), (loc.X, loc.Y));
+                weapon.Fire(Name, itemNum, (Location.X, Location.Y), (loc.X, loc.Y));
             }
         }
 

@@ -113,6 +113,11 @@ namespace DungeonGame
             SendToServer(ClientMessageType.PickItem, playerName + "," + p.ToString());
         }
 
+        public void Hit(string name, int damage)
+        {
+            SendToServer(ClientMessageType.Hit, name + "|" + damage.ToString());
+        }
+
         /// <summary>
         /// 傳送登出請求與玩家名稱
         /// </summary>
@@ -393,7 +398,7 @@ namespace DungeonGame
 
         public bool IsOnline => status == OnlineStatus.Online;
         // 線上玩家清單，[玩家名稱 : 角色物件]
-        private Dictionary<string, PlayerCharacter> players = new Dictionary<string, PlayerCharacter>();
+        public Dictionary<string, PlayerCharacter> players = new Dictionary<string, PlayerCharacter>();
         // 玩家更新狀態，若同步資料後該玩家沒更新過，則會移除該玩家，[玩家名稱 : 是否更新過]
         private Dictionary<string, bool> playerUpdateStatus = new Dictionary<string, bool>();
         // 是否在等待伺服器回傳玩家狀態資料
