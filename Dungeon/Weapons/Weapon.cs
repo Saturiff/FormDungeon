@@ -16,8 +16,8 @@ namespace DungeonGame
             switch (ItemData.weaponData[weaponNum].Bullet.type)
             {
                 case AmmunitionType.Mult:
-                    var bullet1 = ItemData.GetBullet(AmmunitionType.Mult);
-                    var bullet2 = ItemData.GetBullet(AmmunitionType.Mult);
+                    var bullet1 = ItemData.GetBullet(weaponNum);
+                    var bullet2 = ItemData.GetBullet(weaponNum);
                     bullet1.StartNormal(fromPlayer, startPoint, startPoint, GetRadians(angle + 30.0));
                     bullet2.StartNormal(fromPlayer, startPoint, startPoint, GetRadians(angle - 30.0));
                     goto case AmmunitionType.Single;

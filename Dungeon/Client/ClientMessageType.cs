@@ -13,6 +13,10 @@
         SyncPlayerData,
         SpawnItem,
         PickItem,
-        Hit
+        FireSingle,
+        FireStart,
+        FireStop,
+        Hit,
+        Respawn
     }
 }

@@ -47,15 +47,13 @@ namespace DungeonServer
         {
             if (spawnedPickables.Count < 5 && players.Count != 0)
             {
-                (int x, int y) spawnLoc = Map.GetRandomPointInPlayGround();
+                (int x, int y) spawnLoc = map.GetRandomFitPointInPlayGround(Pickable.size.w, Pickable.size.h);
+
                 Pickable p = new Pickable(Pickable.GetRandomItemNum(), spawnLoc);
 
-                if (map.IsWalkable(p.Rect))
-                {
-                    spawnedPickables.Add(p);
+                spawnedPickables.Add(p);
 
-                    SendToAll(ServerMessageType.SpawnItem, p.ToString());
-                }
+                SendToAll(ServerMessageType.SpawnItem, p.ToString());
             }
         }
 
@@ -104,6 +102,11 @@ namespace DungeonServer
                 GC.Collect();
             }
         }
+        #endregion
+
+        #region 傳送資料
+        public void Respawn(string name) 
+            => SendToPlayer(ServerMessageType.Respawn, name, players[name].RespawnDataPack);
         #endregion
 
         #region 監聽客戶端訊息迴圈
@@ -161,6 +164,11 @@ namespace DungeonServer
                             PlayerPickItem(ppiInfo: datas[1]);
                             break;
 
+                        case ServerMessageType.Hit:
+                            string[] hitDatas = datas[1].Split('|');
+                            OnHit(hitDatas[0], hitDatas[1]);
+                            break;
+
                         default:
                             break;
                     }
@@ -169,11 +177,10 @@ namespace DungeonServer
                 {
                     Console.WriteLine(e.Message);
 
-                    foreach(string name in socketHT.Keys)
+                    foreach (string name in socketHT.Keys)
                     {
-                        if(socketHT[name] == sk)
+                        if (socketHT[name] == sk)
                         {
-                            socketHT.Remove(name);
                             PlayerOffline(name, th);
                         }
                     }
@@ -279,6 +286,23 @@ namespace DungeonServer
                         break;
                     }
             }
+        }
+
+        private void OnHit(string name, string damage)
+        {
+            Character ch = players[name];
+            if (ch.health > 0)
+                ch.health -= Convert.ToInt32(damage);
+
+            if (!ch.isRespawning)
+            {
+                if (ch.health <= 0)
+                {
+                    UI.AddLog(name + " killed.");
+                    ch.Respawn(map);
+                }
+            }
+            SendToPlayer(ServerMessageType.Hit, name, players[name].health.ToString());
         }
         #endregion
 

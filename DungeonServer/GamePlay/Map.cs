@@ -65,8 +65,18 @@ namespace DungeonServer
             return false;
         }
 
-        public static (int x, int y) GetRandomPointInPlayGround()
-            => Rand.GetRandPointInRect(playGround);
+        public (int x, int y) GetRandomFitPointInPlayGround(int w, int h)
+        {
+            (int x, int y) loc;
+
+            do
+            {
+                loc = Rand.GetRandPointInRect(playGround);
+            }
+            while (!IsWalkable(new Rect(loc.x, loc.y, w, h)));
+
+            return loc;
+        }
 
         private static readonly Rect playGround = new Rect(800, 440);
         private static readonly Rect tileSize = new Rect(40, 40);

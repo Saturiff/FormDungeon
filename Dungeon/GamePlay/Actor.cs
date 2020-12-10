@@ -19,7 +19,13 @@ namespace DungeonGame
             => Math.Sqrt((pA.x - pB.x) * (pA.x - pB.x) + (pA.y - pB.y) * (pA.y - pB.y));
 
         public bool IsOverlapped(Rectangle rect) => Rect.IntersectsWith(rect);
-
-        public Rectangle Rect => DisplayRectangle;
+        
+        public Rectangle Rect
+        {
+            get
+            {
+                return new Rectangle(Location.X, Location.Y, Size.Width, Size.Height);
+            }
+        }
     }
 }

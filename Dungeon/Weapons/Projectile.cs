@@ -20,7 +20,7 @@ namespace DungeonGame
         private void RenderTimer_Tick(object sender, EventArgs e)
         {
             if ((time >= lifetime / renderTimer.Interval)
-                && (!Game.map.IsWalkable(new DungeonUtility.Rect(Location.X, Location.Y, Size.Width, Size.Width))))
+                && (!Game.map.IsWalkable(new DungeonUtility.Rect(Rect.X, Rect.Y, Rect.Width, Rect.Height))))
                 Destory();
 
             foreach (PlayerCharacter p in Game.client.players.Values)

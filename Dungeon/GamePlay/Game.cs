@@ -134,7 +134,6 @@ namespace DungeonGame
             t_SyncTicker.Tick += delegate (object sender, EventArgs e)
             {
                 client.UpdateUI();
-                player.CalcMove();
             };
         }
 

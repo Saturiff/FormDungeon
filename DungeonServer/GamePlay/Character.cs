@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace DungeonServer
 {
@@ -33,26 +34,51 @@ namespace DungeonServer
                 rawData = sr.ReadLine();
 
             string[] datas = rawData.Split('|');
-            health = Convert.ToUInt32(datas[0]);
+            health = Convert.ToInt32(datas[0]);
             loc.x = Convert.ToInt32(datas[1]);
             loc.y = Convert.ToInt32(datas[2]);
             color = (Convert.ToUInt16(datas[3]), Convert.ToUInt16(datas[4]), Convert.ToUInt16(datas[5]));
         }
 
+        public async void Respawn(Map map)
+        {
+            isRespawning = true;
+
+            await Task.Delay(3000);
+
+            health = 200;
+            item = "000";
+
+            (int x, int y) = map.GetRandomFitPointInPlayGround(size.w, size.h);
+
+            UpdateLocation(x, y);
+
+            UI.server.Respawn(name);
+
+            isRespawning = false;
+            UI.AddLog(name + " respawned.");
+        }
+
         private static int GetNextRandomByte() => r.Next(255);
 
         private string name;
-        private uint health { get => 200; set { } }
-        private (int x, int y) loc = (400, 220);
+
+        private static readonly (int w, int h) size = (20, 20);
         private (int r, int g, int b) color = (GetNextRandomByte(), GetNextRandomByte(), GetNextRandomByte());
         private string dataPath => @"./saves/" + name;
         private static Random r = new Random();
 
-        // 玩家現有的物品，不予保存，但會在遊戲時同步給所有玩家
-        public string item = "000";
         private string DataPack => string.Format("{0}|{1}|{2}|{3}|{4}|{5}",
             health.ToString(), loc.x, loc.y, color.r, color.g, color.b);
         public string DataPackWithItem => string.Format("{0}|{1}",
             DataPack, item);
+        public string RespawnDataPack => string.Format("{0}|{1}|{2}|{3}",
+            health.ToString(), loc.x, loc.y, item);
+
+        public int health = 200;
+        public bool isRespawning = false;
+        public (int x, int y) loc = (400, 220);
+        // 玩家現有的物品，不予保存，但會在遊戲時同步給所有玩家
+        public string item = "000";
     }
 }

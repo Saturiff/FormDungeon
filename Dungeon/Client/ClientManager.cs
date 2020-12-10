@@ -188,27 +188,16 @@ namespace DungeonGame
 
                 switch (cmd)
                 {
-                    case ClientMessageType.Offline:
-                        ForceOffline();
+                    case ClientMessageType.Online:
+                        Online(datas[1]);
                         break;
 
                     case ClientMessageType.Verification:
                         ContinueVerification(datas[1]);
                         break;
 
-                    case ClientMessageType.Online:
-                        string[] dataArr = datas[1].Split(',');
-                        string dataPack = dataArr[0];
-                        string floorItems = dataArr[1];
-
-                        LoadPlayerCharacterStatus(dataPack);
-
-                        if (floorItems != "")
-                            LoadFloorItems(floorItems);
-                        break;
-
-                    case ClientMessageType.SpawnItem:
-                        AddFloorItems(datas[1]);
+                    case ClientMessageType.Offline:
+                        ForceOffline();
                         break;
 
                     case ClientMessageType.TextMessage:
@@ -219,10 +208,21 @@ namespace DungeonGame
                         SyncAllPlayersData(datas[1]);
                         break;
 
+                    case ClientMessageType.SpawnItem:
+                        AddFloorItems(datas[1]);
+                        break;
+
                     case ClientMessageType.PickItem:
                         PickItem(datas[1]);
                         break;
-
+                        
+                    case ClientMessageType.Hit:
+                        GotHit(datas[1]);
+                        break;
+                        
+                    case ClientMessageType.Respawn:
+                        Respawn(datas[1]);
+                        break;
 
                     default:
                         Console.WriteLine("bad data: " + cmdOrder);
@@ -230,14 +230,28 @@ namespace DungeonGame
                 }
             }
         }
-
         /// <summary>
-        /// 伺服器離線，玩家自動下線
+        /// 玩家上線接收自己的角色資料與載入已在服務器生成的物品資料
         /// </summary>
-        private void ForceOffline()
+        /// <param name="onlineData">已封裝之資料</param>
+        private void Online(string onlineData)
         {
-            Game.Destroy();
-            Game.AddLog("Server offline.");
+            string[] dataArr = onlineData.Split(',');
+            string dataPack = dataArr[0];
+            string floorItems = dataArr[1];
+
+            PlayerCharacter c = new PlayerCharacter(dataPack);
+            players.Add(playerName, c);
+            isWaitingPlayerData = false;
+
+            if (floorItems != "")
+            {
+                string[] itemDatas = floorItems.Split('|');
+                if (itemDatas.Length % 3 != 0) return;
+
+                for (int i = 0; i < itemDatas.Length; i += 3)
+                    Game.SpawnInViewport(new Pickable(itemDatas[i], (Convert.ToInt32(itemDatas[i + 1]), Convert.ToInt32(itemDatas[i + 2]))));
+            }
         }
 
         /// <summary>
@@ -250,58 +264,12 @@ namespace DungeonGame
         }
 
         /// <summary>
-        /// 玩家上線接收自己的角色資料
+        /// 伺服器離線，玩家自動下線
         /// </summary>
-        /// <param name="rawData">伺服器傳來的原始資料</param>
-        private void LoadPlayerCharacterStatus(string dataPack)
+        private void ForceOffline()
         {
-            PlayerCharacter c = new PlayerCharacter(dataPack);
-            players.Add(playerName, c);
-            isWaitingPlayerData = false;
-        }
-
-        /// <summary>
-        /// 載入地面所有物品，會在玩家登入時收到該訊號
-        /// </summary>
-        /// <param name="floorItems">封裝過的物品資料</param>
-        private void LoadFloorItems(string floorItems)
-        {
-            string[] itemDatas = floorItems.Split('|');
-            if (itemDatas.Length % 3 != 0) return;
-
-            for (int i = 0; i < itemDatas.Length; i += 3)
-                Game.SpawnInViewport(new Pickable(itemDatas[i], (Convert.ToInt32(itemDatas[i + 1]), Convert.ToInt32(itemDatas[i + 2]))));
-        }
-
-        /// <summary>
-        /// 新增地面物品，玩家會在伺服器在地面新增物品時收到該訊號
-        /// </summary>
-        /// <param name="floorItem"></param>
-        private void AddFloorItems(string floorItem)
-        {
-            string[] itemData = floorItem.Split('|');
-            if (itemData.Length % 3 != 0) return;
-
-            Game.SpawnInViewport(new Pickable(itemData[0], (Convert.ToInt32(itemData[1]), Convert.ToInt32(itemData[2]))));
-        }
-
-        /// <summary>
-        /// 由伺服器傳來的資料做玩家資料的分割整理
-        /// <para>格式: other_player_count,name|{datapack},name|{datapack}, ...</para>
-        /// </summary>
-        /// <param name="dataPacks">伺服器傳來的原始資料</param>
-        /// <returns></returns>
-        private IEnumerable<string> ExtractDataPack(string dataPacks)
-        {
-            string[] datas = dataPacks.Split(',');
-
-            int otherPlayerNum = Convert.ToInt32(datas[0]);
-
-            if (otherPlayerNum < 1)
-                yield break;
-
-            for (int i = 0; i < otherPlayerNum; i++)
-                yield return datas[i + 1];
+            Game.Destroy();
+            Game.AddLog("Server offline.");
         }
 
         /// <summary>
@@ -363,6 +331,37 @@ namespace DungeonGame
         }
 
         /// <summary>
+        /// 由伺服器傳來的資料做玩家資料的分割整理
+        /// <para>格式: other_player_count,name|{datapack},name|{datapack}, ...</para>
+        /// </summary>
+        /// <param name="dataPacks">伺服器傳來的原始資料</param>
+        /// <returns></returns>
+        private IEnumerable<string> ExtractDataPack(string dataPacks)
+        {
+            string[] datas = dataPacks.Split(',');
+
+            int otherPlayerNum = Convert.ToInt32(datas[0]);
+
+            if (otherPlayerNum < 1)
+                yield break;
+
+            for (int i = 0; i < otherPlayerNum; i++)
+                yield return datas[i + 1];
+        }
+
+        /// <summary>
+        /// 新增地面物品，玩家會在伺服器在地面新增物品時收到該訊號
+        /// </summary>
+        /// <param name="floorItem"></param>
+        private void AddFloorItems(string floorItem)
+        {
+            string[] itemData = floorItem.Split('|');
+            if (itemData.Length % 3 != 0) return;
+
+            Game.SpawnInViewport(new Pickable(itemData[0], (Convert.ToInt32(itemData[1]), Convert.ToInt32(itemData[2]))));
+        }
+
+        /// <summary>
         /// 當任何玩家撿起物品時接收到該訊號，若物品編號帶有'-'，則為其他玩家撿到，會移除物品
         /// <para>正常撿起格式: "001"</para>
         /// <para>由地面移除格式: "-001"</para>
@@ -384,6 +383,19 @@ namespace DungeonGame
 
             Game.DestroyFromViewport(p);
             p.Dispose();
+        }
+
+        private void GotHit(string newHealth) 
+            => players[playerName].UpdateHealth(Convert.ToInt32(newHealth));
+
+        private void Respawn(string respawnPack)
+        {
+            string[] respawnDatas = respawnPack.Split('|');
+            int hp = Convert.ToInt32(respawnDatas[0]);
+            int x = Convert.ToInt32(respawnDatas[1]);
+            int y = Convert.ToInt32(respawnDatas[2]);
+            string itemNum = respawnDatas[3];
+            players[playerName].Respawn(hp, x, y, itemNum);
         }
         #endregion
 

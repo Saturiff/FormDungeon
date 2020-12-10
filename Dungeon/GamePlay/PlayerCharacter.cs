@@ -21,19 +21,19 @@ namespace DungeonGame
 
         private void MovementTick_Tick(object sender, EventArgs e)
         {
-            CalcMove();
+            if (CurrentHealth > 0)
+                CalcMove();
         }
 
         public void AttackTo(Point loc)
         {
-            if (itemNum != null && itemNum != "000")
+            if ((CurrentHealth > 0) && (itemNum != null) && (itemNum != "000"))
             {
                 Weapon weapon = new Weapon();
                 weapon.Fire(Name, itemNum, (Location.X, Location.Y), (loc.X, loc.Y));
             }
         }
 
-        // bind to tick
         public void CalcMove()
         {
             if (isMovingUp || isMovingDown || isMovingLeft || isMovingRight)
@@ -44,6 +44,26 @@ namespace DungeonGame
 
                 MoveTo(new Point(Location.X + right, Location.Y + up));
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            return (obj is PlayerCharacter ch) && (ch.Name == Name);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public static bool operator ==(PlayerCharacter a, PlayerCharacter b)
+        {
+            return a.Name == b.Name;
+        }
+
+        public static bool operator !=(PlayerCharacter a, PlayerCharacter b)
+        {
+            return a.Name != b.Name;
         }
 
         private Timer movementTick;

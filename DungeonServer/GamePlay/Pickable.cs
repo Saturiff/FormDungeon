@@ -49,7 +49,7 @@ namespace DungeonServer
         private (int x, int y) Location { get; set; }
 
         public string ItemNum { get; set; }
-        public static readonly (int w, int h) size = (20, 20);
+        public static readonly (int w, int h) size = (50, 50);
         public Rect Rect => new Rect(Location.x, Location.y, size.w, size.h);
     }
 }
