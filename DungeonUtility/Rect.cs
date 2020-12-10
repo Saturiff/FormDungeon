@@ -1,4 +1,6 @@
-﻿namespace DungeonUtility
+﻿using System.Drawing;
+
+namespace DungeonUtility
 {
     // 0,0====1,0
     //  | Form |
@@ -47,5 +49,20 @@
                             (x1y0.x + dx, x1y0.y + dy),
                             (x1y1.x + dx, x1y1.y + dy));
         }
+
+        public bool IsOverlapped(Rect rect)
+            => ToRectangle(this).IntersectsWith(ToRectangle(rect));
+
+        public bool IsOverlapped(Rectangle rect)
+            => ToRectangle(this).IntersectsWith(rect);
+
+        public static bool IsOverlapped(Rectangle rectA, Rectangle rectB)
+            => rectA.IntersectsWith(rectB);
+
+        public static Rect ToRect(Rectangle rect)
+            => new Rect(rect.X, rect.Y, rect.Width, rect.Height);
+
+        public static Rectangle ToRectangle(Rect rect)
+            => new Rectangle(rect.x0y0.x, rect.x0y0.y, rect.width, rect.height);
     }
 }

@@ -47,9 +47,26 @@ namespace DungeonServer
         {
             if (spawnedPickables.Count < 5 && players.Count != 0)
             {
-                (int x, int y) spawnLoc = map.GetRandomFitPointInPlayGround(Pickable.size.w, Pickable.size.h);
+                Pickable p;
+                bool isSpawnSuccess;
 
-                Pickable p = new Pickable(Pickable.GetRandomItemNum(), spawnLoc);
+                do
+                {
+                    isSpawnSuccess = true;
+
+                    (int x, int y) spawnLoc = map.GetRandomFitPointInPlayGround(Pickable.size.w, Pickable.size.h);
+
+                    p = new Pickable(Pickable.GetRandomItemNum(), spawnLoc);
+
+
+                    foreach (Pickable _p in spawnedPickables)
+                        if (p.Rect.IsOverlapped(_p.Rect))
+                        {
+                            isSpawnSuccess = false;
+                            break;
+                        }
+                }
+                while (!isSpawnSuccess);
 
                 spawnedPickables.Add(p);
 

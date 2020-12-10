@@ -13,7 +13,6 @@ hit
 health bar
 畫面震動
 
-服務器防止生成物品重疊
 客戶端將所有可撿起物件移至最底層
 
 client fire pending
