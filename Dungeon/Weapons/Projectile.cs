@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Drawing;
-using System.Windows.Forms;
+using System.Linq;
+using System.Timers;
 
-namespace DungeonGame
+namespace DungeonGame.Weapons
 {
     public class Projectile : Actor
     {
@@ -12,36 +13,45 @@ namespace DungeonGame
 
             BackColor = Color.Red;
 
-            renderTimer = new Timer();
-            renderTimer.Interval = 50;
-            renderTimer.Tick += RenderTimer_Tick;
+            renderTimer = new Timer(50);
+            renderTimer.Elapsed += RenderTimer_Tick;
         }
 
-        private void RenderTimer_Tick(object sender, EventArgs e)
+        private void RenderTimer_Tick(object sender, ElapsedEventArgs e)
         {
-            if ((time >= lifetime / renderTimer.Interval)
-                && (!Game.map.IsWalkable(new DungeonUtility.Rect(Rect.X, Rect.Y, Rect.Width, Rect.Height))))
-                Destory();
-
-            foreach (PlayerCharacter p in Game.client.players.Values)
+            if (!Game.client.IsOnline)
             {
-                if (p != Game.player && IsOverlapped(p.Rect))
+                Destory();
+                return;
+            }
+
+            if ((time >= lifetime / renderTimer.Interval)
+                && (!Game.map.IsWalkable(new DungeonUtility.Rect(ActorRect.X, ActorRect.Y, ActorRect.Width, ActorRect.Height))))
+            {
+                Destory();
+                return;
+            }
+
+            foreach (PlayerCharacter hittedPlayer in Game.client.players.Values.ToList())
+            {
+                if (hittedPlayer.Name != name && IsOverlapped(hittedPlayer.ActorRect))
                 {
-                    Game.client.Hit(p.Name, damage);
+                    Game.client.RequestHit(hittedPlayer.Name, damage);
                     Destory();
+                    return;
                 }
             }
 
             (double x, double y) = (begin.x + speed * time++ * Math.Cos(radians),
                                     begin.y + speed * time++ * Math.Sin(radians));
 
-            Location = new Point((int)x, (int)y);
+            if (this != null)
+                Location = new Point((int)x, (int)y);
         }
 
         public void StartNormal(string name, (int x, int y) begin, (int x, int y) dest, double radians)
         {
             Init(name, begin, dest, radians);
-
             renderTimer.Start();
         }
 
@@ -68,6 +78,7 @@ namespace DungeonGame
         private void Destory()
         {
             Game.DestroyFromViewport(this);
+            renderTimer.Stop();
             Dispose();
         }
 
@@ -76,7 +87,7 @@ namespace DungeonGame
         private (int x, int y) dest;
         private int time = 1;
         private double radians = 0;
-        private Timer renderTimer = new Timer();
+        private Timer renderTimer;
 
         public AmmunitionType type;
         public int damage;

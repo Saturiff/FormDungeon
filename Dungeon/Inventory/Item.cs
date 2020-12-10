@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using DungeonGame.Weapons;
+using System.Drawing;
 
 namespace DungeonGame
 {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DungeonGame.Weapons;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace DungeonGame

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DungeonUtility;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -18,9 +19,9 @@ namespace DungeonGame
         public static double DistanceOf((int x, int y) pA, (int x, int y) pB)
             => Math.Sqrt((pA.x - pB.x) * (pA.x - pB.x) + (pA.y - pB.y) * (pA.y - pB.y));
 
-        public bool IsOverlapped(Rectangle rect) => Rect.IntersectsWith(rect);
+        public bool IsOverlapped(Rectangle rect) => Rect.IsOverlapped(ActorRect, rect);
         
-        public Rectangle Rect
+        public Rectangle ActorRect
         {
             get
             {

@@ -24,7 +24,7 @@ namespace DungeonGame
         /// <para>4. 登入成功則傳送登入請求與玩家名稱至伺服器</para>
         /// </summary>
         /// <param name="name"></param>
-        public void Login(string name)
+        public void RequestLogin(string name)
         {
             svMsgStatus = ServerMessageStatus.None;
             isWaitingPlayerData = true;
@@ -57,7 +57,7 @@ namespace DungeonGame
         /// <summary>
         /// 玩家移動後對伺服器傳送玩家的新位置
         /// </summary>
-        public void UpdatePlayerLocation()
+        public void RequestUpdatePlayerLocation()
         {
             SendToServer(ClientMessageType.Action, string.Format("{0}|{1}|{2}",
                 playerName, Game.player.Location.X, Game.player.Location.Y));
@@ -113,7 +113,15 @@ namespace DungeonGame
             SendToServer(ClientMessageType.PickItem, playerName + "," + p.ToString());
         }
 
-        public void Hit(string name, int damage)
+        public void RequestFireSingle(string fromPlayer, string weaponNum, (int x, int y) startPoint, (int x, int y) endPoint)
+        {
+            string fireInfo = $"{fromPlayer}|{weaponNum}|{ItemData.GetBullet(weaponNum).lifetime}|{startPoint.x}|{startPoint.y}|{endPoint.x}|{endPoint.y}";
+
+            SendToServer(ClientMessageType.FireSingle, fireInfo);
+
+        }
+
+        public void RequestHit(string name, int damage)
         {
             SendToServer(ClientMessageType.Hit, name + "|" + damage.ToString());
         }
@@ -129,12 +137,15 @@ namespace DungeonGame
             }
             catch { }
 
-            Game.p_Viewport.Controls.Clear();
+            status = OnlineStatus.Offline;
+
+            foreach(var c in Game.p_Viewport.Controls)
+                if (!(c is Weapons.Projectile))
+                    Game.DestroyFromViewport(c);
 
             players.Clear();
             playerUpdateStatus.Clear();
 
-            status = OnlineStatus.Offline;
             socket.Close();
 
             GC.Collect();
@@ -215,11 +226,23 @@ namespace DungeonGame
                     case ClientMessageType.PickItem:
                         PickItem(datas[1]);
                         break;
-                        
+
+                    case ClientMessageType.FireSingle:
+                        FireSingle(datas[1]);
+                        break;
+
+                    case ClientMessageType.FireStart:
+
+                        break;
+
+                    case ClientMessageType.FireStop:
+
+                        break;
+
                     case ClientMessageType.Hit:
                         GotHit(datas[1]);
                         break;
-                        
+
                     case ClientMessageType.Respawn:
                         Respawn(datas[1]);
                         break;
@@ -385,7 +408,19 @@ namespace DungeonGame
             p.Dispose();
         }
 
-        private void GotHit(string newHealth) 
+        private void FireSingle(string fireInfo)
+        {
+            // string fireInfo = $"{fromPlayer}|{weaponNum}|{lifetime}|{startPoint.x}|{startPoint.y}|{endPoint.x}|{endPoint.y}";
+            string[] infos = fireInfo.Split('|');
+            Weapon weapon = new Weapon();
+            weapon.Fire(
+                fromPlayer: infos[0],
+                weaponNum: infos[1],
+                startPoint: (Convert.ToInt32(infos[3]), Convert.ToInt32(infos[4])),
+                endPoint: (Convert.ToInt32(infos[5]), Convert.ToInt32(infos[6])));
+        }
+
+        private void GotHit(string newHealth)
             => players[playerName].UpdateHealth(Convert.ToInt32(newHealth));
 
         private void Respawn(string respawnPack)

@@ -122,7 +122,7 @@ namespace DungeonServer
         #endregion
 
         #region 傳送資料
-        public void Respawn(string name) 
+        public void Respawn(string name)
             => SendToPlayer(ServerMessageType.Respawn, name, players[name].RespawnDataPack);
         #endregion
 
@@ -179,6 +179,18 @@ namespace DungeonServer
 
                         case ServerMessageType.PickItem:
                             PlayerPickItem(ppiInfo: datas[1]);
+                            break;
+
+                        case ServerMessageType.FireSingle:
+                            FireSingle(datas[1]);
+                            break;
+
+                        case ServerMessageType.FireStart:
+
+                            break;
+
+                        case ServerMessageType.FireStop:
+
                             break;
 
                         case ServerMessageType.Hit:
@@ -303,6 +315,11 @@ namespace DungeonServer
                         break;
                     }
             }
+        }
+
+        private void FireSingle(string fireInfo)
+        {
+            SendToAll(ServerMessageType.FireSingle, fireInfo);
         }
 
         private void OnHit(string name, string damage)

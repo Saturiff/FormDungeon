@@ -29,8 +29,7 @@ namespace DungeonGame
         {
             if ((CurrentHealth > 0) && (itemNum != null) && (itemNum != "000"))
             {
-                Weapon weapon = new Weapon();
-                weapon.Fire(Name, itemNum, (Location.X, Location.Y), (loc.X, loc.Y));
+                Game.client.RequestFireSingle(Name, itemNum, (Location.X, Location.Y), (loc.X, loc.Y));
             }
         }
 

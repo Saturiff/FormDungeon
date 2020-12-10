@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
@@ -208,19 +208,35 @@ namespace DungeonGame
 
         #region Interactable
         public static void SpawnInViewport(Actor actor) => p_Viewport.BeginInvoke((Action)delegate ()
-            {
-                p_Viewport.Controls.Add(actor);
-            });
+        {
+            SetDoubleBuffered(actor);
+            p_Viewport.Controls.Add(actor);
+        });
 
         public static void DestroyFromViewport<T>(T control) => p_Viewport.BeginInvoke((Action)delegate ()
+        {
+            for (int i = 0; i < p_Viewport.Controls.Count; i++)
+                if (p_Viewport.Controls[i] is T c && c.Equals(control))
+                {
+                    p_Viewport.Controls.Remove(p_Viewport.Controls[i]);
+                    break;
+                }
+        });
+
+        public static void RefreshViewport() => p_Viewport.BeginInvoke((Action)async delegate ()
+        {
+            while (client.IsOnline)
             {
-                for (int i = 0; i < p_Viewport.Controls.Count; i++)
-                    if (p_Viewport.Controls[i] is T c && c.Equals(control))
-                    {
-                        p_Viewport.Controls.Remove(p_Viewport.Controls[i]);
-                        break;
-                    }
-            });
+                try
+                {
+                    foreach (var c in p_Viewport.Controls)
+                        if (c is Pickable p)
+                            p.SendToBack();
+                }
+                catch { }
+                await Task.Delay(50);
+            }
+        });
 
         /// <summary>
         /// 鼠標與Viewport中的物件互動，根據不同情況做不同行為
@@ -259,7 +275,7 @@ namespace DungeonGame
         public static void BeginPlay()
         {
             if (IsVaildName(tb_Nickname.Text))
-                client.Login(tb_Nickname.Text);
+                client.RequestLogin(tb_Nickname.Text);
             else
                 AddLog("Invalid name.");
 
@@ -273,6 +289,8 @@ namespace DungeonGame
                 AddLog("Welcome, " + player.Name + "!");
 
                 map = new MapManager();
+
+                RefreshViewport();
 
                 SpawnInViewport(player);
 
@@ -333,8 +351,6 @@ namespace DungeonGame
             b_ToggleLogin.Text = "Login";
         }
         #endregion
-
-        private static List<Control> spawnedControls = new List<Control>();
 
         public static string focusEnemyName;
         public static bool IsInViewport => p_Viewport.Focused;

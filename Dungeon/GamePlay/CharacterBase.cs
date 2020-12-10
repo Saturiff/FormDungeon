@@ -47,10 +47,10 @@ namespace DungeonGame
 
         protected void MoveTo(Point newLoc)
         {
-            if (Game.map.IsWalkable(Rect.Offset((newLoc.X, newLoc.Y))))
+            if (Game.map.IsWalkable(Rect.ToRect(ActorRect).Offset((newLoc.X, newLoc.Y))))
                 Location = newLoc;
 
-            Game.client.UpdatePlayerLocation();
+            Game.client.RequestUpdatePlayerLocation();
         }
 
         public new void Interact() { }
@@ -62,8 +62,6 @@ namespace DungeonGame
         }
 
         private static readonly Size characterSize = new Size(20, 20);
-        private new Rect Rect => new Rect(Location.X, Location.Y, Size.Width, Size.Height);
-
         protected const int maxHealth = 200;
         protected int CurrentHealth { get; set; }
 
