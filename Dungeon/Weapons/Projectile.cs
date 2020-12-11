@@ -32,11 +32,20 @@ namespace DungeonGame.Weapons
                 return;
             }
 
-            foreach (PlayerCharacter hittedPlayer in Game.client.players.Values.ToList())
+            if (IsOverlapped(Game.player.ActorRect) && senderName != Game.player.Name)
             {
-                if (hittedPlayer.Name != name && IsOverlapped(hittedPlayer.ActorRect))
+                Game.client.RequestHit(damage);
+                Destory();
+                return;
+            }
+
+            foreach (PlayerCharacter pc in Game.client.players.Values)
+            {
+                if (pc.Name == senderName)
+                    continue;
+
+                if (IsOverlapped(pc.ActorRect))
                 {
-                    Game.client.RequestHit(hittedPlayer.Name, damage);
                     Destory();
                     return;
                 }
@@ -65,7 +74,7 @@ namespace DungeonGame.Weapons
 
         private void Init(string name, (int x, int y) begin, (int x, int y) dest, double radians)
         {
-            this.name = name;
+            this.senderName = name;
             this.begin = begin;
             this.dest = dest;
             this.radians = radians;
@@ -82,7 +91,7 @@ namespace DungeonGame.Weapons
             Dispose();
         }
 
-        private string name;
+        private string senderName;
         private (int x, int y) begin;
         private (int x, int y) dest;
         private int time = 1;

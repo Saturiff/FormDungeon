@@ -121,9 +121,9 @@ namespace DungeonGame
 
         }
 
-        public void RequestHit(string name, int damage)
+        public void RequestHit(int damage)
         {
-            SendToServer(ClientMessageType.Hit, name + "|" + damage.ToString());
+            SendToServer(ClientMessageType.Hit, playerName + "|" + damage.ToString());
         }
 
         /// <summary>

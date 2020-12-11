@@ -20,8 +20,6 @@ namespace DungeonGame
         {
             client = new ClientManager();
 
-            tb_ItemInfo.Font = new Font(tb_ItemInfo.Font.Name, 10);
-
             s_Slot.RemoveItem();
 
             BindEvents();
