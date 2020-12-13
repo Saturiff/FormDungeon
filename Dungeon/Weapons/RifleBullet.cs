@@ -4,7 +4,7 @@
     {
         public RifleBullet()
         {
-            type = AmmunitionType.Auto;
+            type = AmmunitionType.Single;
             damage = 25;
             lifetime = 1500;
             speed = 4;

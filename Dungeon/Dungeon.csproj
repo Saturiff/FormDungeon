@@ -86,12 +86,6 @@
     <Compile Include="Weapons\Grenade.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Weapons\HmgBullet.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Weapons\LaserBullet.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Weapons\Projectile.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -144,8 +138,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Misc\Note.md" />
-    <None Include="Resources\item007.png" />
-    <None Include="Resources\item006.png" />
     <None Include="Resources\item005.png" />
     <None Include="Resources\item004.png" />
     <None Include="Resources\item003.png" />

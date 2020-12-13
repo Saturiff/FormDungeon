@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
 using System.Timers;
 
 namespace DungeonGame.Weapons
@@ -19,14 +18,9 @@ namespace DungeonGame.Weapons
 
         private void RenderTimer_Tick(object sender, ElapsedEventArgs e)
         {
-            if (!Game.client.IsOnline)
-            {
-                Destory();
-                return;
-            }
-
-            if ((time >= lifetime / renderTimer.Interval)
-                && (!Game.map.IsWalkable(new DungeonUtility.Rect(ActorRect.X, ActorRect.Y, ActorRect.Width, ActorRect.Height))))
+            if ((!Game.client.IsOnline)
+                || (time >= lifetime / renderTimer.Interval)
+                || (!Game.map.IsWalkable(new DungeonUtility.Rect(ActorRect.X, ActorRect.Y, ActorRect.Width, ActorRect.Height))))
             {
                 Destory();
                 return;
@@ -58,25 +52,16 @@ namespace DungeonGame.Weapons
                 Location = new Point((int)x, (int)y);
         }
 
-        public void StartNormal(string name, (int x, int y) begin, (int x, int y) dest, double radians)
+        public void Start(string name, (int x, int y) begin, double radians)
         {
-            Init(name, begin, dest, radians);
+            Init(name, begin, radians);
             renderTimer.Start();
         }
 
-        public void StartDot((int x, int y) begin, (int x, int y) dest, double radians) { }
-
-        public void StartAuto((int x, int y) begin, (int x, int y) dest, double radians) { }
-
-        public void StopAuto((int x, int y) begin, (int x, int y) dest, double radians) { }
-
-        public void StartBlast((int x, int y) begin, (int x, int y) dest, double radians) { }
-
-        private void Init(string name, (int x, int y) begin, (int x, int y) dest, double radians)
+        private void Init(string name, (int x, int y) begin, double radians)
         {
-            this.senderName = name;
+            senderName = name;
             this.begin = begin;
-            this.dest = dest;
             this.radians = radians;
 
             Location = new Point(begin.x, begin.y);
@@ -88,15 +73,13 @@ namespace DungeonGame.Weapons
         {
             Game.DestroyFromViewport(this);
             renderTimer.Stop();
-            Dispose();
         }
 
         private string senderName;
         private (int x, int y) begin;
-        private (int x, int y) dest;
         private int time = 1;
         private double radians = 0;
-        private Timer renderTimer;
+        private readonly Timer renderTimer;
 
         public AmmunitionType type;
         public int damage;

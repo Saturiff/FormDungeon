@@ -13,7 +13,7 @@ namespace DungeonServer
     public class Map
     {
         public Map() => GenerateRoomData();
-        
+
         private string[] ReadMapFromFile()
         {
             string path = @".\Maps\Map.csv";
@@ -46,7 +46,7 @@ namespace DungeonServer
 
         private TileType? GetTileType((int x, int y) p)
         {
-            p = (p.x / tileSize.width, p.y / tileSize.height);
+            p = (p.x / tileSize.Width, p.y / tileSize.Height);
 
             if (p.x > -1 && p.x < col && p.y > -1 && p.y < row)
                 return tilesData[new Point(p.x, p.y)];
@@ -80,8 +80,8 @@ namespace DungeonServer
 
         private static readonly Rect playGround = new Rect(800, 440);
         private static readonly Rect tileSize = new Rect(40, 40);
-        private static readonly int row = playGround.height / tileSize.width;
-        private static readonly int col = playGround.width / tileSize.height;
+        private static readonly int row = playGround.Height / tileSize.Width;
+        private static readonly int col = playGround.Width / tileSize.Height;
         private Dictionary<Point, TileType> tilesData = new Dictionary<Point, TileType>(row * col);
 
         public enum TileType

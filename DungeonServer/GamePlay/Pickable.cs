@@ -23,7 +23,7 @@ namespace DungeonServer
 
         public static string GetRandomItemNum()
         {
-            int num = Rand.GetRandNum(1, 7);
+            int num = Rand.GetRandNum(1, 5);
 
             return ((num < 10) ? "00" : "0") + num.ToString();
         }

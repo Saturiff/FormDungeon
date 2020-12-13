@@ -185,14 +185,6 @@ namespace DungeonServer
                             FireSingle(datas[1]);
                             break;
 
-                        case ServerMessageType.FireStart:
-
-                            break;
-
-                        case ServerMessageType.FireStop:
-
-                            break;
-
                         case ServerMessageType.Hit:
                             string[] hitDatas = datas[1].Split('|');
                             OnHit(hitDatas[0], hitDatas[1]);

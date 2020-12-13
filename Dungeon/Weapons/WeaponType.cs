@@ -9,8 +9,6 @@
         Rifle,
         Shotgun,
         Sniper,
-        HeavyMachineGun,
-        Laser,
         Grenade,
         RPG
     }

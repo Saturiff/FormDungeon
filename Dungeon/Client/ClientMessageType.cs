@@ -14,8 +14,6 @@
         SpawnItem,
         PickItem,
         FireSingle,
-        FireStart,
-        FireStop,
         Hit,
         Respawn
     }

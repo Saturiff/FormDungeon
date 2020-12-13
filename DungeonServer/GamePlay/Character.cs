@@ -14,7 +14,7 @@ namespace DungeonServer
         public void UpdateLocation(int newX, int newY) => loc = (newX, newY);
 
         // call when logout
-        public void Save() => File.WriteAllText(dataPath, DataPack);
+        public void Save() => File.WriteAllText(DataPath, DataPack);
 
         // call when login
         public void Read()
@@ -25,12 +25,12 @@ namespace DungeonServer
             // 3: Color.R
             // 4: Color.G
             // 5: Color.B
-            if (!File.Exists(dataPath))
-                using (StreamWriter sw = File.CreateText(dataPath))
+            if (!File.Exists(DataPath))
+                using (StreamWriter sw = File.CreateText(DataPath))
                     sw.WriteLine(DataPack);
 
             string rawData = "";
-            using (StreamReader sr = File.OpenText(dataPath))
+            using (StreamReader sr = File.OpenText(DataPath))
                 rawData = sr.ReadLine();
 
             string[] datas = rawData.Split('|');
@@ -65,8 +65,8 @@ namespace DungeonServer
 
         private static readonly (int w, int h) size = (20, 20);
         private (int r, int g, int b) color = (GetNextRandomByte(), GetNextRandomByte(), GetNextRandomByte());
-        private string dataPath => @"./saves/" + name;
-        private static Random r = new Random();
+        private string DataPath => @"./saves/" + name;
+        private static readonly Random r = new Random();
 
         private string DataPack => string.Format("{0}|{1}|{2}|{3}|{4}|{5}",
             health.ToString(), loc.x, loc.y, color.r, color.g, color.b);

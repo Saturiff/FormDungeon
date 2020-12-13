@@ -60,7 +60,7 @@ namespace DungeonGame
             // viewport
             p_Viewport.ControlAdded += delegate (object sender, ControlEventArgs e)
             {
-                e.Control.Click += Interact;
+                e.Control.MouseDown += Interact;
             };
 
             p_Viewport.Click += delegate (object sender, EventArgs e)
@@ -68,7 +68,7 @@ namespace DungeonGame
                 p_Viewport.Focus();
 
                 if (client.IsOnline)
-                    Interact(sender, e);
+                    Interact(sender, (MouseEventArgs)e);
             };
 
             p_Viewport.PreviewKeyDown += delegate (object sender, PreviewKeyDownEventArgs e)
@@ -241,25 +241,28 @@ namespace DungeonGame
         /// </summary>
         /// <param name="sender">被點擊物件</param>
         /// <param name="e">EventArgs參數</param>
-        private static void Interact(object sender, EventArgs e)
+        private static void Interact(object sender, MouseEventArgs e)
         {
-            if (sender is IInteractable obj)
-            {
-                if (obj is PlayerCharacter p)
+            if (e.Button == MouseButtons.Left)
+                if (sender is IInteractable obj)
                 {
-                    if (p != player)
-                        focusEnemyName = p.Name;
+                    if (obj is PlayerCharacter p && p.IsAlive)
+                    {
+                        if (p != player)
+                            focusEnemyName = p.Name;
 
-                    player.AttackTo(p.Location);
+                        player.AttackTo(new Point(p.Location.X + p.Size.Width / 2, p.Location.Y + p.Size.Height / 2));
+                    }
+                    else if (obj is Pickable item)
+                    {
+                        if (item.DistanceOf(player) < PlayerCharacter.pickRange)
+                            item.Interact();
+                        else
+                            player.AttackTo(new Point(item.Location.X + e.Location.X, item.Location.Y + e.Location.Y));
+                    }
                 }
-                else if (obj is Pickable item)
-                    if (item.DistanceOf(player) < PlayerCharacter.pickRange)
-                        item.Interact();
-                    else
-                        player.AttackTo(item.Location);
-            }
-            else
-                player.AttackTo(((MouseEventArgs)e).Location);
+                else
+                    player.AttackTo(e.Location);
         }
         #endregion
 
@@ -283,7 +286,7 @@ namespace DungeonGame
 
                 while (client.isWaitingPlayerData) ;
                 player = client.GetPlayerCharacter();
-                player.InitTick();
+                player.InitPlayerTick();
                 AddLog("Welcome, " + player.Name + "!");
 
                 map = new MapManager();

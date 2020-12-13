@@ -15,10 +15,8 @@ namespace DungeonGame
             { "001", new Item { Type = WeaponType.Rifle,           Bullet = new RifleBullet(),   Name = "Rifle",           Desc = "步槍",   Icon = Properties.Resources.item001 } },
             { "002", new Item { Type = WeaponType.Shotgun,         Bullet = new ShotgunBullet(), Name = "Shotgun",         Desc = "霰彈槍", Icon = Properties.Resources.item002 } },
             { "003", new Item { Type = WeaponType.Sniper,          Bullet = new SniperBullet(),  Name = "Sniper",          Desc = "狙擊槍", Icon = Properties.Resources.item003 } },
-            { "004", new Item { Type = WeaponType.HeavyMachineGun, Bullet = new HmgBullet(),     Name = "HeavyMachineGun", Desc = "重機槍", Icon = Properties.Resources.item004 } },
-            { "005", new Item { Type = WeaponType.Laser,           Bullet = new Laser(),         Name = "Laser",           Desc = "雷射槍", Icon = Properties.Resources.item005 } },
-            { "006", new Item { Type = WeaponType.Grenade,         Bullet = new Grenade(),       Name = "Grenade",         Desc = "手榴彈", Icon = Properties.Resources.item006 } },
-            { "007", new Item { Type = WeaponType.RPG,             Bullet = new Rpg(),           Name = "RPG",             Desc = "火箭筒", Icon = Properties.Resources.item007 } }
+            { "004", new Item { Type = WeaponType.Grenade,         Bullet = new Grenade(),       Name = "Grenade",         Desc = "手榴彈", Icon = Properties.Resources.item004 } },
+            { "005", new Item { Type = WeaponType.RPG,             Bullet = new Rpg(),           Name = "RPG",             Desc = "火箭筒", Icon = Properties.Resources.item005 } }
         };
 
         public static Projectile GetBullet(string weaponNum)

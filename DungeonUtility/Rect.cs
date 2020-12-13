@@ -38,8 +38,8 @@ namespace DungeonUtility
         public (int x, int y) x0y1;
         public (int x, int y) x1y0;
         public (int x, int y) x1y1;
-        public int width => x1y0.x - x0y0.x;
-        public int height => x0y1.y - x0y0.y;
+        public int Width => x1y0.x - x0y0.x;
+        public int Height => x0y1.y - x0y0.y;
 
         public Rect Offset((int x, int y) p)
         {
@@ -63,6 +63,6 @@ namespace DungeonUtility
             => new Rect(rect.X, rect.Y, rect.Width, rect.Height);
 
         public static Rectangle ToRectangle(Rect rect)
-            => new Rectangle(rect.x0y0.x, rect.x0y0.y, rect.width, rect.height);
+            => new Rectangle(rect.x0y0.x, rect.x0y0.y, rect.Width, rect.Height);
     }
 }

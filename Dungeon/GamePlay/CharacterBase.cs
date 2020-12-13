@@ -63,16 +63,32 @@ namespace DungeonGame
 
         private static readonly Size characterSize = new Size(20, 20);
         protected const int maxHealth = 200;
-        protected int CurrentHealth { get; set; }
+        protected int currentHealth;
 
+        protected int CurrentHealth
+        {
+            get
+            {
+                return currentHealth;
+            }
+            set
+            {
+                currentHealth = value;
+
+                if (IsAlive)
+                    Show();
+                else
+                    Hide();
+            }
+        }
+        public bool IsAlive => currentHealth > 0;
         public string itemNum;
         public new string Name { get; set; }
-        public bool IsAlive => CurrentHealth <= 0;
         public string Status
         {
             get
             {
-                return "Name:\t" + Name + Environment.NewLine 
+                return "Name:\t" + Name + Environment.NewLine
                 + "Health:\t" + CurrentHealth + " / " + maxHealth;
             }
         }

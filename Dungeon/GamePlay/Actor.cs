@@ -20,7 +20,7 @@ namespace DungeonGame
             => Math.Sqrt((pA.x - pB.x) * (pA.x - pB.x) + (pA.y - pB.y) * (pA.y - pB.y));
 
         public bool IsOverlapped(Rectangle rect) => Rect.IsOverlapped(ActorRect, rect);
-        
+
         public Rectangle ActorRect
         {
             get

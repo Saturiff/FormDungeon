@@ -11,7 +11,7 @@ namespace DungeonGame
     {
         public PlayerCharacter(string dataPack) : base(dataPack) { }
 
-        public void InitTick()
+        public void InitPlayerTick()
         {
             movementTick = new Timer();
             movementTick.Interval = 10;
@@ -21,15 +21,23 @@ namespace DungeonGame
 
         private void MovementTick_Tick(object sender, EventArgs e)
         {
-            if (CurrentHealth > 0)
+            if (IsAlive)
                 CalcMove();
+        }
+
+        private void AliveTick_Tick(object sender, EventArgs e)
+        {
+            if (IsAlive)
+                Show();
+            else
+                Hide();
         }
 
         public void AttackTo(Point loc)
         {
-            if ((CurrentHealth > 0) && (itemNum != null) && (itemNum != "000"))
+            if (IsAlive && (itemNum != null) && (itemNum != "000"))
             {
-                Game.client.RequestFireSingle(Name, itemNum, (Location.X, Location.Y), (loc.X, loc.Y));
+                Game.client.RequestFire(Name, itemNum, (Location.X, Location.Y), (loc.X, loc.Y));
             }
         }
 

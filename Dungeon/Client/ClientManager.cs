@@ -113,18 +113,14 @@ namespace DungeonGame
             SendToServer(ClientMessageType.PickItem, playerName + "," + p.ToString());
         }
 
-        public void RequestFireSingle(string fromPlayer, string weaponNum, (int x, int y) startPoint, (int x, int y) endPoint)
+        public void RequestFire(string fromPlayer, string weaponNum, (int x, int y) startPoint, (int x, int y) endPoint)
         {
             string fireInfo = $"{fromPlayer}|{weaponNum}|{ItemData.GetBullet(weaponNum).lifetime}|{startPoint.x}|{startPoint.y}|{endPoint.x}|{endPoint.y}";
-
             SendToServer(ClientMessageType.FireSingle, fireInfo);
-
         }
 
-        public void RequestHit(int damage)
-        {
-            SendToServer(ClientMessageType.Hit, playerName + "|" + damage.ToString());
-        }
+        public void RequestHit(int damage) 
+            => SendToServer(ClientMessageType.Hit, playerName + "|" + damage.ToString());
 
         /// <summary>
         /// 傳送登出請求與玩家名稱
@@ -139,7 +135,7 @@ namespace DungeonGame
 
             status = OnlineStatus.Offline;
 
-            foreach(var c in Game.p_Viewport.Controls)
+            foreach (var c in Game.p_Viewport.Controls)
                 if (!(c is Weapons.Projectile))
                     Game.DestroyFromViewport(c);
 
@@ -173,7 +169,7 @@ namespace DungeonGame
         {
             EndPoint svEndpoint = socket.RemoteEndPoint;
             byte[] byteDatas = new byte[dataSize];
-            int inLen = 0;
+            int inLen;
             string rawData;
             string[] datas;
             int cmdOrder;
@@ -229,14 +225,6 @@ namespace DungeonGame
 
                     case ClientMessageType.FireSingle:
                         FireSingle(datas[1]);
-                        break;
-
-                    case ClientMessageType.FireStart:
-
-                        break;
-
-                    case ClientMessageType.FireStop:
-
                         break;
 
                     case ClientMessageType.Hit:
@@ -326,7 +314,7 @@ namespace DungeonGame
                 else
                 {
                     PlayerCharacter c = new PlayerCharacter(dataPack);
-
+                    
                     players.Add(c.Name, c);
 
                     Game.SpawnInViewport(players[c.Name]);
@@ -363,7 +351,7 @@ namespace DungeonGame
         {
             string[] datas = dataPacks.Split(',');
 
-            int otherPlayerNum = Convert.ToInt32(datas[0]);
+            int otherPlayerNum = Convert.ToInt32(datas[0][0].ToString());
 
             if (otherPlayerNum < 1)
                 yield break;
