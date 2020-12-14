@@ -28,7 +28,6 @@ namespace DungeonGame.Weapons
 
             Thread th = new Thread(Exp);
             th.Start();
-            // Task.Delay(1000).Wait();
             
             base.Destory();
         }

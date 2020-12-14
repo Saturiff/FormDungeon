@@ -121,6 +121,10 @@ namespace DungeonServer
         #endregion
 
         #region 傳送資料
+        /// <summary>
+        /// 重生後傳遞給玩家重生資訊
+        /// </summary>
+        /// <param name="name">玩家名稱</param>
         public void Respawn(string name)
             => SendToPlayer(ServerMessageType.Respawn, name, players[name].RespawnDataPack);
         #endregion
@@ -316,11 +320,19 @@ namespace DungeonServer
             }
         }
 
+        /// <summary>
+        /// 某玩家開火之訊號，告知所有玩家
+        /// </summary>
+        /// <param name="fireInfo"></param>
         private void FireSingle(string fireInfo)
-        {
-            SendToAll(ServerMessageType.FireSingle, fireInfo);
-        }
+            => SendToAll(ServerMessageType.FireSingle, fireInfo);
 
+        /// <summary>
+        /// 受傷訊號，經擊殺判定後傳給該玩家更新後的素質
+        /// <para>若血量不足會進行重生</para>
+        /// </summary>
+        /// <param name="name">玩家名稱</param>
+        /// <param name="damage">造成傷害</param>
         private void OnHit(string name, string damage)
         {
             Character ch = players[name];
@@ -338,10 +350,12 @@ namespace DungeonServer
             SendToPlayer(ServerMessageType.Hit, name, players[name].health.ToString());
         }
 
+        /// <summary>
+        /// 清空玩家物品
+        /// </summary>
+        /// <param name="name">玩家名稱</param>
         private void ClearPlayerItem(string name)
-        {
-            players[name].item = "0";
-        }
+            => players[name].item = "0";
         #endregion
 
         #region 傳遞位元組資料

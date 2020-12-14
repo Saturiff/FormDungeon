@@ -5,6 +5,9 @@ using System.Timers;
 
 namespace DungeonGame.Weapons
 {
+    /// <summary>
+    /// 投射物類，所有子彈之基類，提供初始化、運算子彈路徑之計時器與銷毀機制
+    /// </summary>
     public class Projectile : Actor
     {
         public Projectile()
@@ -26,9 +29,7 @@ namespace DungeonGame.Weapons
                 Destory();
                 return;
             }
-            if(canFriendlyFire)
-                Console.WriteLine($"tick {time}, {canFriendlyFire}");
-
+            
             if (DetectHit())
                 return;
 

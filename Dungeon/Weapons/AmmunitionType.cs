@@ -1,5 +1,8 @@
 ﻿namespace DungeonGame
 {
+    /// <summary>
+    /// 彈藥種類
+    /// </summary>
     public enum AmmunitionType
     {
         None,

@@ -77,7 +77,7 @@ namespace DungeonGame
         {
             RequestPlayersData();
 
-            players[playerName] = GetPlayerCharacter(); // fix: ?
+            players[playerName] = GetPlayerCharacter();
             playerUpdateStatus[playerName] = true;
 
             Game.tb_CharacterStatus.Text = players[playerName].Status;
@@ -104,14 +104,16 @@ namespace DungeonGame
         /// 查詢玩家
         /// </summary>
         /// <returns>Character物件</returns>
-        public PlayerCharacter GetPlayerCharacter() => players[playerName];
+        public PlayerCharacter GetPlayerCharacter() 
+            => players[playerName];
 
         /// <summary>
         /// 查詢指定名稱玩家
         /// </summary>
         /// <param name="name">玩家名稱</param>
         /// <returns>Character物件</returns>
-        public PlayerCharacter GetPlayerCharacter(string name) => players[name];
+        public PlayerCharacter GetPlayerCharacter(string name) 
+            => players[name];
 
         /// <summary>
         /// 向伺服器請求撿起物品
@@ -408,9 +410,13 @@ namespace DungeonGame
             p.Dispose();
         }
 
+        /// <summary>
+        /// 所有玩家的開火訊號
+        /// <para>格式: {fromPlayer}|{weaponNum}|{lifetime}|{startPoint.x}|{startPoint.y}|{endPoint.x}|{endPoint.y} </para>
+        /// </summary>
+        /// <param name="fireInfo">已封裝之資訊</param>
         private void FireSingle(string fireInfo)
         {
-            // string fireInfo = $"{fromPlayer}|{weaponNum}|{lifetime}|{startPoint.x}|{startPoint.y}|{endPoint.x}|{endPoint.y}";
             string[] infos = fireInfo.Split('|');
             Weapon weapon = new Weapon();
             weapon.Fire(
@@ -420,9 +426,18 @@ namespace DungeonGame
                 endPoint: (Convert.ToInt32(infos[5]), Convert.ToInt32(infos[6])));
         }
 
+        /// <summary>
+        /// 受傷訊號，更新玩家血量
+        /// </summary>
+        /// <param name="newHealth">扣除傷害後的新血量</param>
         private void GotHit(string newHealth)
             => players[playerName].UpdateHealth(Convert.ToInt32(newHealth));
 
+        /// <summary>
+        /// 重生角色，更新血量與玩家位置
+        /// <para>格式: {HP}|{X}|{Y} </para>
+        /// </summary>
+        /// <param name="respawnPack">已封裝之資訊</param>
         private void Respawn(string respawnPack)
         {
             string[] respawnDatas = respawnPack.Split('|');
@@ -443,6 +458,7 @@ namespace DungeonGame
         private Socket socket;
         private Thread tcpThread;
 
+        // 客戶端狀態
         public bool IsOnline => status == OnlineStatus.Online;
         // 線上玩家清單，[玩家名稱 : 角色物件]
         public Dictionary<string, PlayerCharacter> players = new Dictionary<string, PlayerCharacter>();
