@@ -33,6 +33,8 @@ namespace DungeonGame
             Game.lb_Log = LB_Log;
             Game.b_ToggleLogin = B_ToggleLogin;
             Game.b_SendMessage = B_SendMessage;
+            Game.hb_Player = HB_Player;
+            Game.hb_Enemy = HB_Enemy;
             Game.InitControls();
         }
     }

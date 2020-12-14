@@ -58,7 +58,6 @@ namespace DungeonServer
 
                     p = new Pickable(Pickable.GetRandomItemNum(), spawnLoc);
 
-
                     foreach (Pickable _p in spawnedPickables)
                         if (p.Rect.IsOverlapped(_p.Rect))
                         {
@@ -190,6 +189,10 @@ namespace DungeonServer
                             OnHit(hitDatas[0], hitDatas[1]);
                             break;
 
+                        case ServerMessageType.ClearItem:
+                            ClearPlayerItem(datas[1]);
+                            break;
+
                         default:
                             break;
                     }
@@ -237,6 +240,9 @@ namespace DungeonServer
             players.Add(name, new Character(name));
             players[name].Read();
 
+            if (players[name].health <= 0)
+                players[name].Respawn(map);
+            
             socketHT.Add(name, sk);
 
             SendToPlayer(ServerMessageType.Online, name, string.Format("{0: Player name}|{1: Data Pack With Item},{2: Floor Datas}",
@@ -285,6 +291,7 @@ namespace DungeonServer
 
         /// <summary>
         /// 玩家撿起物品
+        /// <para>格式: 玩家名稱, 物品編號 | X | Y </para>
         /// </summary>
         /// <param name="ppiInfo"></param>
         private void PlayerPickItem(string ppiInfo)
@@ -329,6 +336,11 @@ namespace DungeonServer
                 }
             }
             SendToPlayer(ServerMessageType.Hit, name, players[name].health.ToString());
+        }
+
+        private void ClearPlayerItem(string name)
+        {
+            players[name].item = "0";
         }
         #endregion
 

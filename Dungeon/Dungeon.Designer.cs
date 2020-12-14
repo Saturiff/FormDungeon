@@ -47,6 +47,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.TB_EnemyStatus = new System.Windows.Forms.TextBox();
             this.S_Slot = new DungeonGame.Slot();
+            this.HB_Player = new DungeonGame.HealthBar();
+            this.HB_Enemy = new DungeonGame.HealthBar();
             this.SuspendLayout();
             // 
             // P_Viewport
@@ -101,7 +103,7 @@
             this.TB_CharacterStatus.Location = new System.Drawing.Point(516, 481);
             this.TB_CharacterStatus.Multiline = true;
             this.TB_CharacterStatus.Name = "TB_CharacterStatus";
-            this.TB_CharacterStatus.Size = new System.Drawing.Size(250, 168);
+            this.TB_CharacterStatus.Size = new System.Drawing.Size(250, 88);
             this.TB_CharacterStatus.TabIndex = 14;
             // 
             // TB_Message
@@ -127,7 +129,7 @@
             this.TB_ItemInfo.Location = new System.Drawing.Point(231, 481);
             this.TB_ItemInfo.Multiline = true;
             this.TB_ItemInfo.Name = "TB_ItemInfo";
-            this.TB_ItemInfo.Size = new System.Drawing.Size(250, 166);
+            this.TB_ItemInfo.Size = new System.Drawing.Size(250, 168);
             this.TB_ItemInfo.TabIndex = 23;
             // 
             // label6
@@ -188,7 +190,7 @@
             this.TB_EnemyStatus.Location = new System.Drawing.Point(805, 481);
             this.TB_EnemyStatus.Multiline = true;
             this.TB_EnemyStatus.Name = "TB_EnemyStatus";
-            this.TB_EnemyStatus.Size = new System.Drawing.Size(250, 168);
+            this.TB_EnemyStatus.Size = new System.Drawing.Size(250, 88);
             this.TB_EnemyStatus.TabIndex = 29;
             // 
             // S_Slot
@@ -203,11 +205,27 @@
             this.S_Slot.Size = new System.Drawing.Size(170, 170);
             this.S_Slot.TabIndex = 31;
             // 
+            // HB_Player
+            // 
+            this.HB_Player.Location = new System.Drawing.Point(516, 597);
+            this.HB_Player.Name = "HB_Player";
+            this.HB_Player.Size = new System.Drawing.Size(250, 33);
+            this.HB_Player.TabIndex = 34;
+            // 
+            // HB_Enemy
+            // 
+            this.HB_Enemy.Location = new System.Drawing.Point(805, 597);
+            this.HB_Enemy.Name = "HB_Enemy";
+            this.HB_Enemy.Size = new System.Drawing.Size(250, 33);
+            this.HB_Enemy.TabIndex = 35;
+            // 
             // F_Dungeon
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1104, 661);
+            this.Controls.Add(this.HB_Enemy);
+            this.Controls.Add(this.HB_Player);
             this.Controls.Add(this.S_Slot);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.TB_EnemyStatus);
@@ -253,6 +271,8 @@
         private Slot S_Slot;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox TB_EnemyStatus;
+        private HealthBar HB_Player;
+        private HealthBar HB_Enemy;
     }
 }
 

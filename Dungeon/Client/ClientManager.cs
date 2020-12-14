@@ -77,12 +77,21 @@ namespace DungeonGame
         {
             RequestPlayersData();
 
-            players[playerName] = GetPlayerCharacter();
+            players[playerName] = GetPlayerCharacter(); // fix: ?
             playerUpdateStatus[playerName] = true;
 
             Game.tb_CharacterStatus.Text = players[playerName].Status;
+            Game.hb_Player.Value = players[playerName].CurrentHealth;
+
             if (Game.focusEnemyName != "" && Game.focusEnemyName != null)
+            {
                 Game.tb_EnemyStatus.Text = players[Game.focusEnemyName].Status;
+                Game.hb_Enemy.Value = players[Game.focusEnemyName].CurrentHealth;
+            }
+            else
+            {
+                Game.hb_Enemy.Value = 0;
+            }
         }
 
         /// <summary>
@@ -121,6 +130,9 @@ namespace DungeonGame
 
         public void RequestHit(int damage) 
             => SendToServer(ClientMessageType.Hit, playerName + "|" + damage.ToString());
+
+        public void RequestClearItem()
+            => SendToServer(ClientMessageType.ClearItem, playerName);
 
         /// <summary>
         /// 傳送登出請求與玩家名稱

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using System.Timers;
 
 namespace DungeonGame.Weapons
@@ -16,7 +17,7 @@ namespace DungeonGame.Weapons
             renderTimer.Elapsed += RenderTimer_Tick;
         }
 
-        private void RenderTimer_Tick(object sender, ElapsedEventArgs e)
+        protected void RenderTimer_Tick(object sender, ElapsedEventArgs e)
         {
             if ((!Game.client.IsOnline)
                 || (time >= lifetime / renderTimer.Interval)
@@ -25,15 +26,13 @@ namespace DungeonGame.Weapons
                 Destory();
                 return;
             }
+            if(canFriendlyFire)
+                Console.WriteLine($"tick {time}, {canFriendlyFire}");
 
-            if (IsOverlapped(Game.player.ActorRect) && senderName != Game.player.Name)
-            {
-                Game.client.RequestHit(damage);
-                Destory();
+            if (DetectHit())
                 return;
-            }
 
-            foreach (PlayerCharacter pc in Game.client.players.Values)
+            foreach (PlayerCharacter pc in Game.client.players.Values.ToList())
             {
                 if (pc.Name == senderName)
                     continue;
@@ -52,7 +51,18 @@ namespace DungeonGame.Weapons
                 Location = new Point((int)x, (int)y);
         }
 
-        public void Start(string name, (int x, int y) begin, double radians)
+        public virtual bool DetectHit()
+        {
+            if (IsOverlapped(Game.player.ActorRect) && (senderName != Game.player.Name))
+            {
+                Game.client.RequestHit(damage);
+                Destory();
+                return true;
+            }
+            return false;
+        }
+
+        public virtual void Start(string name, (int x, int y) begin, double radians)
         {
             Init(name, begin, radians);
             renderTimer.Start();
@@ -69,18 +79,20 @@ namespace DungeonGame.Weapons
             Game.SpawnInViewport(this);
         }
 
-        private void Destory()
+        public virtual void Destory()
         {
             Game.DestroyFromViewport(this);
             renderTimer.Stop();
         }
 
-        private string senderName;
-        private (int x, int y) begin;
-        private int time = 1;
-        private double radians = 0;
         private readonly Timer renderTimer;
+        private int time = 1;
 
+        protected string senderName;
+        protected (int x, int y) begin;
+        protected double radians = 0;
+        protected bool canFriendlyFire = false;
+        
         public AmmunitionType type;
         public int damage;
         public int lifetime; // 1/1000 s

@@ -35,7 +35,7 @@ namespace DungeonGame
 
         public void AttackTo(Point loc)
         {
-            if (IsAlive && (itemNum != null) && (itemNum != "000"))
+            if (IsAlive && (itemNum != null) && (itemNum != "0"))
             {
                 Game.client.RequestFire(Name, itemNum, (Location.X, Location.Y), (loc.X, loc.Y));
             }

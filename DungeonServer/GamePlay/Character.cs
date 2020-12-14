@@ -47,7 +47,7 @@ namespace DungeonServer
             await Task.Delay(3000);
 
             health = 200;
-            item = "000";
+            item = "0";
 
             (int x, int y) = map.GetRandomFitPointInPlayGround(size.w, size.h);
 
@@ -79,6 +79,6 @@ namespace DungeonServer
         public bool isRespawning = false;
         public (int x, int y) loc = (400, 220);
         // 玩家現有的物品，不予保存，但會在遊戲時同步給所有玩家
-        public string item = "000";
+        public string item = "0";
     }
 }

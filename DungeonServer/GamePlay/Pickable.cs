@@ -25,7 +25,7 @@ namespace DungeonServer
         {
             int num = Rand.GetRandNum(1, 5);
 
-            return ((num < 10) ? "00" : "0") + num.ToString();
+            return num.ToString();
         }
 
         public static bool operator ==(Pickable a, Pickable b)

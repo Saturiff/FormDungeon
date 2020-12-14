@@ -25,7 +25,7 @@ namespace DungeonGame
             BackgroundImage = bmp;
         }
 
-        public void RemoveItem() => AddItem("000");
+        public void RemoveItem() => AddItem("0");
 
         public Item Item { get; set; }
     }

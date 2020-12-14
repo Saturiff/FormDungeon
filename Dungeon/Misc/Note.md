@@ -1,2 +1,4 @@
 ﻿### Todo:
-health bar
+
+### bug:
+exceptinon logout server side

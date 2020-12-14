@@ -15,6 +15,7 @@
         PickItem,
         FireSingle,
         Hit,
-        Respawn
+        Respawn,
+        ClearItem
     }
 }

@@ -371,5 +371,7 @@ namespace DungeonGame
         public static ListBox lb_Log;
         public static Button b_ToggleLogin;
         public static Button b_SendMessage;
+        public static HealthBar hb_Player;
+        public static HealthBar hb_Enemy;
     }
 }

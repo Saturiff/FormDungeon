@@ -65,12 +65,9 @@ namespace DungeonGame
         protected const int maxHealth = 200;
         protected int currentHealth;
 
-        protected int CurrentHealth
+        public int CurrentHealth
         {
-            get
-            {
-                return currentHealth;
-            }
+            get => currentHealth;
             set
             {
                 currentHealth = value;
@@ -81,6 +78,7 @@ namespace DungeonGame
                     Hide();
             }
         }
+        public static int MaxHealth => maxHealth;
         public bool IsAlive => currentHealth > 0;
         public string itemNum;
         public new string Name { get; set; }
