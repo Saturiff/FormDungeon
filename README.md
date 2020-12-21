@@ -18,6 +18,9 @@ Server
 ├─DungeonServer.exe  
 └─DungeonUtility.dll  
   
+## 可執行文件
+[Dungeon executable](https://github.com/reina42689/Dungeon-executable)  
+  
 ## Todo && Bug
 [列表傳送門](https://github.com/reina42689/FormDungeon/blob/master/Dungeon/Misc/Note.md)  
   
