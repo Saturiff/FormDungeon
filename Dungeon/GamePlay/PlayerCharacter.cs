@@ -54,24 +54,16 @@ namespace DungeonGame
         }
 
         public override bool Equals(object obj)
-        {
-            return (obj is PlayerCharacter ch) && (ch.Name == Name);
-        }
+            => (obj is PlayerCharacter ch) && (ch.Name == Name);
 
         public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
+            => base.GetHashCode();
 
         public static bool operator ==(PlayerCharacter a, PlayerCharacter b)
-        {
-            return a.Name == b.Name;
-        }
+            => a.Name == b.Name;
 
         public static bool operator !=(PlayerCharacter a, PlayerCharacter b)
-        {
-            return a.Name != b.Name;
-        }
+            => a.Name != b.Name;
 
         private Timer movementTick;
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DungeonUtility;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -59,14 +60,13 @@ namespace DungeonServer
             UI.AddLog(name + " respawned.");
         }
 
-        private static int GetNextRandomByte() => r.Next(255);
+        private static int GetNextRandomByte() => Rand.GetRandNum(0, 255);
 
-        private string name;
+        private readonly string name;
 
         private static readonly (int w, int h) size = (20, 20);
         private (int r, int g, int b) color = (GetNextRandomByte(), GetNextRandomByte(), GetNextRandomByte());
         private string DataPath => @"./saves/" + name;
-        private static readonly Random r = new Random();
 
         private string DataPack => string.Format("{0}|{1}|{2}|{3}|{4}|{5}",
             health.ToString(), loc.x, loc.y, color.r, color.g, color.b);

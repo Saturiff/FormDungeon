@@ -1,5 +1,4 @@
 ﻿using System.Threading;
-using System.Threading.Tasks;
 
 namespace DungeonGame.Weapons
 {
@@ -28,7 +27,7 @@ namespace DungeonGame.Weapons
 
             Thread th = new Thread(Exp);
             th.Start();
-            
+
             base.Destory();
         }
 

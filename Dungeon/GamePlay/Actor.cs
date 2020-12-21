@@ -21,12 +21,7 @@ namespace DungeonGame
 
         public bool IsOverlapped(Rectangle rect) => Rect.IsOverlapped(ActorRect, rect);
 
-        public Rectangle ActorRect
-        {
-            get
-            {
-                return new Rectangle(Location.X, Location.Y, Size.Width, Size.Height);
-            }
-        }
+        public Rectangle ActorRect 
+            => new Rectangle(Location.X, Location.Y, Size.Width, Size.Height);
     }
 }

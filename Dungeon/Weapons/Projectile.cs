@@ -29,7 +29,7 @@ namespace DungeonGame.Weapons
                 Destory();
                 return;
             }
-            
+
             if (DetectHit())
                 return;
 
@@ -60,6 +60,7 @@ namespace DungeonGame.Weapons
                 Destory();
                 return true;
             }
+
             return false;
         }
 
@@ -93,7 +94,7 @@ namespace DungeonGame.Weapons
         protected (int x, int y) begin;
         protected double radians = 0;
         protected bool canFriendlyFire = false;
-        
+
         public AmmunitionType type;
         public int damage;
         public int lifetime; // 1/1000 s

@@ -246,7 +246,7 @@ namespace DungeonServer
 
             if (players[name].health <= 0)
                 players[name].Respawn(map);
-            
+
             socketHT.Add(name, sk);
 
             SendToPlayer(ServerMessageType.Online, name, string.Format("{0: Player name}|{1: Data Pack With Item},{2: Floor Datas}",
@@ -340,13 +340,11 @@ namespace DungeonServer
                 ch.health -= Convert.ToInt32(damage);
 
             if (!ch.isRespawning)
-            {
                 if (ch.health <= 0)
                 {
                     UI.AddLog(name + " killed.");
                     ch.Respawn(map);
                 }
-            }
             SendToPlayer(ServerMessageType.Hit, name, players[name].health.ToString());
         }
 
@@ -420,10 +418,10 @@ namespace DungeonServer
         private Map map;
 
         // 所有連線清單，[玩家名稱 : 連線物件]
-        private Hashtable socketHT = new Hashtable();
+        private readonly Hashtable socketHT = new Hashtable();
         // 所有玩家清單，[玩家名稱 : 角色物件]
-        private Dictionary<string, Character> players = new Dictionary<string, Character>();
-        private List<Pickable> spawnedPickables = new List<Pickable>();
+        private readonly Dictionary<string, Character> players = new Dictionary<string, Character>();
+        private readonly List<Pickable> spawnedPickables = new List<Pickable>();
         private string FloorItemDatas
         {
             get

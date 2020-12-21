@@ -50,8 +50,8 @@ namespace DungeonGame
                     Rectangle rect = new Rectangle(pos, tileSize);
 
                     TileType tileType = EnumEx.GetEnumByOrder<TileType>(Convert.ToUInt16(mapData[i]));
-                    _tilesData.Add(new Point(i % col, i / col), tileType);
-                    g.FillRectangle(_palette[tileType], rect);
+                    tilesData.Add(new Point(i % col, i / col), tileType);
+                    g.FillRectangle(palette[tileType], rect);
                 }
             }
 
@@ -63,7 +63,7 @@ namespace DungeonGame
             p = (p.x / tileSize.Width, p.y / tileSize.Height);
 
             if (p.x > -1 && p.x < col && p.y > -1 && p.y < row)
-                return _tilesData[new Point(p.x, p.y)];
+                return tilesData[new Point(p.x, p.y)];
 
             return null;
         }
@@ -83,10 +83,10 @@ namespace DungeonGame
         private static readonly Size tileSize = new Size(40, 40);
         private static readonly int row = playGround.Height / tileSize.Width;
         private static readonly int col = playGround.Width / tileSize.Height;
-        private Dictionary<Point, TileType> _tilesData = new Dictionary<Point, TileType>(row * col);
-        private readonly Dictionary<TileType, Brush> _palette = new Dictionary<TileType, Brush>
+        private readonly Dictionary<Point, TileType> tilesData = new Dictionary<Point, TileType>(row * col);
+        private readonly Dictionary<TileType, Brush> palette = new Dictionary<TileType, Brush>
         {
-            { TileType.None,    new SolidBrush(Color.FromArgb(70,75,82)) },
+            { TileType.None,    new SolidBrush(Color.FromArgb(70,75,82))    },
             { TileType.Wall,    new SolidBrush(Color.FromArgb(177,188,208)) },
             { TileType.WallTop, new SolidBrush(Color.FromArgb(207,218,238)) },
             { TileType.Floor,   new SolidBrush(Color.FromArgb(195,200,208)) }

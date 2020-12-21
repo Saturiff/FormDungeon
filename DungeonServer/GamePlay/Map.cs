@@ -82,7 +82,7 @@ namespace DungeonServer
         private static readonly Rect tileSize = new Rect(40, 40);
         private static readonly int row = playGround.Height / tileSize.Width;
         private static readonly int col = playGround.Width / tileSize.Height;
-        private Dictionary<Point, TileType> tilesData = new Dictionary<Point, TileType>(row * col);
+        private readonly Dictionary<Point, TileType> tilesData = new Dictionary<Point, TileType>(row * col);
 
         public enum TileType
         {

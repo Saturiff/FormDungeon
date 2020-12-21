@@ -33,10 +33,7 @@ namespace DungeonGame
             itemNum = datas[7];
         }
 
-        public void UpdateHealth(int newHealth)
-        {
-            CurrentHealth = newHealth;
-        }
+        public void UpdateHealth(int newHealth) => CurrentHealth = newHealth;
 
         public void Respawn(int hp, int x, int y, string itemNum)
         {
@@ -62,6 +59,7 @@ namespace DungeonGame
         }
 
         private static readonly Size characterSize = new Size(20, 20);
+
         protected const int maxHealth = 200;
         protected int currentHealth;
 
@@ -80,15 +78,11 @@ namespace DungeonGame
         }
         public static int MaxHealth => maxHealth;
         public bool IsAlive => currentHealth > 0;
-        public string itemNum;
         public new string Name { get; set; }
         public string Status
-        {
-            get
-            {
-                return "Name:\t" + Name + Environment.NewLine
-                + "Health:\t" + CurrentHealth + " / " + maxHealth;
-            }
-        }
+            => "Name:\t" + Name + Environment.NewLine
+            + "Health:\t" + CurrentHealth + " / " + maxHealth;
+
+        public string itemNum;
     }
 }

@@ -43,10 +43,7 @@ namespace DungeonGame
         }
 
         public static bool operator ==(Pickable a, Pickable b)
-        {
-            return (a.ItemNum == b.ItemNum)
-                && (a.Location == b.Location);
-        }
+            => (a.ItemNum == b.ItemNum) && (a.Location == b.Location);
 
         public static bool operator !=(Pickable a, Pickable b)
             => !((a.ItemNum == b.ItemNum) && (a.Location == b.Location));

@@ -19,6 +19,7 @@
                 Destory();
                 return true;
             }
+
             return false;
         }
     }

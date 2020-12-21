@@ -8,7 +8,7 @@ namespace DungeonUtility
             => (rect.x0y0.x + r.Next(0, rect.Width),
                 rect.x0y0.y + r.Next(0, rect.Height));
 
-        public static int GetRandNum(int min, int max) => r.Next(min, max+1);
+        public static int GetRandNum(int min, int max) => r.Next(min, max + 1);
 
         private static readonly Random r = new Random();
     }

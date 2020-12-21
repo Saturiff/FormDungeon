@@ -104,7 +104,7 @@ namespace DungeonGame
         /// 查詢玩家
         /// </summary>
         /// <returns>Character物件</returns>
-        public PlayerCharacter GetPlayerCharacter() 
+        public PlayerCharacter GetPlayerCharacter()
             => players[playerName];
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace DungeonGame
         /// </summary>
         /// <param name="name">玩家名稱</param>
         /// <returns>Character物件</returns>
-        public PlayerCharacter GetPlayerCharacter(string name) 
+        public PlayerCharacter GetPlayerCharacter(string name)
             => players[name];
 
         /// <summary>
@@ -120,9 +120,7 @@ namespace DungeonGame
         /// </summary>
         /// <param name="p">可撿取的目標物件</param>
         public void RequestPickup(Pickable p)
-        {
-            SendToServer(ClientMessageType.PickItem, playerName + "," + p.ToString());
-        }
+            => SendToServer(ClientMessageType.PickItem, playerName + "," + p.ToString());
 
         public void RequestFire(string fromPlayer, string weaponNum, (int x, int y) startPoint, (int x, int y) endPoint)
         {
@@ -130,7 +128,7 @@ namespace DungeonGame
             SendToServer(ClientMessageType.FireSingle, fireInfo);
         }
 
-        public void RequestHit(int damage) 
+        public void RequestHit(int damage)
             => SendToServer(ClientMessageType.Hit, playerName + "|" + damage.ToString());
 
         public void RequestClearItem()
@@ -328,7 +326,7 @@ namespace DungeonGame
                 else
                 {
                     PlayerCharacter c = new PlayerCharacter(dataPack);
-                    
+
                     players.Add(c.Name, c);
 
                     Game.SpawnInViewport(players[c.Name]);
@@ -463,7 +461,7 @@ namespace DungeonGame
         // 線上玩家清單，[玩家名稱 : 角色物件]
         public Dictionary<string, PlayerCharacter> players = new Dictionary<string, PlayerCharacter>();
         // 玩家更新狀態，若同步資料後該玩家沒更新過，則會移除該玩家，[玩家名稱 : 是否更新過]
-        private Dictionary<string, bool> playerUpdateStatus = new Dictionary<string, bool>();
+        private readonly Dictionary<string, bool> playerUpdateStatus = new Dictionary<string, bool>();
         // 是否在等待伺服器回傳玩家狀態資料
         public bool isWaitingPlayerData = true;
     }
